@@ -1,40 +1,19 @@
-#-------------------------------------------------------------------------------
-# Note for using the rate-limiting:
-#   The comment part won't be copied if you use the subgenerator docker-compose
-#   you have to manually copy it
-#-------------------------------------------------------------------------------
 version: '2'
 services:
     jhipstersamplegateway-app:
         image: jhipstersamplegateway
-        external_links:
-            - jhipstersamplegateway-mysql:mysql
-            # Uncomment to have Cassandra working with the gateway
-            # - jhipstersamplegateway-cassandra:cassandra
-            - jhipster-registry:registry
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
-            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
-            - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jhipstersamplegateway?useUnicode=true&characterEncoding=utf8&useSSL=false
-            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
-            - JHIPSTER_SLEEP=30 # gives time for the cassandra cluster to start and execute the migration scripts
+            - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+            - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+            - SPRING_DATASOURCE_URL=jdbc:mysql://jhipstersamplegateway-mysql:3306/jhipstersamplegateway?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=30 # gives time for the JHipster Registry to boot before the application
         ports:
             - 8080:8080
     jhipstersamplegateway-mysql:
         extends:
             file: mysql.yml
             service: jhipstersamplegateway-mysql
-    # Uncomment to have Cassandra working with the gateway
-    # jhipstersamplegateway-cassandra:
-    #     extends:
-    #         file: cassandra-cluster.yml
-    #         service: jhipstersamplegateway-cassandra
-    # jhipstersamplegateway-cassandra-migration:
-    #     extends:
-    #         file: cassandra-migration.yml
-    #         service: jhipstersamplegateway-cassandra-migration
-    #     environment:
-    #         - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     jhipster-registry:
         extends:
             file: jhipster-registry.yml

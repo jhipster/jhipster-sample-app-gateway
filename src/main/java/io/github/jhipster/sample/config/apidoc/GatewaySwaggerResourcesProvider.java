@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.config.apidoc;
 
-import io.github.jhipster.sample.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+
+import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +23,19 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
  */
 @Component
 @Primary
-@Profile(Constants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final Logger log = LoggerFactory.getLogger(GatewaySwaggerResourcesProvider.class);
 
-    @Inject
-    private RouteLocator routeLocator;
+    private final RouteLocator routeLocator;
 
-    @Inject
-    private DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
+
+    public GatewaySwaggerResourcesProvider(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
+        this.routeLocator = routeLocator;
+        this.discoveryClient = discoveryClient;
+    }
 
     @Override
     public List<SwaggerResource> get() {

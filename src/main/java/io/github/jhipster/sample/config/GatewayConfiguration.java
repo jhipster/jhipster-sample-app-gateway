@@ -1,13 +1,13 @@
 package io.github.jhipster.sample.config;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 import io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter;
-import io.github.jhipster.sample.gateway.ratelimiting.RateLimitingRepository;
 import io.github.jhipster.sample.gateway.accesscontrol.AccessControlFilter;
 import io.github.jhipster.sample.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 
-import javax.inject.Inject;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,39 +27,29 @@ public class GatewayConfiguration {
     public static class AccessControlFilterConfiguration {
 
         @Bean
-        public AccessControlFilter accessControlFilter(){
-            return new AccessControlFilter();
+        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties){
+            return new AccessControlFilter(routeLocator, jHipsterProperties);
         }
     }
 
     /**
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
-     * For this filter to work, you need to have:
-     * <ul>
-     * <li>A working Cassandra cluster
-     * <li>A schema with the JHipster rate-limiting tables configured, using the
-     * "create_keyspace.cql" and "create_tables.cql" scripts from the
-     * "src/main/resources/config/cql" directory
-     * <li>Your cluster configured in your application-*.yml files, using the
-     * "spring.data.cassandra" keys
-     * </ul>
+     * This uses Bucke4J to limit the API calls, see {@link io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter}.
      */
     @Configuration
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
     public static class RateLimitingConfiguration {
 
-        @Inject
-        private JHipsterProperties jHipsterProperties;
+        private final JHipsterProperties jHipsterProperties;
 
-        @Bean
-        public RateLimitingRepository rateLimitingRepository() {
-            return new RateLimitingRepository();
+        public RateLimitingConfiguration(JHipsterProperties jHipsterProperties) {
+            this.jHipsterProperties = jHipsterProperties;
         }
 
         @Bean
         public RateLimitingFilter rateLimitingFilter() {
-            return new RateLimitingFilter(rateLimitingRepository(), jHipsterProperties);
+            return new RateLimitingFilter(jHipsterProperties);
         }
     }
 }

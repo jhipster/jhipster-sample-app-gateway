@@ -12,7 +12,7 @@ Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 }
 
 /* ==========================================================================
-Developement Ribbon
+Development Ribbon
 ========================================================================== */
 .ribbon {
     background-color: #a00;
@@ -52,7 +52,14 @@ Version number in navbar
 ========================================================================== */
 .navbar-version {
     font-size: 10px;
-    color: #ccc
+    color: #444;
+}
+
+/* ==========================================================================
+navbar text
+========================================================================== */
+.navbar-default .navbar-brand {
+    color: #444;
 }
 
 /* ==========================================================================
@@ -155,11 +162,11 @@ Generic styles
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
-a:hover {
-  cursor: pointer;
+a {
+    color: #1c0cf5;
 }
 
-.hand {
+a:hover, .hand, [jh-sort-by] {
     cursor: pointer;
 }
 
@@ -278,7 +285,7 @@ entity tables helpers
 }
 
 .jh-table > tbody > tr > td {
-    /* Align text in td verifically (top aligned by Bootstrap) */
+    /* Align text in td vertically (top aligned by Bootstrap) */
     vertical-align: middle;
 }
 

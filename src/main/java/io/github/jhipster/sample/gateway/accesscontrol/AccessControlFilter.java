@@ -1,10 +1,9 @@
 package io.github.jhipster.sample.gateway.accesscontrol;
 
-import io.github.jhipster.sample.config.JHipsterProperties;
+import io.github.jhipster.config.JHipsterProperties;
 
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +21,14 @@ public class AccessControlFilter extends ZuulFilter {
 
     private final Logger log = LoggerFactory.getLogger(AccessControlFilter.class);
 
-    @Inject
-    private RouteLocator routeLocator;
+    private final RouteLocator routeLocator;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
+
+    public AccessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties) {
+        this.routeLocator = routeLocator;
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @Override
     public String filterType() {

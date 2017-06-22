@@ -32,7 +32,6 @@
                     Auth.authorize();
                 }
 
-                
             });
 
             var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
