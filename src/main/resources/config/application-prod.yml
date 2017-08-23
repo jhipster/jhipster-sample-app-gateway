@@ -50,7 +50,6 @@ spring:
             hibernate.cache.hazelcast.instance_name: jhipsterSampleGateway
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true
-    data:
     mail:
         host: localhost
         port: 25
