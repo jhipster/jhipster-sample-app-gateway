@@ -144,6 +144,7 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
 
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
