@@ -80,7 +80,6 @@ spring:
             enabled: false
     thymeleaf:
         mode: XHTML
-
 security:
     basic:
         enabled: false

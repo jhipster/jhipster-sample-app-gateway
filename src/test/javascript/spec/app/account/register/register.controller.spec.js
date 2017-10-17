@@ -7,21 +7,23 @@ describe('Controller Tests', function() {
 
     describe('RegisterController', function() {
 
-        var $scope, $q; // actual implementations
+        var $scope, $q, errorConstants; // actual implementations
         var MockTimeout, MockAuth; // mocks
         var createController; // local utility function
 
         beforeEach(inject(function($injector) {
             $q = $injector.get('$q');
             $scope = $injector.get('$rootScope').$new();
+            errorConstants = $injector.get('errorConstants');
             MockTimeout = jasmine.createSpy('MockTimeout');
             MockAuth = jasmine.createSpyObj('MockAuth', ['createAccount']);
             
 
             var locals = {
+                'errorConstants': errorConstants,
                 'Auth': MockAuth,
                 '$timeout': MockTimeout,
-                '$scope': $scope,
+                '$scope': $scope
             };
             createController = function() {
                 $injector.get('$controller')('RegisterController as vm', locals);
@@ -64,7 +66,7 @@ describe('Controller Tests', function() {
             // given
             MockAuth.createAccount.and.returnValue($q.reject({
                 status: 400,
-                data: 'login already in use'
+                data: '{"type": "' + errorConstants.LOGIN_ALREADY_USED_TYPE + '"}'
             }));
             createController();
             $scope.vm.registerAccount.password = $scope.vm.confirmPassword = 'password';
@@ -80,7 +82,7 @@ describe('Controller Tests', function() {
             // given
             MockAuth.createAccount.and.returnValue($q.reject({
                 status: 400,
-                data: 'email address already in use'
+                data: '{"type": "' + errorConstants.EMAIL_ALREADY_USED_TYPE + '"}'
             }));
             createController();
             $scope.vm.registerAccount.password = $scope.vm.confirmPassword = 'password';

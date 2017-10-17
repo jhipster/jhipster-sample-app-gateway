@@ -28,7 +28,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty("eureka.client.enabled")
 public class LoggingConfiguration {
+
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
+
     private static final String ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH";
 
     private final Logger log = LoggerFactory.getLogger(LoggingConfiguration.class);
@@ -46,12 +48,12 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        EurekaInstanceConfigBean eurekaInstanceConfigBean, JHipsterProperties jHipsterProperties, @Value("${info.project.version}") String version) {
+        EurekaInstanceConfigBean eurekaInstanceConfigBean, @Value("${info.project.version}") String version, JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         this.eurekaInstanceConfigBean = eurekaInstanceConfigBean;
-        this.jHipsterProperties = jHipsterProperties;
         this.version = version;
+        this.jHipsterProperties = jHipsterProperties;
         if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashAppender(context);
             addContextListener(context);
