@@ -35,7 +35,7 @@ public class GatewayConfiguration {
     /**
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
-     * This uses Bucke4J to limit the API calls, see {@link io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter}.
+     * This uses Bucket4J to limit the API calls, see {@link io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter}.
      */
     @Configuration
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
