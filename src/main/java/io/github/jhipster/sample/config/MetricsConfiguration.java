@@ -40,6 +40,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
     private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
     private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
+
     private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private MetricRegistry metricRegistry = new MetricRegistry();
