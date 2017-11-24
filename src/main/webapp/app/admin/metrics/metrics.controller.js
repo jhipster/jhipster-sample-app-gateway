@@ -21,7 +21,7 @@
         $scope.$watch('vm.metrics', function (newValue) {
             vm.servicesStats = {};
             angular.forEach(newValue.timers, function (value, key) {
-                if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
+                if (key.includes('web.rest') || key.includes('service')) {
                     vm.servicesStats[key] = value;
                 }
             });
