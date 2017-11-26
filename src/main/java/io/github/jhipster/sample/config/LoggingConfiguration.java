@@ -26,7 +26,6 @@ import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 @ConditionalOnProperty("eureka.client.enabled")
 @RefreshScope

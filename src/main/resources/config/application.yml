@@ -54,6 +54,12 @@ hystrix:
                     thread:
                         timeoutInMilliseconds: 10000
 
+logging:
+    level:
+        ROOT: #logback.loglevel#
+        io.github.jhipster.sample: #logback.loglevel#
+        io.github.jhipster: #logback.loglevel#
+
 management:
     security:
         roles: ADMIN
