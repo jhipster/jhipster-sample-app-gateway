@@ -13,6 +13,12 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+    level:
+        ROOT: INFO
+        io.github.jhipster.sample: INFO
+        io.github.jhipster: INFO
+
 eureka:
     instance:
         prefer-ip-address: true
@@ -111,6 +117,10 @@ jhipster:
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
+            management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
+                enabled: false
+                update-interval: 3
+                url:
     security:
         authentication:
             jwt:

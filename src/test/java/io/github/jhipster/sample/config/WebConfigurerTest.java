@@ -3,6 +3,7 @@ package io.github.jhipster.sample.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
+import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
 import com.hazelcast.durableexecutor.DurableExecutorService;
@@ -10,6 +11,7 @@ import com.hazelcast.logging.LoggingService;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
+import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
 import com.hazelcast.transaction.*;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
@@ -545,6 +547,16 @@ public class WebConfigurerTest {
 
         @Override
         public ICacheManager getCacheManager() {
+            return null;
+        }
+
+        @Override
+        public CardinalityEstimator getCardinalityEstimator(String s) {
+            return null;
+        }
+
+        @Override
+        public IScheduledExecutorService getScheduledExecutorService(String s) {
             return null;
         }
 

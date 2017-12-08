@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty("eureka.client.enabled")
 @RefreshScope
 public class LoggingConfiguration {
 
@@ -50,7 +50,7 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        EurekaInstanceConfigBean eurekaInstanceConfigBean, @Value("${info.project.version}") String version, JHipsterProperties jHipsterProperties) {
+        @Autowired(required = false) EurekaInstanceConfigBean eurekaInstanceConfigBean, @Value("${info.project.version}") String version, JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         this.eurekaInstanceConfigBean = eurekaInstanceConfigBean;
@@ -77,8 +77,12 @@ public class LoggingConfiguration {
         LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
         logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.setContext(context);
+        String optionalFields = "";
+        if (eurekaInstanceConfigBean != null) {
+            optionalFields = "\"instance_id\":\"" + eurekaInstanceConfigBean.getInstanceId() + "\",";
+        }
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
-            "\"instance_id\":\"" + eurekaInstanceConfigBean.getInstanceId() + "\"," + "\"version\":\"" + version + "\"}";
+            optionalFields + "\"version\":\"" + version + "\"}";
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         LogstashEncoder logstashEncoder=new LogstashEncoder();
