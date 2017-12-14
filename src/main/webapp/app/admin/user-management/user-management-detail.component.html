@@ -6,10 +6,11 @@
         <dt><span>Login</span></dt>
         <dd>
             <span>{{user.login}}</span>
-            <span class="badge badge-danger" *ngIf="!user.activated"
-                 >Deactivated</span>
-            <span class="badge badge-success" *ngIf="user.activated"
-                 >Activated</span>
+            <jhi-boolean
+                [value]="user.activated"
+                textTrue="Activated"
+                textFalse="Deactivated">
+            </jhi-boolean>
         </dd>
         <dt><span>First Name</span></dt>
         <dd>{{user.firstName}}</dd>
