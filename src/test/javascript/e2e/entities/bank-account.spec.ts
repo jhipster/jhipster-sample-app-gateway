@@ -18,14 +18,16 @@ describe('BankAccount e2e test', () => {
     it('should load BankAccounts', () => {
         navBarPage.goToEntity('bank-account');
         bankAccountComponentsPage = new BankAccountComponentsPage();
-        expect(bankAccountComponentsPage.getTitle()).toMatch(/Bank Accounts/);
+        expect(bankAccountComponentsPage.getTitle())
+            .toMatch(/Bank Accounts/);
 
     });
 
     it('should load create BankAccount dialog', () => {
         bankAccountComponentsPage.clickOnCreateButton();
         bankAccountDialogPage = new BankAccountDialogPage();
-        expect(bankAccountDialogPage.getModalTitle()).toMatch(/Create or edit a Bank Account/);
+        expect(bankAccountDialogPage.getModalTitle())
+            .toMatch(/Create or edit a Bank Account/);
         bankAccountDialogPage.close();
     });
 

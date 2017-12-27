@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-alert-error',

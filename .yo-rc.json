@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "4.13.0",
+    "jhipsterVersion": "4.13.1",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -27,6 +27,8 @@
     "jhiPrefix": "jhi",
     "enableTranslation": false,
     "clientFramework": "angularX",
-    "clientPackageManager": "yarn"
+    "clientPackageManager": "yarn",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true
   }
 }
