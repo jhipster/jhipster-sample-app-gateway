@@ -17,7 +17,7 @@
         <div class="form-group">
             <label class="form-control-label">Login</label>
             <input type="text" class="form-control" name="login" #loginInput="ngModel"
-                   [(ngModel)]="user.login" required minlength="1" maxlength="50" pattern="^[_'.A-Za-z0-9-]*$">
+                   [(ngModel)]="user.login" required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
 
             <div *ngIf="loginInput.dirty && loginInput.invalid">
                 <small class="form-text text-danger"
@@ -33,7 +33,7 @@
 
                 <small class="form-text text-danger"
                    *ngIf="loginInput.errors.pattern">
-                    This field can only contain letters and digits.
+                    This field can only contain letters, digits and e-mail addresses.
                 </small>
             </div>
         </div>
