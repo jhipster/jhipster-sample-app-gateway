@@ -72,19 +72,19 @@ export class BankAccountDialogPage {
 
     setNameInput = function(name) {
         this.nameInput.sendKeys(name);
-    }
+    };
 
     getNameInput = function() {
         return this.nameInput.getAttribute('value');
-    }
+    };
 
     setBalanceInput = function(balance) {
         this.balanceInput.sendKeys(balance);
-    }
+    };
 
     getBalanceInput = function() {
         return this.balanceInput.getAttribute('value');
-    }
+    };
 
     save() {
         this.saveButton.click();
