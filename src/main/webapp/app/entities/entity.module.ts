@@ -1,16 +1,17 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { JhipsterSampleGatewayBankAccountModule } from './bank-account/bank-account.module';
+import { JhipsterSampleGatewayBankAccountModule as JhipsterSampleMicroserviceBankAccountModule } from './jhipsterSampleMicroservice/bank-account/bank-account.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
-    imports: [
-        JhipsterSampleGatewayBankAccountModule,
+  // prettier-ignore
+  imports: [
+        JhipsterSampleMicroserviceBankAccountModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
-    declarations: [],
-    entryComponents: [],
-    providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  declarations: [],
+  entryComponents: [],
+  providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterSampleGatewayEntityModule {}
