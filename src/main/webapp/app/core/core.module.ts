@@ -5,41 +5,41 @@ import { Title } from '@angular/platform-browser';
 import locale from '@angular/common/locales/en';
 
 import {
-  LoginService,
-  LoginModalService,
-  AccountService,
-  StateStorageService,
-  Principal,
-  CSRFService,
-  AuthServerProvider,
-  UserService,
-  UserRouteAccessService
-} from './';
-
-@NgModule({
-  imports: [HttpClientModule],
-  exports: [],
-  declarations: [],
-  providers: [
     LoginService,
     LoginModalService,
-    Title,
-    {
-      provide: LOCALE_ID,
-      useValue: 'en'
-    },
     AccountService,
     StateStorageService,
     Principal,
     CSRFService,
     AuthServerProvider,
     UserService,
-    DatePipe,
     UserRouteAccessService
-  ]
+} from './';
+
+@NgModule({
+    imports: [HttpClientModule],
+    exports: [],
+    declarations: [],
+    providers: [
+        LoginService,
+        LoginModalService,
+        Title,
+        {
+            provide: LOCALE_ID,
+            useValue: 'en'
+        },
+        AccountService,
+        StateStorageService,
+        Principal,
+        CSRFService,
+        AuthServerProvider,
+        UserService,
+        DatePipe,
+        UserRouteAccessService
+    ]
 })
 export class JhipsterSampleGatewayCoreModule {
-  constructor() {
-    registerLocaleData(locale);
-  }
+    constructor() {
+        registerLocaleData(locale);
+    }
 }

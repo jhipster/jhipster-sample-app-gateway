@@ -21,46 +21,46 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, PageRibbonComponent, ErrorComponent } from './layouts';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    JhipsterSampleGatewayAppRoutingModule,
-    Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
-    JhipsterSampleGatewaySharedModule,
-    JhipsterSampleGatewayCoreModule,
-    JhipsterSampleGatewayHomeModule,
-    JhipsterSampleGatewayAccountModule,
-    JhipsterSampleGatewayEntityModule
-    // jhipster-needle-angular-add-module JHipster will add new module here
-  ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
-  providers: [
-    ProfileService,
-    PaginationConfig,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-      deps: [LocalStorageService, SessionStorageService]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true,
-      deps: [Injector]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
-      multi: true,
-      deps: [JhiEventManager]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: NotificationInterceptor,
-      multi: true,
-      deps: [Injector]
-    }
-  ],
-  bootstrap: [JhiMainComponent]
+    imports: [
+        BrowserModule,
+        JhipsterSampleGatewayAppRoutingModule,
+        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
+        JhipsterSampleGatewaySharedModule,
+        JhipsterSampleGatewayCoreModule,
+        JhipsterSampleGatewayHomeModule,
+        JhipsterSampleGatewayAccountModule,
+        JhipsterSampleGatewayEntityModule
+        // jhipster-needle-angular-add-module JHipster will add new module here
+    ],
+    declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
+    providers: [
+        ProfileService,
+        PaginationConfig,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+            deps: [LocalStorageService, SessionStorageService]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthExpiredInterceptor,
+            multi: true,
+            deps: [Injector]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorHandlerInterceptor,
+            multi: true,
+            deps: [JhiEventManager]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: NotificationInterceptor,
+            multi: true,
+            deps: [Injector]
+        }
+    ],
+    bootstrap: [JhiMainComponent]
 })
 export class JhipsterSampleGatewayAppModule {}

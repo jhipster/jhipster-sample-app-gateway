@@ -5,8 +5,6 @@ import io.github.jhipster.sample.web.rest.vm.RouteVM;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
@@ -21,8 +19,6 @@ import com.codahale.metrics.annotation.Timed;
 @RestController
 @RequestMapping("/api/gateway")
 public class GatewayResource {
-
-    private final Logger log = LoggerFactory.getLogger(GatewayResource.class);
 
     private final RouteLocator routeLocator;
 

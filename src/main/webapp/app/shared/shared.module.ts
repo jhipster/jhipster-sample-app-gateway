@@ -3,18 +3,18 @@ import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import {
-  JhipsterSampleGatewaySharedLibsModule,
-  JhipsterSampleGatewaySharedCommonModule,
-  JhiLoginModalComponent,
-  HasAnyAuthorityDirective
+    JhipsterSampleGatewaySharedLibsModule,
+    JhipsterSampleGatewaySharedCommonModule,
+    JhiLoginModalComponent,
+    HasAnyAuthorityDirective
 } from './';
 
 @NgModule({
-  imports: [JhipsterSampleGatewaySharedLibsModule, JhipsterSampleGatewaySharedCommonModule],
-  declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
-  entryComponents: [JhiLoginModalComponent],
-  exports: [JhipsterSampleGatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [JhipsterSampleGatewaySharedLibsModule, JhipsterSampleGatewaySharedCommonModule],
+    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
+    providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
+    entryComponents: [JhiLoginModalComponent],
+    exports: [JhipsterSampleGatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterSampleGatewaySharedModule {}
