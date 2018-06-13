@@ -96,7 +96,7 @@ public class RateLimitingFilter extends ZuulFilter {
             return Bucket4j.configurationBuilder()
                 .addLimit(Bandwidth.simple(rateLimitingProperties.getLimit(),
                     Duration.ofSeconds(rateLimitingProperties.getDurationInSeconds())))
-                .buildConfiguration();
+                .build();
         };
     }
 

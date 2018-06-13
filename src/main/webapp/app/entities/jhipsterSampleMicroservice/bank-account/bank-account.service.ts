@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
@@ -9,7 +9,7 @@ import { IBankAccount } from 'app/shared/model/jhipsterSampleMicroservice/bank-a
 type EntityResponseType = HttpResponse<IBankAccount>;
 type EntityArrayResponseType = HttpResponse<IBankAccount[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BankAccountService {
     private resourceUrl = SERVER_API_URL + 'jhipstersamplemicroservice/api/bank-accounts';
 

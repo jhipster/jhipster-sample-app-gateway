@@ -16,9 +16,8 @@ import { JhipsterSampleGatewayAppRoutingModule } from './app-routing.module';
 import { JhipsterSampleGatewayHomeModule } from './home/home.module';
 import { JhipsterSampleGatewayAccountModule } from './account/account.module';
 import { JhipsterSampleGatewayEntityModule } from './entities/entity.module';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, PageRibbonComponent, ErrorComponent } from './layouts';
+import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
 
 @NgModule({
     imports: [
@@ -34,8 +33,6 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, ProfileService, Pag
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
     providers: [
-        ProfileService,
-        PaginationConfig,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

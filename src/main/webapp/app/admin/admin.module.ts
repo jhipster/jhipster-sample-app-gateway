@@ -5,9 +5,7 @@ import { JhipsterSampleGatewaySharedModule } from 'app/shared';
 
 import {
     adminState,
-    AuditResolvePagingParams,
     AuditsComponent,
-    UserDeleteDialogComponent,
     UserMgmtComponent,
     UserMgmtDetailComponent,
     UserMgmtUpdateComponent,
@@ -19,16 +17,7 @@ import {
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
     JhiDocsComponent,
-    AuditsService,
-    JhiConfigurationService,
-    JhiHealthService,
-    JhiMetricsService,
-    GatewayRoutesService,
-    JhiGatewayComponent,
-    LogsService,
-    UserResolvePagingParams,
-    UserMgmtResolve,
-    UserResolve
+    JhiGatewayComponent
 } from './';
 
 @NgModule({
@@ -39,7 +28,6 @@ import {
     ],
     declarations: [
         AuditsComponent,
-        UserDeleteDialogComponent,
         UserMgmtComponent,
         UserMgmtDetailComponent,
         UserMgmtUpdateComponent,
@@ -53,19 +41,7 @@ import {
         JhiMetricsMonitoringComponent,
         JhiMetricsMonitoringModalComponent
     ],
-    entryComponents: [UserMgmtUpdateComponent, UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
-    providers: [
-        AuditResolvePagingParams,
-        AuditsService,
-        JhiConfigurationService,
-        JhiHealthService,
-        JhiMetricsService,
-        GatewayRoutesService,
-        LogsService,
-        UserResolvePagingParams,
-        UserResolve,
-        UserMgmtResolve
-    ],
+    entryComponents: [UserMgmtDeleteDialogComponent, JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterSampleGatewayAdminModule {}
