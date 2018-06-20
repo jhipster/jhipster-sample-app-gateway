@@ -10,10 +10,10 @@ import { IBankAccount } from 'app/shared/model/jhipsterSampleMicroservice/bank-a
 export class BankAccountDetailComponent implements OnInit {
     bankAccount: IBankAccount;
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({ bankAccount }) => {
+        this.activatedRoute.data.subscribe(({ bankAccount }) => {
             this.bankAccount = bankAccount;
         });
     }

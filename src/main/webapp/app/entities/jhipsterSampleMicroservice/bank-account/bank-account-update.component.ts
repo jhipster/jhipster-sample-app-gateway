@@ -14,11 +14,11 @@ export class BankAccountUpdateComponent implements OnInit {
     private _bankAccount: IBankAccount;
     isSaving: boolean;
 
-    constructor(private bankAccountService: BankAccountService, private route: ActivatedRoute) {}
+    constructor(private bankAccountService: BankAccountService, private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({ bankAccount }) => {
+        this.activatedRoute.data.subscribe(({ bankAccount }) => {
             this.bankAccount = bankAccount;
         });
     }
