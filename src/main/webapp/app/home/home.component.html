@@ -8,7 +8,7 @@
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account"
+                <span id="home-logged-message" *ngIf="account"
                    > You are logged in as user "{{account.login}}". </span>
             </div>
 
