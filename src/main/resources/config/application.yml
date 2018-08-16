@@ -42,6 +42,7 @@ ribbon:
         enabled: true
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
+    sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
     host:
         max-total-connections: 1000
         max-per-route-connections: 100
