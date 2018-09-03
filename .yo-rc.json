@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "5.2.1",
+    "jhipsterVersion": "5.3.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -27,7 +27,7 @@
     "jhiPrefix": "jhi",
     "enableTranslation": false,
     "clientFramework": "angularX",
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "cacheProvider": "hazelcast",
     "enableHibernateCache": true,
     "reactive": false
