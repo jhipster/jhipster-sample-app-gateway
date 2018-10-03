@@ -12,7 +12,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         NgbModule.forRoot(),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
-            alertAsToast: false
+            alertAsToast: false,
+            alertTimeout: 5000
         }),
         InfiniteScrollModule,
         CookieModule.forRoot(),

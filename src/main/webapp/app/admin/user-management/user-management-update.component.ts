@@ -27,7 +27,7 @@ export class UserMgmtUpdateComponent implements OnInit {
     }
 
     previousState() {
-        this.router.navigate(['/admin/user-management']);
+        window.history.back();
     }
 
     save() {
