@@ -11,7 +11,7 @@ import { BankAccountService } from './bank-account.service';
     templateUrl: './bank-account-update.component.html'
 })
 export class BankAccountUpdateComponent implements OnInit {
-    private _bankAccount: IBankAccount;
+    bankAccount: IBankAccount;
     isSaving: boolean;
 
     constructor(private bankAccountService: BankAccountService, private activatedRoute: ActivatedRoute) {}
@@ -47,12 +47,5 @@ export class BankAccountUpdateComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-    get bankAccount() {
-        return this._bankAccount;
-    }
-
-    set bankAccount(bankAccount: IBankAccount) {
-        this._bankAccount = bankAccount;
     }
 }
