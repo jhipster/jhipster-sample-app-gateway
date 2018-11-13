@@ -17,4 +17,10 @@ import {
     exports: [JhipsterSampleGatewaySharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class JhipsterSampleGatewaySharedModule {}
+export class JhipsterSampleGatewaySharedModule {
+    static forRoot() {
+        return {
+            ngModule: JhipsterSampleGatewaySharedModule
+        };
+    }
+}
