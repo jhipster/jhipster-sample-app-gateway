@@ -4,11 +4,11 @@ import { UserRouteAccessService } from 'app/core';
 import { SettingsComponent } from './settings.component';
 
 export const settingsRoute: Route = {
-    path: 'settings',
-    component: SettingsComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'Settings'
-    },
-    canActivate: [UserRouteAccessService]
+  path: 'settings',
+  component: SettingsComponent,
+  data: {
+    authorities: ['ROLE_USER'],
+    pageTitle: 'Settings'
+  },
+  canActivate: [UserRouteAccessService]
 };

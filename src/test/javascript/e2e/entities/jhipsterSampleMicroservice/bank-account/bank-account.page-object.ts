@@ -1,76 +1,76 @@
 import { element, by, ElementFinder } from 'protractor';
 
 export class BankAccountComponentsPage {
-    createButton = element(by.id('jh-create-entity'));
-    deleteButtons = element.all(by.css('jhi-bank-account div table .btn-danger'));
-    title = element.all(by.css('jhi-bank-account div h2#page-heading span')).first();
+  createButton = element(by.id('jh-create-entity'));
+  deleteButtons = element.all(by.css('jhi-bank-account div table .btn-danger'));
+  title = element.all(by.css('jhi-bank-account div h2#page-heading span')).first();
 
-    async clickOnCreateButton() {
-        await this.createButton.click();
-    }
+  async clickOnCreateButton() {
+    await this.createButton.click();
+  }
 
-    async clickOnLastDeleteButton() {
-        await this.deleteButtons.last().click();
-    }
+  async clickOnLastDeleteButton() {
+    await this.deleteButtons.last().click();
+  }
 
-    async countDeleteButtons() {
-        return this.deleteButtons.count();
-    }
+  async countDeleteButtons() {
+    return this.deleteButtons.count();
+  }
 
-    async getTitle() {
-        return this.title.getText();
-    }
+  async getTitle() {
+    return this.title.getText();
+  }
 }
 
 export class BankAccountUpdatePage {
-    pageTitle = element(by.id('jhi-bank-account-heading'));
-    saveButton = element(by.id('save-entity'));
-    cancelButton = element(by.id('cancel-save'));
-    nameInput = element(by.id('field_name'));
-    balanceInput = element(by.id('field_balance'));
+  pageTitle = element(by.id('jhi-bank-account-heading'));
+  saveButton = element(by.id('save-entity'));
+  cancelButton = element(by.id('cancel-save'));
+  nameInput = element(by.id('field_name'));
+  balanceInput = element(by.id('field_balance'));
 
-    async getPageTitle() {
-        return this.pageTitle.getText();
-    }
+  async getPageTitle() {
+    return this.pageTitle.getText();
+  }
 
-    async setNameInput(name) {
-        await this.nameInput.sendKeys(name);
-    }
+  async setNameInput(name) {
+    await this.nameInput.sendKeys(name);
+  }
 
-    async getNameInput() {
-        return this.nameInput.getAttribute('value');
-    }
+  async getNameInput() {
+    return this.nameInput.getAttribute('value');
+  }
 
-    async setBalanceInput(balance) {
-        await this.balanceInput.sendKeys(balance);
-    }
+  async setBalanceInput(balance) {
+    await this.balanceInput.sendKeys(balance);
+  }
 
-    async getBalanceInput() {
-        return this.balanceInput.getAttribute('value');
-    }
+  async getBalanceInput() {
+    return this.balanceInput.getAttribute('value');
+  }
 
-    async save() {
-        await this.saveButton.click();
-    }
+  async save() {
+    await this.saveButton.click();
+  }
 
-    async cancel() {
-        await this.cancelButton.click();
-    }
+  async cancel() {
+    await this.cancelButton.click();
+  }
 
-    getSaveButton(): ElementFinder {
-        return this.saveButton;
-    }
+  getSaveButton(): ElementFinder {
+    return this.saveButton;
+  }
 }
 
 export class BankAccountDeleteDialog {
-    private dialogTitle = element(by.id('jhi-delete-bankAccount-heading'));
-    private confirmButton = element(by.id('jhi-confirm-delete-bankAccount'));
+  private dialogTitle = element(by.id('jhi-delete-bankAccount-heading'));
+  private confirmButton = element(by.id('jhi-confirm-delete-bankAccount'));
 
-    async getDialogTitle() {
-        return this.dialogTitle.getText();
-    }
+  async getDialogTitle() {
+    return this.dialogTitle.getText();
+  }
 
-    async clickOnConfirmButton() {
-        await this.confirmButton.click();
-    }
+  async clickOnConfirmButton() {
+    await this.confirmButton.click();
+  }
 }

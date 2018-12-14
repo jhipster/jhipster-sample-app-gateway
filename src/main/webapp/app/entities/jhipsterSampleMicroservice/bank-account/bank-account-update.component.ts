@@ -7,45 +7,45 @@ import { IBankAccount } from 'app/shared/model/jhipsterSampleMicroservice/bank-a
 import { BankAccountService } from './bank-account.service';
 
 @Component({
-    selector: 'jhi-bank-account-update',
-    templateUrl: './bank-account-update.component.html'
+  selector: 'jhi-bank-account-update',
+  templateUrl: './bank-account-update.component.html'
 })
 export class BankAccountUpdateComponent implements OnInit {
-    bankAccount: IBankAccount;
-    isSaving: boolean;
+  bankAccount: IBankAccount;
+  isSaving: boolean;
 
-    constructor(private bankAccountService: BankAccountService, private activatedRoute: ActivatedRoute) {}
+  constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute) {}
 
-    ngOnInit() {
-        this.isSaving = false;
-        this.activatedRoute.data.subscribe(({ bankAccount }) => {
-            this.bankAccount = bankAccount;
-        });
+  ngOnInit() {
+    this.isSaving = false;
+    this.activatedRoute.data.subscribe(({ bankAccount }) => {
+      this.bankAccount = bankAccount;
+    });
+  }
+
+  previousState() {
+    window.history.back();
+  }
+
+  save() {
+    this.isSaving = true;
+    if (this.bankAccount.id !== undefined) {
+      this.subscribeToSaveResponse(this.bankAccountService.update(this.bankAccount));
+    } else {
+      this.subscribeToSaveResponse(this.bankAccountService.create(this.bankAccount));
     }
+  }
 
-    previousState() {
-        window.history.back();
-    }
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IBankAccount>>) {
+    result.subscribe((res: HttpResponse<IBankAccount>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+  }
 
-    save() {
-        this.isSaving = true;
-        if (this.bankAccount.id !== undefined) {
-            this.subscribeToSaveResponse(this.bankAccountService.update(this.bankAccount));
-        } else {
-            this.subscribeToSaveResponse(this.bankAccountService.create(this.bankAccount));
-        }
-    }
+  protected onSaveSuccess() {
+    this.isSaving = false;
+    this.previousState();
+  }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IBankAccount>>) {
-        result.subscribe((res: HttpResponse<IBankAccount>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
-    }
-
-    private onSaveSuccess() {
-        this.isSaving = false;
-        this.previousState();
-    }
-
-    private onSaveError() {
-        this.isSaving = false;
-    }
+  protected onSaveError() {
+    this.isSaving = false;
+  }
 }
