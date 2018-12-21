@@ -5,10 +5,10 @@ import { JhipsterSampleGatewayAppModule } from './app.module';
 ProdConfig();
 
 if (module['hot']) {
-  module['hot'].accept();
+    module['hot'].accept();
 }
 
 platformBrowserDynamic()
-  .bootstrapModule(JhipsterSampleGatewayAppModule, { preserveWhitespaces: true })
-  .then(success => console.log(`Application started`))
-  .catch(err => console.error(err));
+    .bootstrapModule(JhipsterSampleGatewayAppModule, { preserveWhitespaces: true })
+    .then(success => console.log(`Application started`))
+    .catch(err => console.error(err));
