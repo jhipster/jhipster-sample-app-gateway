@@ -26,4 +26,4 @@ const ENTITY_STATES = [...bankAccountRoute, ...bankAccountPopupRoute];
     entryComponents: [BankAccountComponent, BankAccountUpdateComponent, BankAccountDeleteDialogComponent, BankAccountDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class JhipsterSampleGatewayBankAccountModule {}
+export class JhipsterSampleMicroserviceBankAccountModule {}

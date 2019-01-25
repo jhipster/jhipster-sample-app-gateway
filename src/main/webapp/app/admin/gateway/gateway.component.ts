@@ -10,7 +10,7 @@ import { GatewayRoute } from './gateway-route.model';
 })
 export class JhiGatewayComponent implements OnInit {
     gatewayRoutes: GatewayRoute[];
-    updatingRoutes: Boolean;
+    updatingRoutes: boolean;
 
     constructor(private gatewayRoutesService: GatewayRoutesService) {}
 

@@ -13,8 +13,6 @@ import org.springframework.security.access.annotation.Secured;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
-
 /**
  * REST controller for managing Gateway configuration.
  */
@@ -37,7 +35,6 @@ public class GatewayResource {
      * @return the ResponseEntity with status 200 (OK) and with body the list of routes
      */
     @GetMapping("/routes")
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<RouteVM>> activeRoutes() {
         List<Route> routes = routeLocator.getRoutes();

@@ -21,7 +21,6 @@ export * from './gateway/gateway-routes.service';
 export * from './gateway/gateway.route';
 export * from './gateway/gateway-route.model';
 export * from './metrics/metrics.component';
-export * from './metrics/metrics-modal.component';
 export * from './metrics/metrics.service';
 export * from './metrics/metrics.route';
 export * from './user-management/user-management-update.component';
