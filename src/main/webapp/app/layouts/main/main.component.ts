@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 
 import { Title } from '@angular/platform-browser';
 
@@ -23,6 +23,9 @@ export class JhiMainComponent implements OnInit {
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+            }
+            if (event instanceof NavigationError && event.error.status === 404) {
+                this.router.navigate(['/404']);
             }
         });
     }
