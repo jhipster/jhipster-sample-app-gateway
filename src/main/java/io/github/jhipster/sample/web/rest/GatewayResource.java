@@ -30,9 +30,9 @@ public class GatewayResource {
     }
 
     /**
-     * GET  /routes : get the active routes.
+     * {@code GET  /routes} : get the active routes.
      *
-     * @return the ResponseEntity with status 200 (OK) and with body the list of routes
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of routes.
      */
     @GetMapping("/routes")
     @Secured(AuthoritiesConstants.ADMIN)
@@ -46,6 +46,6 @@ public class GatewayResource {
             routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
             routeVMs.add(routeVM);
         });
-        return new ResponseEntity<>(routeVMs, HttpStatus.OK);
+        return ResponseEntity.ok(routeVMs);
     }
 }

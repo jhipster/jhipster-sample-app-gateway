@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "5.8.2",
+    "jhipsterVersion": "6.0.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -18,7 +18,7 @@
     "buildTool": "maven",
     "enableSocialSignIn": false,
     "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
-    "useSass": false,
+    "useSass": true,
     "applicationType": "gateway",
     "testFrameworks": [
       "gatling",
@@ -33,6 +33,7 @@
     "reactive": false,
     "otherModules": [],
     "entitySuffix": "",
-    "dtoSuffix": "DTO"
+    "dtoSuffix": "DTO",
+    "clientTheme": "none"
   }
 }

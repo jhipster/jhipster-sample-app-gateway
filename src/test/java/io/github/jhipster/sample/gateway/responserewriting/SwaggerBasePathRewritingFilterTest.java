@@ -2,7 +2,7 @@ package io.github.jhipster.sample.gateway.responserewriting;
 
 import com.netflix.zuul.context.RequestContext;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -12,11 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 
 import static io.github.jhipster.sample.gateway.responserewriting.SwaggerBasePathRewritingFilter.gzipData;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static springfox.documentation.swagger2.web.Swagger2Controller.DEFAULT_URL;
 
 /**
- * Tests SwaggerBasePathRewritingFilter class.
+ * Tests {@link SwaggerBasePathRewritingFilter} class.
  */
 public class SwaggerBasePathRewritingFilterTest {
 
