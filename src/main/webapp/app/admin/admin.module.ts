@@ -22,8 +22,8 @@ import {
 @NgModule({
   imports: [
     JhipsterSampleGatewaySharedModule,
-    RouterModule.forChild(adminState)
     /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
+    RouterModule.forChild(adminState)
   ],
   declarations: [
     AuditsComponent,
