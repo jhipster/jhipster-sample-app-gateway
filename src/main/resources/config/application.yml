@@ -68,6 +68,7 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+      roles: 'ROLE_ADMIN'
     jhimetrics:
       enabled: true
   info:

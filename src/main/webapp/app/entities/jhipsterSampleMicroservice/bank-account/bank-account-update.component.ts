@@ -11,7 +11,6 @@ import { BankAccountService } from './bank-account.service';
   templateUrl: './bank-account-update.component.html'
 })
 export class BankAccountUpdateComponent implements OnInit {
-  bankAccount: IBankAccount;
   isSaving: boolean;
 
   editForm = this.fb.group({
@@ -26,7 +25,6 @@ export class BankAccountUpdateComponent implements OnInit {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ bankAccount }) => {
       this.updateForm(bankAccount);
-      this.bankAccount = bankAccount;
     });
   }
 
