@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "6.1.2",
+    "jhipsterVersion": "6.2.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -34,6 +34,7 @@
     "otherModules": [],
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "clientTheme": "none"
+    "clientTheme": "none",
+    "blueprints": []
   }
 }

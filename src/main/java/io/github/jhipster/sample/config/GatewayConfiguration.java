@@ -2,10 +2,9 @@ package io.github.jhipster.sample.config;
 
 import io.github.jhipster.config.JHipsterProperties;
 
-import io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter;
 import io.github.jhipster.sample.gateway.accesscontrol.AccessControlFilter;
 import io.github.jhipster.sample.gateway.responserewriting.SwaggerBasePathRewritingFilter;
-
+import io.github.jhipster.sample.gateway.ratelimiting.RateLimitingFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +45,6 @@ public class GatewayConfiguration {
         public RateLimitingConfiguration(JHipsterProperties jHipsterProperties) {
             this.jHipsterProperties = jHipsterProperties;
         }
-
         @Bean
         public RateLimitingFilter rateLimitingFilter() {
             return new RateLimitingFilter(jHipsterProperties);

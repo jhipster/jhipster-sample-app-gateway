@@ -6,7 +6,8 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'bank-account',
-        loadChildren: './jhipsterSampleMicroservice/bank-account/bank-account.module#JhipsterSampleMicroserviceBankAccountModule'
+        loadChildren: () =>
+          import('./jhipsterSampleMicroservice/bank-account/bank-account.module').then(m => m.JhipsterSampleMicroserviceBankAccountModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

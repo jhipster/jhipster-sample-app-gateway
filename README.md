@@ -1,6 +1,6 @@
 # jhipsterSampleGateway
 
-This application was generated using JHipster 6.1.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.1.2](https://www.jhipster.tech/documentation-archive/v6.1.2).
+This application was generated using JHipster 6.2.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.2.0](https://www.jhipster.tech/documentation-archive/v6.2.0).
 
 This is a "gateway" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
 
@@ -32,11 +32,11 @@ Add the `help` flag on any command to see how you can use it. For example, `npm 
 
 The `npm run` command will list all of the scripts available to run for this project.
 
-### Service workers
+### PWA Support
 
-Service workers are commented by default, to enable them please uncomment the following code.
+JHipster ships with PWA (Progressive Web App) support, and it's disabled by default. One of the main components of a PWA is a service worker.
 
-- The service worker registering script in index.html
+The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
 
 ```html
 <script>
@@ -48,7 +48,7 @@ Service workers are commented by default, to enable them please uncomment the fo
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
+Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
 
 ### Managing dependencies
 
@@ -73,11 +73,11 @@ Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor
 @import '~leaflet/dist/leaflet.css';
 ```
 
-Note: there are still few other things remaining to do for Leaflet that we won't detail here.
+Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-### Using angular-cli
+### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
 
@@ -182,15 +182,15 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 6.1.2 archive]: https://www.jhipster.tech/documentation-archive/v6.1.2
-[doing microservices with jhipster]: https://www.jhipster.tech/documentation-archive/v6.1.2/microservices-architecture/
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.1.2/development/
-[service discovery and configuration with the jhipster-registry]: https://www.jhipster.tech/documentation-archive/v6.1.2/microservices-architecture/#jhipster-registry
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.1.2/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.1.2/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v6.1.2/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v6.1.2/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.1.2/setting-up-ci/
+[jhipster 6.2.0 archive]: https://www.jhipster.tech/documentation-archive/v6.2.0
+[doing microservices with jhipster]: https://www.jhipster.tech/documentation-archive/v6.2.0/microservices-architecture/
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.2.0/development/
+[service discovery and configuration with the jhipster-registry]: https://www.jhipster.tech/documentation-archive/v6.2.0/microservices-architecture/#jhipster-registry
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.2.0/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.2.0/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v6.2.0/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v6.2.0/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.2.0/setting-up-ci/
 [node.js]: https://nodejs.org/
 [yarn]: https://yarnpkg.org/
 [webpack]: https://webpack.github.io/
