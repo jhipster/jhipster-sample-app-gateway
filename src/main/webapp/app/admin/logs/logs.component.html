@@ -5,7 +5,7 @@
 
     <span>Filter</span> <input type="text" [(ngModel)]="filter" class="form-control">
 
-    <table class="table table-sm table-striped table-bordered">
+    <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
         <thead>
         <tr title="click to order">
             <th (click)="orderProp = 'name'; reverse=!reverse"><span>Name</span></th>

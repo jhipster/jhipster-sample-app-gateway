@@ -1,16 +1,12 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { JhipsterSampleGatewaySharedModule } from 'app/shared';
-import {
-  BankAccountComponent,
-  BankAccountDetailComponent,
-  BankAccountUpdateComponent,
-  BankAccountDeletePopupComponent,
-  BankAccountDeleteDialogComponent,
-  bankAccountRoute,
-  bankAccountPopupRoute
-} from './';
+import { JhipsterSampleGatewaySharedModule } from 'app/shared/shared.module';
+import { BankAccountComponent } from './bank-account.component';
+import { BankAccountDetailComponent } from './bank-account-detail.component';
+import { BankAccountUpdateComponent } from './bank-account-update.component';
+import { BankAccountDeletePopupComponent, BankAccountDeleteDialogComponent } from './bank-account-delete-dialog.component';
+import { bankAccountRoute, bankAccountPopupRoute } from './bank-account.route';
 
 const ENTITY_STATES = [...bankAccountRoute, ...bankAccountPopupRoute];
 
@@ -23,7 +19,6 @@ const ENTITY_STATES = [...bankAccountRoute, ...bankAccountPopupRoute];
     BankAccountDeleteDialogComponent,
     BankAccountDeletePopupComponent
   ],
-  entryComponents: [BankAccountComponent, BankAccountUpdateComponent, BankAccountDeleteDialogComponent, BankAccountDeletePopupComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [BankAccountComponent, BankAccountUpdateComponent, BankAccountDeleteDialogComponent, BankAccountDeletePopupComponent]
 })
 export class JhipsterSampleMicroserviceBankAccountModule {}

@@ -28,21 +28,21 @@ describe('administration', () => {
   });
 
   it('should load metrics', async () => {
-    await navBarPage.clickOnAdmin('jhi-metrics');
+    await navBarPage.clickOnAdmin('metrics');
     const expect1 = 'Application Metrics';
     const value1 = await element(by.id('metrics-page-heading')).getText();
     expect(value1).to.eq(expect1);
   });
 
   it('should load health', async () => {
-    await navBarPage.clickOnAdmin('jhi-health');
+    await navBarPage.clickOnAdmin('health');
     const expect1 = 'Health Checks';
     const value1 = await element(by.id('health-page-heading')).getText();
     expect(value1).to.eq(expect1);
   });
 
   it('should load configuration', async () => {
-    await navBarPage.clickOnAdmin('jhi-configuration');
+    await navBarPage.clickOnAdmin('configuration');
     await browser.sleep(500);
     const expect1 = 'Configuration';
     const value1 = await element(by.id('configuration-page-heading')).getText();

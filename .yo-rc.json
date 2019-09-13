@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "6.2.0",
+    "jhipsterVersion": "6.3.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -20,10 +20,7 @@
     "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
     "useSass": true,
     "applicationType": "gateway",
-    "testFrameworks": [
-      "gatling",
-      "protractor"
-    ],
+    "testFrameworks": ["gatling", "protractor"],
     "jhiPrefix": "jhi",
     "enableTranslation": false,
     "clientFramework": "angularX",
@@ -35,6 +32,7 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "clientTheme": "none",
-    "blueprints": []
+    "blueprints": [],
+    "embeddableLaunchScript": false
   }
 }
