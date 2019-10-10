@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { JhiGatewayComponent } from './gateway.component';
 
 export const gatewayRoute: Route = {
-  path: 'gateway',
+  path: '',
   component: JhiGatewayComponent,
   data: {
     pageTitle: 'Gateway'

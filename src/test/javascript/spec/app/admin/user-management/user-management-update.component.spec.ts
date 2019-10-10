@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { JhipsterSampleGatewayTestModule } from '../../../test.module';
-import { UserMgmtUpdateComponent } from 'app/admin/user-management/user-management-update.component';
+import { UserManagementUpdateComponent } from 'app/admin/user-management/user-management-update.component';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
 
 describe('Component Tests', () => {
   describe('User Management Update Component', () => {
-    let comp: UserMgmtUpdateComponent;
-    let fixture: ComponentFixture<UserMgmtUpdateComponent>;
+    let comp: UserManagementUpdateComponent;
+    let fixture: ComponentFixture<UserManagementUpdateComponent>;
     let service: UserService;
     const route = ({
       data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null) })
@@ -21,7 +21,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JhipsterSampleGatewayTestModule],
-        declarations: [UserMgmtUpdateComponent],
+        declarations: [UserManagementUpdateComponent],
         providers: [
           FormBuilder,
           {
@@ -30,12 +30,12 @@ describe('Component Tests', () => {
           }
         ]
       })
-        .overrideTemplate(UserMgmtUpdateComponent, '')
+        .overrideTemplate(UserManagementUpdateComponent, '')
         .compileComponents();
     }));
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(UserMgmtUpdateComponent);
+      fixture = TestBed.createComponent(UserManagementUpdateComponent);
       comp = fixture.componentInstance;
       service = fixture.debugElement.injector.get(UserService);
     });

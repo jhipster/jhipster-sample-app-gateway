@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
   selector: 'jhi-settings',
@@ -10,7 +11,6 @@ import { AccountService } from 'app/core/auth/account.service';
 export class SettingsComponent implements OnInit {
   error: string;
   success: string;
-  languages: any[];
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -25,7 +25,7 @@ export class SettingsComponent implements OnInit {
   constructor(private accountService: AccountService, private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.accountService.identity().then(account => {
+    this.accountService.identity().subscribe(account => {
       this.updateForm(account);
     });
   }
@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
       () => {
         this.error = null;
         this.success = 'OK';
-        this.accountService.identity(true).then(account => {
+        this.accountService.identity(true).subscribe(account => {
           this.updateForm(account);
         });
       },
@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
     };
   }
 
-  updateForm(account: any): void {
+  updateForm(account: Account): void {
     this.settingsForm.patchValue({
       firstName: account.firstName,
       lastName: account.lastName,
