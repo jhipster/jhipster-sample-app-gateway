@@ -1,6 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
-import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
+import { HttpErrorResponse } from '@angular/common/http';
+import { JhiEventManager, JhiAlert, JhiAlertService, JhiEventWithContent } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
+
+import { AlertError } from './alert-error.model';
 
 @Component({
   selector: 'jhi-alert-error',
@@ -14,79 +17,89 @@ import { Subscription } from 'rxjs';
     </div>
   `
 })
-export class JhiAlertErrorComponent implements OnDestroy {
-  alerts: any[];
-  cleanHttpErrorListener: Subscription;
+export class AlertErrorComponent implements OnDestroy {
+  alerts: JhiAlert[] = [];
+  errorListener: Subscription;
+  httpErrorListener: Subscription;
+
   constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager) {
-    this.alerts = [];
-
-    this.cleanHttpErrorListener = eventManager.subscribe('jhipsterSampleGatewayApp.httpError', response => {
-      let i;
-      const httpErrorResponse = response.content;
-      switch (httpErrorResponse.status) {
-        // connection refused, server not reachable
-        case 0:
-          this.addErrorAlert('Server not reachable');
-          break;
-
-        case 400: {
-          const arr = httpErrorResponse.headers.keys();
-          let errorHeader = null;
-          arr.forEach(entry => {
-            if (entry.toLowerCase().endsWith('app-error')) {
-              errorHeader = httpErrorResponse.headers.get(entry);
-            }
-          });
-          if (errorHeader) {
-            this.addErrorAlert(errorHeader);
-          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
-            const fieldErrors = httpErrorResponse.error.fieldErrors;
-            for (i = 0; i < fieldErrors.length; i++) {
-              const fieldError = fieldErrors[i];
-              if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
-                fieldError.message = 'Size';
-              }
-              // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-              const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-              const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-              this.addErrorAlert('Error on field "' + fieldName + '"');
-            }
-          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
-          } else {
-            this.addErrorAlert(httpErrorResponse.error);
-          }
-          break;
-        }
-        case 404:
-          this.addErrorAlert('Not found');
-          break;
-
-        default:
-          if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.message);
-          } else {
-            this.addErrorAlert(httpErrorResponse.error);
-          }
-      }
+    this.errorListener = eventManager.subscribe('jhipsterSampleGatewayApp.error', (response: JhiEventWithContent<AlertError>) => {
+      const errorResponse = response.content;
+      this.addErrorAlert(errorResponse.message);
     });
+
+    this.httpErrorListener = eventManager.subscribe(
+      'jhipsterSampleGatewayApp.httpError',
+      (response: JhiEventWithContent<HttpErrorResponse>) => {
+        const httpErrorResponse = response.content;
+        switch (httpErrorResponse.status) {
+          // connection refused, server not reachable
+          case 0:
+            this.addErrorAlert('Server not reachable');
+            break;
+
+          case 400: {
+            const arr = httpErrorResponse.headers.keys();
+            let errorHeader = null;
+            arr.forEach(entry => {
+              if (entry.toLowerCase().endsWith('app-error')) {
+                errorHeader = httpErrorResponse.headers.get(entry);
+              }
+            });
+            if (errorHeader) {
+              this.addErrorAlert(errorHeader);
+            } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
+              const fieldErrors = httpErrorResponse.error.fieldErrors;
+              for (const fieldError of fieldErrors) {
+                if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
+                  fieldError.message = 'Size';
+                }
+                // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+                const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+                this.addErrorAlert('Error on field "' + fieldName + '"');
+              }
+            } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+              this.addErrorAlert(httpErrorResponse.error.message);
+            } else {
+              this.addErrorAlert(httpErrorResponse.error);
+            }
+            break;
+          }
+
+          case 404:
+            this.addErrorAlert('Not found');
+            break;
+
+          default:
+            if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+              this.addErrorAlert(httpErrorResponse.error.message);
+            } else {
+              this.addErrorAlert(httpErrorResponse.error);
+            }
+        }
+      }
+    );
   }
 
-  setClasses(alert) {
-    return {
-      'jhi-toast': alert.toast,
-      [alert.position]: true
-    };
+  setClasses(alert: JhiAlert): { [key: string]: boolean } {
+    const classes = { 'jhi-toast': Boolean(alert.toast) };
+    if (alert.position) {
+      return { ...classes, [alert.position]: true };
+    }
+    return classes;
   }
 
-  ngOnDestroy() {
-    if (this.cleanHttpErrorListener !== undefined && this.cleanHttpErrorListener !== null) {
-      this.eventManager.destroy(this.cleanHttpErrorListener);
-      this.alerts = [];
+  ngOnDestroy(): void {
+    if (this.errorListener) {
+      this.eventManager.destroy(this.errorListener);
+    }
+    if (this.httpErrorListener) {
+      this.eventManager.destroy(this.httpErrorListener);
     }
   }
 
-  addErrorAlert(message) {
+  addErrorAlert(message: string): void {
     const newAlert: JhiAlert = {
       type: 'danger',
       msg: message,

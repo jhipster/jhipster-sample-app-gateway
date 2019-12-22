@@ -22,7 +22,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
         },
         {
           path: 'account',
-          loadChildren: () => import('./account/account.module').then(m => m.JhipsterSampleGatewayAccountModule)
+          loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
         },
         ...LAYOUT_ROUTES
       ],

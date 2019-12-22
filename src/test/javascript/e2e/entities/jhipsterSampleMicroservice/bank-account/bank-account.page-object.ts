@@ -5,19 +5,19 @@ export class BankAccountComponentsPage {
   deleteButtons = element.all(by.css('jhi-bank-account div table .btn-danger'));
   title = element.all(by.css('jhi-bank-account div h2#page-heading span')).first();
 
-  async clickOnCreateButton() {
+  async clickOnCreateButton(): Promise<void> {
     await this.createButton.click();
   }
 
-  async clickOnLastDeleteButton() {
+  async clickOnLastDeleteButton(): Promise<void> {
     await this.deleteButtons.last().click();
   }
 
-  async countDeleteButtons() {
+  async countDeleteButtons(): Promise<number> {
     return this.deleteButtons.count();
   }
 
-  async getTitle() {
+  async getTitle(): Promise<string> {
     return this.title.getText();
   }
 }
@@ -29,31 +29,31 @@ export class BankAccountUpdatePage {
   nameInput = element(by.id('field_name'));
   balanceInput = element(by.id('field_balance'));
 
-  async getPageTitle() {
+  async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
 
-  async setNameInput(name) {
+  async setNameInput(name: string): Promise<void> {
     await this.nameInput.sendKeys(name);
   }
 
-  async getNameInput() {
+  async getNameInput(): Promise<string> {
     return await this.nameInput.getAttribute('value');
   }
 
-  async setBalanceInput(balance) {
+  async setBalanceInput(balance: string): Promise<void> {
     await this.balanceInput.sendKeys(balance);
   }
 
-  async getBalanceInput() {
+  async getBalanceInput(): Promise<string> {
     return await this.balanceInput.getAttribute('value');
   }
 
-  async save() {
+  async save(): Promise<void> {
     await this.saveButton.click();
   }
 
-  async cancel() {
+  async cancel(): Promise<void> {
     await this.cancelButton.click();
   }
 
@@ -66,11 +66,11 @@ export class BankAccountDeleteDialog {
   private dialogTitle = element(by.id('jhi-delete-bankAccount-heading'));
   private confirmButton = element(by.id('jhi-confirm-delete-bankAccount'));
 
-  async getDialogTitle() {
+  async getDialogTitle(): Promise<string> {
     return this.dialogTitle.getText();
   }
 
-  async clickOnConfirmButton() {
+  async clickOnConfirmButton(): Promise<void> {
     await this.confirmButton.click();
   }
 }

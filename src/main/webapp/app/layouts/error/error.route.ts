@@ -8,7 +8,7 @@ export const errorRoute: Routes = [
     component: ErrorComponent,
     data: {
       authorities: [],
-      pageTitle: 'jhipsterSampleGateway'
+      pageTitle: 'Error page!'
     }
   },
   {
@@ -16,8 +16,8 @@ export const errorRoute: Routes = [
     component: ErrorComponent,
     data: {
       authorities: [],
-      pageTitle: 'jhipsterSampleGateway',
-      error403: true
+      pageTitle: 'Error page!',
+      errorMessage: 'You are not authorized to access this page.'
     }
   },
   {
@@ -25,8 +25,8 @@ export const errorRoute: Routes = [
     component: ErrorComponent,
     data: {
       authorities: [],
-      pageTitle: 'jhipsterSampleGateway',
-      error404: true
+      pageTitle: 'Error page!',
+      errorMessage: 'The page does not exist.'
     }
   },
   {

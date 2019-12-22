@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import { IBankAccount, BankAccount } from 'app/shared/model/jhipsterSampleMicroservice/bank-account.model';
 import { BankAccountService } from './bank-account.service';
 
@@ -13,7 +13,7 @@ import { BankAccountService } from './bank-account.service';
   templateUrl: './bank-account-update.component.html'
 })
 export class BankAccountUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
   editForm = this.fb.group({
     id: [],
@@ -23,14 +23,13 @@ export class BankAccountUpdateComponent implements OnInit {
 
   constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bankAccount }) => {
       this.updateForm(bankAccount);
     });
   }
 
-  updateForm(bankAccount: IBankAccount) {
+  updateForm(bankAccount: IBankAccount): void {
     this.editForm.patchValue({
       id: bankAccount.id,
       name: bankAccount.name,
@@ -38,11 +37,11 @@ export class BankAccountUpdateComponent implements OnInit {
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const bankAccount = this.createFromForm();
     if (bankAccount.id !== undefined) {
@@ -55,22 +54,25 @@ export class BankAccountUpdateComponent implements OnInit {
   private createFromForm(): IBankAccount {
     return {
       ...new BankAccount(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
-      balance: this.editForm.get(['balance']).value
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      balance: this.editForm.get(['balance'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IBankAccount>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IBankAccount>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 }
