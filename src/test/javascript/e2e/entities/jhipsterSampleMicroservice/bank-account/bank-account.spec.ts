@@ -25,6 +25,10 @@ describe('BankAccount e2e test', () => {
     bankAccountComponentsPage = new BankAccountComponentsPage();
     await browser.wait(ec.visibilityOf(bankAccountComponentsPage.title), 5000);
     expect(await bankAccountComponentsPage.getTitle()).to.eq('Bank Accounts');
+    await browser.wait(
+      ec.or(ec.visibilityOf(bankAccountComponentsPage.entities), ec.visibilityOf(bankAccountComponentsPage.noResult)),
+      1000
+    );
   });
 
   it('should load create BankAccount page', async () => {
@@ -38,9 +42,12 @@ describe('BankAccount e2e test', () => {
     const nbButtonsBeforeCreate = await bankAccountComponentsPage.countDeleteButtons();
 
     await bankAccountComponentsPage.clickOnCreateButton();
+
     await promise.all([bankAccountUpdatePage.setNameInput('name'), bankAccountUpdatePage.setBalanceInput('5')]);
+
     expect(await bankAccountUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
     expect(await bankAccountUpdatePage.getBalanceInput()).to.eq('5', 'Expected balance value to be equals to 5');
+
     await bankAccountUpdatePage.save();
     expect(await bankAccountUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
