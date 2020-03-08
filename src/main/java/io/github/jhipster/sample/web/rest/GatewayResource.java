@@ -24,6 +24,7 @@ public class GatewayResource {
 
     private final DiscoveryClient discoveryClient;
 
+
     public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
         this.discoveryClient = discoveryClient;
