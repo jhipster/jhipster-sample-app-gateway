@@ -9,6 +9,6 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
   imports: [JhipsterSampleGatewaySharedLibsModule],
   declarations: [AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
   entryComponents: [LoginModalComponent],
-  exports: [JhipsterSampleGatewaySharedLibsModule, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective]
+  exports: [JhipsterSampleGatewaySharedLibsModule, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
 })
 export class JhipsterSampleGatewaySharedModule {}

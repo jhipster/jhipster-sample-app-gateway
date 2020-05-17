@@ -6,6 +6,6 @@ export const gatewayRoute: Route = {
   path: '',
   component: GatewayComponent,
   data: {
-    pageTitle: 'Gateway'
-  }
+    pageTitle: 'Gateway',
+  },
 };

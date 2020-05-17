@@ -6,7 +6,7 @@ import { GatewayRoute } from './gateway-route.model';
 @Component({
   selector: 'jhi-gateway',
   templateUrl: './gateway.component.html',
-  providers: [GatewayRoutesService]
+  providers: [GatewayRoutesService],
 })
 export class GatewayComponent implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];

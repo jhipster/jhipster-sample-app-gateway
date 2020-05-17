@@ -10,7 +10,7 @@ import { BankAccountService } from './bank-account.service';
 
 @Component({
   selector: 'jhi-bank-account-update',
-  templateUrl: './bank-account-update.component.html'
+  templateUrl: './bank-account-update.component.html',
 })
 export class BankAccountUpdateComponent implements OnInit {
   isSaving = false;
@@ -18,7 +18,7 @@ export class BankAccountUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
-    balance: [null, [Validators.required]]
+    balance: [null, [Validators.required]],
   });
 
   constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -33,7 +33,7 @@ export class BankAccountUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: bankAccount.id,
       name: bankAccount.name,
-      balance: bankAccount.balance
+      balance: bankAccount.balance,
     });
   }
 
@@ -56,7 +56,7 @@ export class BankAccountUpdateComponent implements OnInit {
       ...new BankAccount(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      balance: this.editForm.get(['balance'])!.value
+      balance: this.editForm.get(['balance'])!.value,
     };
   }
 

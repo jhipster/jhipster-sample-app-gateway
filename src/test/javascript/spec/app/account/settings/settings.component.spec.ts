@@ -21,14 +21,14 @@ describe('Component Tests', () => {
       langKey: 'en',
       login: 'john',
       authorities: [],
-      imageUrl: ''
+      imageUrl: '',
     };
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [JhipsterSampleGatewayTestModule],
         declarations: [SettingsComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(SettingsComponent, '')
         .compileComponents();
@@ -47,7 +47,7 @@ describe('Component Tests', () => {
       const settingsFormValues = {
         firstName: 'John',
         lastName: 'Doe',
-        email: 'john.doe@mail.com'
+        email: 'john.doe@mail.com',
       };
 
       // WHEN

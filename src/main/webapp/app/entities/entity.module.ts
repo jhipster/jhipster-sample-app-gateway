@@ -7,10 +7,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'bank-account',
         loadChildren: () =>
-          import('./jhipsterSampleMicroservice/bank-account/bank-account.module').then(m => m.JhipsterSampleMicroserviceBankAccountModule)
-      }
+          import('./jhipsterSampleMicroservice/bank-account/bank-account.module').then(m => m.JhipsterSampleMicroserviceBankAccountModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ])
-  ]
+    ]),
+  ],
 })
 export class JhipsterSampleGatewayEntityModule {}
