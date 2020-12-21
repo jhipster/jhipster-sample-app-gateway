@@ -2,9 +2,8 @@ package io.github.jhipster.sample.gateway;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.springframework.stereotype.Component;
-
 import java.util.Set;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TokenRelayFilter extends ZuulFilter {

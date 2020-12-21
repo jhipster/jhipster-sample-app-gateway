@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "6.10.5",
+    "jhipsterVersion": "7.0.0-beta.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -34,6 +34,17 @@
     "clientTheme": "none",
     "blueprints": [],
     "embeddableLaunchScript": false,
-    "creationTimestamp": 1577001687629
+    "creationTimestamp": 1577001687629,
+    "skipUserManagement": false,
+    "withAdminUi": true,
+    "clientThemeVariant": "",
+    "skipClient": false,
+    "skipServer": false,
+    "skipCheckLengthOfIdentifier": false,
+    "skipFakeData": false,
+    "pages": [],
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
+    "entities": ["BankAccount"]
   }
 }

@@ -14,20 +14,12 @@ import { RouterModule } from '@angular/router';
         },
       },
       {
-        path: 'audits',
-        loadChildren: () => import('./audits/audits.module').then(m => m.AuditsModule),
-      },
-      {
-        path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
-      },
-      {
         path: 'docs',
         loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
       },
       {
-        path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
+        path: 'configuration',
+        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
       },
       {
         path: 'health',
@@ -40,6 +32,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'metrics',
         loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
+      },
+      {
+        path: 'gateway',
+        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
       },
       /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
     ]),

@@ -1,18 +1,15 @@
 package io.github.jhipster.sample.gateway.accesscontrol;
 
-import io.github.jhipster.config.JHipsterProperties;
-
+import com.netflix.zuul.ZuulFilter;
+import com.netflix.zuul.context.RequestContext;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.http.HttpStatus;
-
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
+import tech.jhipster.config.JHipsterProperties;
 
 /**
  * Zuul filter for restricting access to backend micro-services endpoints.
@@ -63,13 +60,15 @@ public class AccessControlFilter extends ZuulFilter {
     }
 
     private boolean isAuthorizedRequest(String serviceUrl, String serviceName, String requestUri) {
-        Map<String, List<String>> authorizedMicroservicesEndpoints = jHipsterProperties.getGateway()
-            .getAuthorizedMicroservicesEndpoints();
+        Map<String, List<String>> authorizedMicroservicesEndpoints = jHipsterProperties.getGateway().getAuthorizedMicroservicesEndpoints();
 
         // If the authorized endpoints list was left empty for this route, all access are allowed
         if (authorizedMicroservicesEndpoints.get(serviceName) == null) {
-            log.debug("Access Control: allowing access for {}, as no access control policy has been set up for " +
-                "service: {}", requestUri, serviceName);
+            log.debug(
+                "Access Control: allowing access for {}, as no access control policy has been set up for " + "service: {}",
+                requestUri,
+                serviceName
+            );
             return true;
         } else {
             List<String> authorizedEndpoints = authorizedMicroservicesEndpoints.get(serviceName);
@@ -79,8 +78,11 @@ public class AccessControlFilter extends ZuulFilter {
                 // We do a substring to remove the "**/" at the end of the route URL
                 String gatewayEndpoint = serviceUrl.substring(0, serviceUrl.length() - 3) + endpoint;
                 if (requestUri.startsWith(gatewayEndpoint)) {
-                    log.debug("Access Control: allowing access for {}, as it matches the following authorized " +
-                        "microservice endpoint: {}", requestUri, gatewayEndpoint);
+                    log.debug(
+                        "Access Control: allowing access for {}, as it matches the following authorized " + "microservice endpoint: {}",
+                        requestUri,
+                        gatewayEndpoint
+                    );
                     return true;
                 }
             }

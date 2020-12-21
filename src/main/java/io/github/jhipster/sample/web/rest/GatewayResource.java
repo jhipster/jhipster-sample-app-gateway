@@ -1,16 +1,14 @@
 package io.github.jhipster.sample.web.rest;
 
+import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.web.rest.vm.RouteVM;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
-import io.github.jhipster.sample.security.AuthoritiesConstants;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,7 +21,6 @@ public class GatewayResource {
     private final RouteLocator routeLocator;
 
     private final DiscoveryClient discoveryClient;
-
 
     public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
@@ -40,13 +37,15 @@ public class GatewayResource {
     public ResponseEntity<List<RouteVM>> activeRoutes() {
         List<Route> routes = routeLocator.getRoutes();
         List<RouteVM> routeVMs = new ArrayList<>();
-        routes.forEach(route -> {
-            RouteVM routeVM = new RouteVM();
-            routeVM.setPath(route.getFullPath());
-            routeVM.setServiceId(route.getId());
-            routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
-            routeVMs.add(routeVM);
-        });
+        routes.forEach(
+            route -> {
+                RouteVM routeVM = new RouteVM();
+                routeVM.setPath(route.getFullPath());
+                routeVM.setServiceId(route.getId());
+                routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
+                routeVMs.add(routeVM);
+            }
+        );
         return ResponseEntity.ok(routeVMs);
     }
 }
