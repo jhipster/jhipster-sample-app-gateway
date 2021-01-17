@@ -7,7 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { Account } from 'app/core/user/account.model';
+import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 

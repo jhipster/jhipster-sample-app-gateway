@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { User } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
+import { User } from '../user-management.model';
+import { UserManagementService } from '../service/user-management.service';
 
 @Component({
   selector: 'jhi-user-mgmt-update',
@@ -33,7 +33,7 @@ export class UserManagementUpdateComponent implements OnInit {
     authorities: [],
   });
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private userService: UserManagementService, private route: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {

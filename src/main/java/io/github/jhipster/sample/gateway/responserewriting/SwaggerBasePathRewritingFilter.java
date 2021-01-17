@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.commons.io.IOUtils;
@@ -19,6 +23,10 @@ import org.springframework.cloud.netflix.zuul.filters.post.SendResponseFilter;
 public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerBasePathRewritingFilter.class);
+
+    private static final String SERVERS = "servers";
+
+    private static final String URL = "url";
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -76,7 +84,12 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
                 LinkedHashMap<String, Object> map = this.mapper.readValue(response, LinkedHashMap.class);
 
                 String basePath = requestUri.replace("/v3/api-docs", "");
-                map.put("basePath", basePath);
+                if (map.containsKey(SERVERS)) {
+                    List<Map<String, String>> listServers = ((List<Map<String, String>>) map.get(SERVERS));
+                    if (listServers.size() > 0 && listServers.get(0).containsKey(URL)) {
+                        map.put(SERVERS, List.of(Map.of(URL, listServers.get(0).get(URL) + basePath)));
+                    }
+                }
                 log.debug("OpenAPI-docs: rewritten Base URL with correct micro-service route: {}", basePath);
                 return mapper.writeValueAsString(map);
             }

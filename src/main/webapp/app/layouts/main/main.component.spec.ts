@@ -50,7 +50,7 @@ describe('Component Tests', () => {
     });
 
     describe('page title', () => {
-      const defaultPageTitle = 'JhipsterSampleGateway';
+      const defaultPageTitle = 'Jhipster Sample Gateway';
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');

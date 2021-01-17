@@ -6,7 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { throwError, of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/user/account.model';
+import { Account } from 'app/core/auth/account.model';
 
 import { SettingsComponent } from './settings.component';
 
