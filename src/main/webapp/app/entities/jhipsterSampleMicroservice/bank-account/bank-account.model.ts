@@ -7,3 +7,7 @@ export interface IBankAccount {
 export class BankAccount implements IBankAccount {
   constructor(public id?: number, public name?: string, public balance?: number) {}
 }
+
+export function getBankAccountIdentifier(bankAccount: IBankAccount): number | undefined {
+  return bankAccount.id;
+}

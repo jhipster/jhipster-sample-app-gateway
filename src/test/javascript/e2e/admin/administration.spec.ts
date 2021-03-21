@@ -32,7 +32,7 @@ describe('administration', () => {
   it('should load metrics', async () => {
     await navBarPage.clickOnAdmin('metrics');
     const heading = element(by.id('metrics-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 10000);
     const expect1 = 'Application Metrics';
     const value1 = await heading.getText();
     expect(value1).to.eq(expect1);
@@ -41,7 +41,7 @@ describe('administration', () => {
   it('should load health', async () => {
     await navBarPage.clickOnAdmin('health');
     const heading = element(by.id('health-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 10000);
     const expect1 = 'Health Checks';
     const value1 = await heading.getText();
     expect(value1).to.eq(expect1);
@@ -50,7 +50,7 @@ describe('administration', () => {
   it('should load configuration', async () => {
     await navBarPage.clickOnAdmin('configuration');
     const heading = element(by.id('configuration-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 10000);
     const expect1 = 'Configuration';
     const value1 = await heading.getText();
     expect(value1).to.eq(expect1);
@@ -59,7 +59,7 @@ describe('administration', () => {
   it('should load logs', async () => {
     await navBarPage.clickOnAdmin('logs');
     const heading = element(by.id('logs-page-heading'));
-    await browser.wait(ec.visibilityOf(heading), 2000);
+    await browser.wait(ec.visibilityOf(heading), 10000);
     const expect1 = 'Logs';
     const value1 = await heading.getText();
     expect(value1).to.eq(expect1);

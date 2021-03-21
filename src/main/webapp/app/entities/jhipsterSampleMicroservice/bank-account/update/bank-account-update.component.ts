@@ -3,6 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { IBankAccount, BankAccount } from '../bank-account.model';
 import { BankAccountService } from '../service/bank-account.service';
@@ -20,19 +21,11 @@ export class BankAccountUpdateComponent implements OnInit {
     balance: [null, [Validators.required]],
   });
 
-  constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bankAccount }) => {
       this.updateForm(bankAccount);
-    });
-  }
-
-  updateForm(bankAccount: IBankAccount): void {
-    this.editForm.patchValue({
-      id: bankAccount.id,
-      name: bankAccount.name,
-      balance: bankAccount.balance,
     });
   }
 
@@ -50,28 +43,39 @@ export class BankAccountUpdateComponent implements OnInit {
     }
   }
 
-  private createFromForm(): IBankAccount {
-    return {
-      ...new BankAccount(),
-      id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
-      balance: this.editForm.get(['balance'])!.value,
-    };
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBankAccount>>): void {
-    result.subscribe(
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
   }
 
   protected onSaveSuccess(): void {
-    this.isSaving = false;
     this.previousState();
   }
 
   protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
     this.isSaving = false;
+  }
+
+  protected updateForm(bankAccount: IBankAccount): void {
+    this.editForm.patchValue({
+      id: bankAccount.id,
+      name: bankAccount.name,
+      balance: bankAccount.balance,
+    });
+  }
+
+  protected createFromForm(): IBankAccount {
+    return {
+      ...new BankAccount(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      balance: this.editForm.get(['balance'])!.value,
+    };
   }
 }

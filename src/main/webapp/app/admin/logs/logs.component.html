@@ -3,7 +3,8 @@
 
   <p>There are {{ loggers.length }} loggers.</p>
 
-  <span>Filter</span> <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
+  <span>Filter</span>
+  <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
 
   <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
     <thead>
@@ -25,6 +26,7 @@
         >
           TRACE
         </button>
+
         <button
           (click)="changeLevel(logger.name, 'DEBUG')"
           [ngClass]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
@@ -32,6 +34,7 @@
         >
           DEBUG
         </button>
+
         <button
           (click)="changeLevel(logger.name, 'INFO')"
           [ngClass]="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
@@ -39,6 +42,7 @@
         >
           INFO
         </button>
+
         <button
           (click)="changeLevel(logger.name, 'WARN')"
           [ngClass]="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
@@ -46,6 +50,7 @@
         >
           WARN
         </button>
+
         <button
           (click)="changeLevel(logger.name, 'ERROR')"
           [ngClass]="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
@@ -53,6 +58,7 @@
         >
           ERROR
         </button>
+
         <button
           (click)="changeLevel(logger.name, 'OFF')"
           [ngClass]="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
