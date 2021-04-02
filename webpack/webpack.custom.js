@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const { merge } = require('webpack-merge');
 const path = require('path');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
@@ -10,7 +11,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const tls = process.env.TLS;
 
-module.exports = (config, options) => {
+module.exports = (config, options, targetOptions) => {
   // PLUGINS
   if (config.mode === 'development') {
     config.plugins.push(
@@ -21,14 +22,25 @@ module.exports = (config, options) => {
       new WebpackNotifierPlugin({
         title: 'Jhipster Sample Gateway',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
-      }),
+      })
+    );
+    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
+      config.plugins.push(
+        new SimpleProgressWebpackPlugin({
+          format: 'compact',
+        })
+      );
+    }
+  }
+  if (targetOptions.target === 'serve' || config.watch) {
+    config.plugins.push(
       new BrowserSyncPlugin(
         {
           host: 'localhost',
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:4200`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '8080'}`,
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
             },
@@ -48,18 +60,10 @@ module.exports = (config, options) => {
           */
         },
         {
-          reload: false,
+          reload: targetOptions.target === 'build', // enabled for build --watch
         }
       )
     );
-
-    if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
-      config.plugins.push(
-        new SimpleProgressWebpackPlugin({
-          format: 'compact',
-        })
-      );
-    }
   }
 
   if (config.mode === 'production') {
@@ -99,6 +103,11 @@ module.exports = (config, options) => {
         SERVER_API_URL: `''`,
       },
     })
+  );
+
+  config = merge(
+    // jhipster-needle-add-webpack-config - JHipster will add custom config
+    config
   );
 
   return config;
