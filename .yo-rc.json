@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "7.0.1",
+    "jhipsterVersion": "7.1.0",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -45,6 +45,7 @@
     "pages": [],
     "nativeLanguage": "en",
     "languages": ["en", "fr"],
-    "entities": ["BankAccount"]
+    "entities": ["BankAccount"],
+    "devServerPort": 4200
   }
 }

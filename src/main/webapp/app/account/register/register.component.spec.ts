@@ -44,7 +44,7 @@ describe('Component Tests', () => {
     it('should update success to true after creating an account', inject(
       [RegisterService],
       fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(of({}));
+        jest.spyOn(service, 'save').mockReturnValue(of({}));
         comp.registerForm.patchValue({
           password: 'password',
           confirmPassword: 'password',
@@ -69,7 +69,7 @@ describe('Component Tests', () => {
     it('should notify of user existence upon 400/login already in use', inject(
       [RegisterService],
       fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(
+        jest.spyOn(service, 'save').mockReturnValue(
           throwError({
             status: 400,
             error: { type: LOGIN_ALREADY_USED_TYPE },
@@ -92,7 +92,7 @@ describe('Component Tests', () => {
     it('should notify of email existence upon 400/email address already in use', inject(
       [RegisterService],
       fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(
+        jest.spyOn(service, 'save').mockReturnValue(
           throwError({
             status: 400,
             error: { type: EMAIL_ALREADY_USED_TYPE },
@@ -115,7 +115,7 @@ describe('Component Tests', () => {
     it('should notify of generic error', inject(
       [RegisterService],
       fakeAsync((service: RegisterService) => {
-        spyOn(service, 'save').and.returnValue(
+        jest.spyOn(service, 'save').mockReturnValue(
           throwError({
             status: 503,
           })

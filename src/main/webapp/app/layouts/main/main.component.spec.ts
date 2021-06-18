@@ -1,7 +1,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
 
@@ -54,10 +54,11 @@ describe('Component Tests', () => {
       const parentRoutePageTitle = 'parentTitle';
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
+      const navigationStart = new NavigationStart(1, '');
 
       beforeEach(() => {
         routerState.snapshot.root = { data: {} };
-        spyOn(titleService, 'setTitle');
+        jest.spyOn(titleService, 'setTitle');
         comp.ngOnInit();
       });
 
@@ -103,6 +104,16 @@ describe('Component Tests', () => {
 
           // THEN
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle);
+        });
+      });
+
+      describe('navigation start', () => {
+        it('should not set page title on navigation start', () => {
+          // WHEN
+          routerEventsSubject.next(navigationStart);
+
+          // THEN
+          expect(titleService.setTitle).not.toHaveBeenCalled();
         });
       });
     });

@@ -19,7 +19,7 @@ describe('account', () => {
 
   it('should fail to login with bad password', async () => {
     const expect1 = 'Welcome, Java Hipster!';
-    const value1 = await element(by.css('h1')).getText();
+    const value1 = await element(by.css('h1 > span')).getText();
     expect(value1).to.eq(expect1);
     signInPage = await navBarPage.getSignInPage();
     await signInPage.autoSignInUsing(username, 'foo');

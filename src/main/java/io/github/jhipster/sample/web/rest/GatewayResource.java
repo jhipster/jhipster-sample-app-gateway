@@ -24,6 +24,9 @@ public class GatewayResource {
 
     private final DiscoveryClient discoveryClient;
 
+    @Value("${spring.application.name}")
+    private String appName;
+
     public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
         this.routeLocator = routeLocator;
         this.discoveryClient = discoveryClient;

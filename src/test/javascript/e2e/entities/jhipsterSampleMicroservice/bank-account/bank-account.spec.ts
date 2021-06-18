@@ -47,9 +47,6 @@ describe('BankAccount e2e test', () => {
 
     await promise.all([bankAccountUpdatePage.setNameInput('name'), bankAccountUpdatePage.setBalanceInput('5')]);
 
-    expect(await bankAccountUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
-    expect(await bankAccountUpdatePage.getBalanceInput()).to.eq('5', 'Expected balance value to be equals to 5');
-
     await bankAccountUpdatePage.save();
     expect(await bankAccountUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
