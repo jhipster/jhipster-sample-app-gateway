@@ -42,22 +42,20 @@ public class GatewayResource {
     public ResponseEntity<List<RouteVM>> activeRoutes() {
         Flux<Route> routes = routeLocator.getRoutes();
         List<RouteVM> routeVMs = new ArrayList<>();
-        routes.subscribe(
-            route -> {
-                RouteVM routeVM = new RouteVM();
-                // Manipulate strings to make Gateway routes look like Zuul's
-                String predicate = route.getPredicate().toString();
-                String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
-                routeVM.setPath(path);
-                String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
-                routeVM.setServiceId(serviceId);
-                // Exclude gateway app from routes
-                if (!serviceId.equalsIgnoreCase(appName)) {
-                    routeVM.setServiceInstances(discoveryClient.getInstances(serviceId));
-                    routeVMs.add(routeVM);
-                }
+        routes.subscribe(route -> {
+            RouteVM routeVM = new RouteVM();
+            // Manipulate strings to make Gateway routes look like Zuul's
+            String predicate = route.getPredicate().toString();
+            String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
+            routeVM.setPath(path);
+            String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
+            routeVM.setServiceId(serviceId);
+            // Exclude gateway app from routes
+            if (!serviceId.equalsIgnoreCase(appName)) {
+                routeVM.setServiceInstances(discoveryClient.getInstances(serviceId));
+                routeVMs.add(routeVM);
             }
-        );
+        });
         return ResponseEntity.ok(routeVMs);
     }
 }

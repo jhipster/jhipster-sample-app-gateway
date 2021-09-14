@@ -26,7 +26,7 @@ export class NavbarComponent implements OnInit {
     private router: Router
   ) {
     if (VERSION) {
-      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
+      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }
   }
 
