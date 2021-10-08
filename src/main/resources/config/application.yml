@@ -197,8 +197,8 @@ jhipster:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: jhipsterSampleGateway API
-    description: jhipsterSampleGateway API documentation
+    title: Jhipster Sample Gateway API
+    description: Jhipster Sample Gateway API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
