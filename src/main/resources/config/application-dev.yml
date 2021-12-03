@@ -45,23 +45,14 @@ spring:
       profile: dev
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1
-    username: jhipsterSampleGateway
-    password:
-    hikari:
-      poolName: Hikari
-      auto-commit: false
   h2:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
-  jpa:
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+    url: jdbc:h2:file:./target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1
   mail:
     host: localhost
     port: 25
@@ -69,6 +60,10 @@ spring:
     password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  r2dbc:
+    url: r2dbc:h2:file://././target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1
+    username: jhipsterSampleGateway
+    password:
   thymeleaf:
     cache: false
   sleuth:
@@ -96,8 +91,6 @@ jhipster:
       enabled: false
       limit: 100000
       duration-in-seconds: 3600
-    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-      app1: /api,/v3/api-docs # recommended dev configuration
   cache: # Cache configuration
     hazelcast: # Hazelcast distributed cache
       time-to-live-seconds: 3600

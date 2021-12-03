@@ -2,29 +2,25 @@ package io.github.jhipster.sample.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Table;
 
 /**
  * An authority (a security role) used by Spring Security.
  */
-@Entity
-@Table(name = "jhi_authority")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Authority implements Serializable {
+@Table("jhi_authority")
+public class Authority implements Serializable, Persistable<String> {
 
     private static final long serialVersionUID = 1L;
 
     @NotNull
     @Size(max = 50)
     @Id
-    @Column(length = 50)
     private String name;
 
     public String getName() {
@@ -57,5 +53,15 @@ public class Authority implements Serializable {
         return "Authority{" +
             "name='" + name + '\'' +
             "}";
+    }
+
+    @Override
+    public String getId() {
+        return name;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }

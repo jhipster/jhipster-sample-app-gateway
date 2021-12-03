@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "7.4.0",
+    "jhipsterVersion": "7.4.1",
     "baseName": "jhipsterSampleGateway",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
@@ -27,7 +27,7 @@
     "clientPackageManager": "npm",
     "cacheProvider": "hazelcast",
     "enableHibernateCache": true,
-    "reactive": false,
+    "reactive": true,
     "otherModules": [],
     "entitySuffix": "",
     "dtoSuffix": "DTO",

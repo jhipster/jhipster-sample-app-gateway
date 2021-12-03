@@ -1,118 +1,174 @@
 package io.github.jhipster.sample.web.rest.errors;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import io.github.jhipster.sample.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @WithMockUser
-@AutoConfigureMockMvc
+@AutoConfigureWebTestClient
 @IntegrationTest
 class ExceptionTranslatorIT {
 
     @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient webTestClient;
 
     @Test
-    void testConcurrencyFailure() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/concurrency-failure"))
-            .andExpect(status().isConflict())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
+    void testConcurrencyFailure() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/concurrency-failure")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatus.CONFLICT)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
 
     @Test
-    void testMethodArgumentNotValid() throws Exception {
-        mockMvc
-            .perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
-            .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
-            .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-            .andExpect(jsonPath("$.fieldErrors.[0].message").value("must not be null"));
+    void testMethodArgumentNotValid() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-argument")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{}")
+            .exchange()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("must not be null");
     }
 
     @Test
-    void testMissingServletRequestPartException() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/missing-servlet-request-part"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"));
+    void testMissingRequestPart() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/missing-servlet-request-part")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400");
     }
 
     @Test
-    void testMissingServletRequestParameterException() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/missing-servlet-request-parameter"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"));
+    void testMissingRequestParameter() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/missing-servlet-request-parameter")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400");
     }
 
     @Test
-    void testAccessDenied() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/access-denied"))
-            .andExpect(status().isForbidden())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.403"))
-            .andExpect(jsonPath("$.detail").value("test access denied!"));
+    void testAccessDenied() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/access-denied")
+            .exchange()
+            .expectStatus()
+            .isForbidden()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.403")
+            .jsonPath("$.detail")
+            .isEqualTo("test access denied!");
     }
 
     @Test
-    void testUnauthorized() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/unauthorized"))
-            .andExpect(status().isUnauthorized())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.401"))
-            .andExpect(jsonPath("$.path").value("/api/exception-translator-test/unauthorized"))
-            .andExpect(jsonPath("$.detail").value("test authentication failed!"));
+    void testUnauthorized() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/unauthorized")
+            .exchange()
+            .expectStatus()
+            .isUnauthorized()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.401")
+            .jsonPath("$.path")
+            .isEqualTo("/api/exception-translator-test/unauthorized")
+            .jsonPath("$.detail")
+            .isEqualTo("test authentication failed!");
     }
 
     @Test
-    void testMethodNotSupported() throws Exception {
-        mockMvc
-            .perform(post("/api/exception-translator-test/access-denied"))
-            .andExpect(status().isMethodNotAllowed())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.405"))
-            .andExpect(jsonPath("$.detail").value("Request method 'POST' not supported"));
+    void testMethodNotSupported() {
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/access-denied")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.405")
+            .jsonPath("$.detail")
+            .isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' not supported\"");
     }
 
     @Test
-    void testExceptionWithResponseStatus() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/response-status"))
-            .andExpect(status().isBadRequest())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.400"))
-            .andExpect(jsonPath("$.title").value("test response status"));
+    void testExceptionWithResponseStatus() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/response-status")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400")
+            .jsonPath("$.title")
+            .isEqualTo("test response status");
     }
 
     @Test
-    void testInternalServerError() throws Exception {
-        mockMvc
-            .perform(get("/api/exception-translator-test/internal-server-error"))
-            .andExpect(status().isInternalServerError())
-            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.message").value("error.http.500"))
-            .andExpect(jsonPath("$.title").value("Internal Server Error"));
+    void testInternalServerError() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/internal-server-error")
+            .exchange()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.http.500")
+            .jsonPath("$.title")
+            .isEqualTo("Internal Server Error");
     }
 }

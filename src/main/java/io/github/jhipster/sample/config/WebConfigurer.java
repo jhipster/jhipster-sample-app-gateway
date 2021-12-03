@@ -1,94 +1,56 @@
 package io.github.jhipster.sample.config;
 
-import static java.net.URLDecoder.decode;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import javax.servlet.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.server.*;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.autoconfigure.web.reactive.ResourceHandlerRegistrationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
+import org.springframework.web.server.WebExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
+import tech.jhipster.web.filter.reactive.CachingHttpHeadersFilter;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
+public class WebConfigurer implements WebFluxConfigurer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
-
-    private final Environment env;
 
     private final JHipsterProperties jHipsterProperties;
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
-        this.env = env;
         this.jHipsterProperties = jHipsterProperties;
-    }
-
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        if (env.getActiveProfiles().length != 0) {
-            log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
-        }
-
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            initH2Console(servletContext);
-        }
-        log.info("Web application fully configured");
-    }
-
-    /**
-     * Customize the Servlet engine: Mime types, the document root, the cache.
-     */
-    @Override
-    public void customize(WebServerFactory server) {
-        // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
-        setLocationForStaticAssets(server);
-    }
-
-    private void setLocationForStaticAssets(WebServerFactory server) {
-        if (server instanceof ConfigurableServletWebServerFactory) {
-            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
-            File root;
-            String prefixPath = resolvePathPrefix();
-            root = new File(prefixPath + "target/classes/static/");
-            if (root.exists() && root.isDirectory()) {
-                servletWebServer.setDocumentRoot(root);
+            try {
+                H2ConfigurationHelper.initH2Console();
+            } catch (Exception e) {
+                // Console may already be running on another app or after a refresh.
+                e.printStackTrace();
             }
         }
     }
 
-    /**
-     * Resolve path prefix to static resources.
-     */
-    private String resolvePathPrefix() {
-        String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
-        String rootPath = Paths.get(".").toUri().normalize().getPath();
-        String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("target/");
-        if (extractionEndIndex <= 0) {
-            return "";
-        }
-        return extractedPath.substring(0, extractionEndIndex);
-    }
-
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsWebFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
@@ -103,14 +65,37 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             source.registerCorsConfiguration("/services/*/api/**", config);
             source.registerCorsConfiguration("/*/management/**", config);
         }
-        return new CorsFilter(source);
+        return new CorsWebFilter(source);
     }
 
-    /**
-     * Initializes H2 console.
-     */
-    private void initH2Console(ServletContext servletContext) {
-        log.debug("Initialize H2 console");
-        H2ConfigurationHelper.initH2Console(servletContext);
+    // TODO: remove when this is supported in spring-boot
+    @Bean
+    HandlerMethodArgumentResolver reactivePageableHandlerMethodArgumentResolver() {
+        return new ReactivePageableHandlerMethodArgumentResolver();
+    }
+
+    // TODO: remove when this is supported in spring-boot
+    @Bean
+    HandlerMethodArgumentResolver reactiveSortHandlerMethodArgumentResolver() {
+        return new ReactiveSortHandlerMethodArgumentResolver();
+    }
+
+    @Bean
+    @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
+    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
+        return new ProblemExceptionHandler(mapper, problemHandling);
+    }
+
+    @Bean
+    ResourceHandlerRegistrationCustomizer registrationCustomizer() {
+        // Disable built-in cache control to use our custom filter instead
+        return registration -> registration.setCacheControl(null);
+    }
+
+    @Bean
+    @Profile(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
+    public CachingHttpHeadersFilter cachingHttpHeadersFilter() {
+        // Use a cache filter that only match selected paths
+        return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
     }
 }

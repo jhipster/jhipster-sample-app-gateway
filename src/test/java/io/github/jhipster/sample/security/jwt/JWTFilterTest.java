@@ -10,14 +10,14 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockFilterChain;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
+import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.test.util.ReflectionTestUtils;
+import reactor.core.publisher.Mono;
 import tech.jhipster.config.JHipsterProperties;
 
 class JWTFilterTest {
@@ -39,79 +39,117 @@ class JWTFilterTest {
 
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", 60000);
         jwtFilter = new JWTFilter(tokenProvider);
-        SecurityContextHolder.getContext().setAuthentication(null);
     }
 
     @Test
-    void testJWTFilter() throws Exception {
+    void testJWTFilter() {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
         String jwt = tokenProvider.createToken(authentication, false);
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        request.setRequestURI("/api/test");
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockFilterChain filterChain = new MockFilterChain();
-        jwtFilter.doFilter(request, response, filterChain);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("test-user");
-        assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials()).hasToString(jwt);
+        MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
+            .get("/api/test")
+            .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        MockServerWebExchange exchange = MockServerWebExchange.from(request);
+        jwtFilter
+            .filter(
+                exchange,
+                it ->
+                    Mono
+                        .subscriberContext()
+                        .flatMap(c -> ReactiveSecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .doOnSuccess(auth -> assertThat(auth.getName()).isEqualTo("test-user"))
+                        .doOnSuccess(auth -> assertThat(auth.getCredentials().toString()).hasToString(jwt))
+                        .then()
+            )
+            .block();
     }
 
     @Test
-    void testJWTFilterInvalidToken() throws Exception {
+    void testJWTFilterInvalidToken() {
         String jwt = "wrong_jwt";
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        request.setRequestURI("/api/test");
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockFilterChain filterChain = new MockFilterChain();
-        jwtFilter.doFilter(request, response, filterChain);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+        MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
+            .get("/api/test")
+            .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        MockServerWebExchange exchange = MockServerWebExchange.from(request);
+        jwtFilter
+            .filter(
+                exchange,
+                it ->
+                    Mono
+                        .subscriberContext()
+                        .flatMap(c -> ReactiveSecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .doOnSuccess(auth -> assertThat(auth).isNull())
+                        .then()
+            )
+            .block();
     }
 
     @Test
-    void testJWTFilterMissingAuthorization() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/test");
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockFilterChain filterChain = new MockFilterChain();
-        jwtFilter.doFilter(request, response, filterChain);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+    void testJWTFilterMissingAuthorization() {
+        MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest.get("/api/test");
+        MockServerWebExchange exchange = MockServerWebExchange.from(request);
+        jwtFilter
+            .filter(
+                exchange,
+                it ->
+                    Mono
+                        .subscriberContext()
+                        .flatMap(c -> ReactiveSecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .doOnSuccess(auth -> assertThat(auth).isNull())
+                        .then()
+            )
+            .block();
     }
 
     @Test
-    void testJWTFilterMissingToken() throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
-        request.setRequestURI("/api/test");
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockFilterChain filterChain = new MockFilterChain();
-        jwtFilter.doFilter(request, response, filterChain);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+    void testJWTFilterMissingToken() {
+        MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
+            .get("/api/test")
+            .header(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
+        MockServerWebExchange exchange = MockServerWebExchange.from(request);
+        jwtFilter
+            .filter(
+                exchange,
+                it ->
+                    Mono
+                        .subscriberContext()
+                        .flatMap(c -> ReactiveSecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .doOnSuccess(auth -> assertThat(auth).isNull())
+                        .then()
+            )
+            .block();
     }
 
     @Test
-    void testJWTFilterWrongScheme() throws Exception {
+    void testJWTFilterWrongScheme() {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
         String jwt = tokenProvider.createToken(authentication, false);
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
-        request.setRequestURI("/api/test");
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockFilterChain filterChain = new MockFilterChain();
-        jwtFilter.doFilter(request, response, filterChain);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
+        MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
+            .get("/api/test")
+            .header(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
+        MockServerWebExchange exchange = MockServerWebExchange.from(request);
+        jwtFilter
+            .filter(
+                exchange,
+                it ->
+                    Mono
+                        .subscriberContext()
+                        .flatMap(c -> ReactiveSecurityContextHolder.getContext())
+                        .map(SecurityContext::getAuthentication)
+                        .doOnSuccess(auth -> assertThat(auth).isNull())
+                        .then()
+            )
+            .block();
     }
 }
