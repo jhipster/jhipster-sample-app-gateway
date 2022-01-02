@@ -19,8 +19,6 @@ public class SpaWebFilter implements WebFilter {
             !path.startsWith("/api") &&
             !path.startsWith("/management") &&
             !path.startsWith("/services") &&
-            !path.startsWith("/swagger") &&
-            !path.startsWith("/v2/api-docs") &&
             !path.startsWith("/v3/api-docs") &&
             path.matches("[^\\\\.]*")
         ) {

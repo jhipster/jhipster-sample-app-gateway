@@ -26,8 +26,8 @@
         <!-- Build properties -->
         <maven.version>3.3.9</maven.version>
         <java.version>11</java.version>
-        <node.version>v14.18.1</node.version>
-        <npm.version>8.1.4</npm.version>
+        <node.version>v16.13.1</node.version>
+        <npm.version>8.3.0</npm.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -44,13 +44,13 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>7.4.1</jhipster-dependencies.version>
+        <jhipster-dependencies.version>7.5.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.5.7</spring-boot.version>
+        <spring-boot.version>2.5.8</spring-boot.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.4.32.Final</hibernate.version>
+        <hibernate.version>5.4.33</hibernate.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>4.6.1</liquibase.version>
@@ -74,7 +74,7 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.2</maven-war-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <checkstyle.version>9.1</checkstyle.version>
+        <checkstyle.version>9.2</checkstyle.version>
         <nohttp-checkstyle.version>0.0.10</nohttp-checkstyle.version>
         <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
@@ -141,16 +141,6 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
         </dependency>
@@ -163,16 +153,8 @@
             <artifactId>hazelcast-spring</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-oas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -183,21 +165,8 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mysql</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.miku</groupId>
-            <artifactId>r2dbc-mysql</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -282,12 +251,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -397,6 +360,26 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.miku</groupId>
+            <artifactId>r2dbc-mysql</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
@@ -812,6 +795,53 @@
                     </executions>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <runOrder>alphabetical</runOrder>
+                        <excludes>
+                            <exclude>**/*IT*</exclude>
+                            <exclude>**/*IntTest*</exclude>
+                        </excludes>
+                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <runOrder>alphabetical</runOrder>
+                        <includes>
+                            <include>**/*IT*</include>
+                            <include>**/*IntTest*</include>
+                        </includes>
+                        <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
+                        <argLine>-XX:+IgnoreUnrecognizedVMOptions -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${sonar-maven-plugin.version}</version>
@@ -1025,6 +1055,21 @@
         </profile>
         <profile>
             <id>prod</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.testcontainers</groupId>
+                    <artifactId>mysql</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>dev.miku</groupId>
+                    <artifactId>r2dbc-mysql</artifactId>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -1231,120 +1276,6 @@
                                     <id>repackage</id>
                                     <goals>
                                         <goal>repackage</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>surefire-java13-</id>
-            <activation>
-                <jdk>(,13]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${maven-surefire-plugin.version}</version>
-                            <configuration>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <excludes>
-                                    <exclude>**/*IT*</exclude>
-                                    <exclude>**/*IntTest*</exclude>
-                                </excludes>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>surefire-java13+</id>
-            <activation>
-                <jdk>(13,]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${maven-surefire-plugin.version}</version>
-                            <configuration>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <excludes>
-                                    <exclude>**/*IT*</exclude>
-                                    <exclude>**/*IntTest*</exclude>
-                                </excludes>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-failsafe-plugin</artifactId>
-                            <version>${maven-failsafe-plugin.version}</version>
-                            <configuration>
-                                <!-- Due to spring-boot repackage, without adding this property test classes are not found
-                                     See https://github.com/spring-projects/spring-boot/issues/6254 -->
-                                <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                                <!-- Force alphabetical order to have a reproducible build -->
-                                <runOrder>alphabetical</runOrder>
-                                <includes>
-                                    <include>**/*IT*</include>
-                                    <include>**/*IntTest*</include>
-                                </includes>
-                                <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
-                                <argLine>-XX:+AllowRedefinitionToAddDeleteMethods</argLine>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>integration-test</id>
-                                    <goals>
-                                        <goal>integration-test</goal>
-                                    </goals>
-                                </execution>
-                                <execution>
-                                    <id>verify</id>
-                                    <goals>
-                                        <goal>verify</goal>
                                     </goals>
                                 </execution>
                             </executions>

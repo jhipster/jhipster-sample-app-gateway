@@ -154,9 +154,9 @@ public class LocaleConfiguration {
                         );
                     }
                 }
-                exchange
-                    .getAttributes()
-                    .put(LOCALE_REQUEST_ATTRIBUTE_NAME, locale != null ? locale : exchange.getLocaleContext().getLocale());
+                if (locale != null) {
+                    exchange.getAttributes().put(LOCALE_REQUEST_ATTRIBUTE_NAME, locale);
+                }
                 if (timeZone != null) {
                     exchange.getAttributes().put(TIME_ZONE_REQUEST_ATTRIBUTE_NAME, timeZone);
                 } else {

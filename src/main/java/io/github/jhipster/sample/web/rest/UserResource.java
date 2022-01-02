@@ -194,7 +194,10 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Mono<ResponseEntity<Flux<AdminUserDTO>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
+    public Mono<ResponseEntity<Flux<AdminUserDTO>>> getAllUsers(
+        @org.springdoc.api.annotations.ParameterObject ServerHttpRequest request,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
         log.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
