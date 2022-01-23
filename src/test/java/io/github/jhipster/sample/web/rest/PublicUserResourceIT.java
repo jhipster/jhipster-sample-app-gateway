@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
+import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-import io.github.jhipster.sample.service.EntityManager;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
 class PublicUserResourceIT {

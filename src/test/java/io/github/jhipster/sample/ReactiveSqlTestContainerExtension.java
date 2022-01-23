@@ -6,12 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 public class ReactiveSqlTestContainerExtension implements BeforeAllCallback {
 
     private static AtomicBoolean started = new AtomicBoolean(false);
 
-    private static MySQLContainer<?> container = new MySQLContainer<>("mysql:8.0.27")
+    private static MySQLContainer<?> container = new MySQLContainer<>(DockerImageName.parse("mysql:8.0.27"))
         .withDatabaseName("jhipsterSampleGateway")
         .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"));
 

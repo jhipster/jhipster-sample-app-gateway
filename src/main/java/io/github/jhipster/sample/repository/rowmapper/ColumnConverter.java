@@ -1,17 +1,17 @@
-package io.github.jhipster.sample.service;
+package io.github.jhipster.sample.repository.rowmapper;
 
 import io.r2dbc.spi.Row;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 /**
  * This service provides helper function dealing with the low level {@link Row} and Spring's {@link R2dbcCustomConversions}, so type conversions can be applied.
  */
-@Service
+@Component
 public class ColumnConverter {
 
     private final ConversionService conversionService;

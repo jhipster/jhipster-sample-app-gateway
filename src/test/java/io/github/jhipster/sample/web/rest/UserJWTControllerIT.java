@@ -15,7 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @IntegrationTest
 class UserJWTControllerIT {
 

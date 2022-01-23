@@ -163,6 +163,7 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+    allow-circular-references: true
   task:
     execution:
       thread-name-prefix: jhipster-sample-gateway-task-

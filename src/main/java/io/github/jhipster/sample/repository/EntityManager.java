@@ -1,4 +1,4 @@
-package io.github.jhipster.sample.service;
+package io.github.jhipster.sample.repository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.r2dbc.core.Parameter;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,7 +34,7 @@ import reactor.core.publisher.Mono;
  * Helper class to create SQL selects based on the entity, paging parameters and criteria.
  *
  */
-@Service
+@Component
 public class EntityManager {
 
     public static final String ENTITY_ALIAS = "e";

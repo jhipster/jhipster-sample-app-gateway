@@ -1,7 +1,6 @@
 package io.github.jhipster.sample.repository.rowmapper;
 
 import io.github.jhipster.sample.domain.User;
-import io.github.jhipster.sample.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 import java.time.Instant;
 import java.util.function.BiFunction;

@@ -14,7 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @WithMockUser
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @IntegrationTest
 class ExceptionTranslatorIT {
 

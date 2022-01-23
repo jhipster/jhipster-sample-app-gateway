@@ -7,9 +7,9 @@ import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.AuthorityRepository;
+import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-import io.github.jhipster.sample.service.EntityManager;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
@@ -30,7 +30,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
 class UserResourceIT {

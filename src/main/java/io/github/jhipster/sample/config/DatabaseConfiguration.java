@@ -107,7 +107,7 @@ public class DatabaseConfiguration {
     // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
-        List<Object> converters = new ArrayList<>(dialect.getConverters());
+        List<Object> converters = new ArrayList<>();
         converters.add(InstantWriteConverter.INSTANCE);
         converters.add(InstantReadConverter.INSTANCE);
         converters.add(BitSetReadConverter.INSTANCE);
@@ -117,11 +117,7 @@ public class DatabaseConfiguration {
         converters.add(ZonedDateTimeWriteConverter.INSTANCE);
         converters.add(StringToUUIDConverter.INSTANCE);
         converters.add(UUIDToStringConverter.INSTANCE);
-        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
-        return new R2dbcCustomConversions(
-            CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
-            Collections.emptyList()
-        );
+        return R2dbcCustomConversions.of(dialect, converters);
     }
 
     @Bean

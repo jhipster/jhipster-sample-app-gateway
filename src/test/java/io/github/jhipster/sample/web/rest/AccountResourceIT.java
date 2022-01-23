@@ -30,7 +30,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
 class AccountResourceIT {
