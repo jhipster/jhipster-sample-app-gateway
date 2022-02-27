@@ -3,7 +3,7 @@
     <span>Bank Accounts</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -45,7 +45,7 @@
           </td>
           <td>{{ bankAccount.name }}</td>
           <td>{{ bankAccount.balance }}</td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"

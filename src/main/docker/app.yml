@@ -11,13 +11,13 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_R2DBC_URL=r2dbc:mysql://jhipstersamplegateway-mysql:3306/jhipstersamplegateway?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhipstersamplegateway-mysql:3306/jhipstersamplegateway?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - JHIPSTER_SLEEP=60 # gives time for microservices to boot before the gateway, the entire stack will be ready to accept incomming requests.
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
   jhipstersamplegateway-mysql:
-    image: mysql:8.0.27
+    image: mysql:8.0.28
     # volumes:
     #   - ~/volumes/jhipster/jhipsterSampleGateway/mysql/:/var/lib/mysql/
     environment:
@@ -29,7 +29,7 @@ services:
       - 127.0.0.1:3306:3306
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
   jhipster-registry:
-    image: jhipster/jhipster-registry:v7.2.0
+    image: jhipster/jhipster-registry:v7.3.0
     volumes:
       - ./central-server-config:/central-config
     # When run with the "dev" Spring profile, the JHipster Registry will
