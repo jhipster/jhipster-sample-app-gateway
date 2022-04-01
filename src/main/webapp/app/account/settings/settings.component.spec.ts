@@ -25,17 +25,15 @@ describe('SettingsComponent', () => {
     imageUrl: '',
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        declarations: [SettingsComponent],
-        providers: [FormBuilder, AccountService],
-      })
-        .overrideTemplate(SettingsComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      declarations: [SettingsComponent],
+      providers: [FormBuilder, AccountService],
     })
-  );
+      .overrideTemplate(SettingsComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent);

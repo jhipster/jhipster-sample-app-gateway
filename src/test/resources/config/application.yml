@@ -32,6 +32,7 @@ spring:
   cloud:
     config:
       enabled: false
+
   jackson:
     serialization:
       write-durations-as-timestamps: false
@@ -42,7 +43,6 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
   messages:
     basename: i18n/messages
   r2dbc:
@@ -59,7 +59,7 @@ spring:
     scheduling:
       thread-name-prefix: jhipster-sample-gateway-scheduling-
       pool:
-        size: 1
+        size: 20
   thymeleaf:
     mode: HTML
 
@@ -72,7 +72,6 @@ server:
 #
 # Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
 jhipster:
   clientApp:
     name: 'jhipsterSampleGatewayApp'

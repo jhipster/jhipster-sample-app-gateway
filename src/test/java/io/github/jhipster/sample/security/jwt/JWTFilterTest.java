@@ -58,7 +58,7 @@ class JWTFilterTest {
                 exchange,
                 it ->
                     Mono
-                        .subscriberContext()
+                        .deferContextual(Mono::just)
                         .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                         .map(SecurityContext::getAuthentication)
                         .doOnSuccess(auth -> assertThat(auth.getName()).isEqualTo("test-user"))
@@ -80,7 +80,7 @@ class JWTFilterTest {
                 exchange,
                 it ->
                     Mono
-                        .subscriberContext()
+                        .deferContextual(Mono::just)
                         .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                         .map(SecurityContext::getAuthentication)
                         .doOnSuccess(auth -> assertThat(auth).isNull())
@@ -98,7 +98,7 @@ class JWTFilterTest {
                 exchange,
                 it ->
                     Mono
-                        .subscriberContext()
+                        .deferContextual(Mono::just)
                         .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                         .map(SecurityContext::getAuthentication)
                         .doOnSuccess(auth -> assertThat(auth).isNull())
@@ -118,7 +118,7 @@ class JWTFilterTest {
                 exchange,
                 it ->
                     Mono
-                        .subscriberContext()
+                        .deferContextual(Mono::just)
                         .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                         .map(SecurityContext::getAuthentication)
                         .doOnSuccess(auth -> assertThat(auth).isNull())
@@ -144,7 +144,7 @@ class JWTFilterTest {
                 exchange,
                 it ->
                     Mono
-                        .subscriberContext()
+                        .deferContextual(Mono::just)
                         .flatMap(c -> ReactiveSecurityContextHolder.getContext())
                         .map(SecurityContext::getAuthentication)
                         .doOnSuccess(auth -> assertThat(auth).isNull())

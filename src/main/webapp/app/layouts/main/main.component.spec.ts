@@ -21,23 +21,21 @@ describe('MainComponent', () => {
     routerState = routerState;
   }
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [MainComponent],
-        providers: [
-          Title,
-          AccountService,
-          {
-            provide: Router,
-            useClass: MockRouter,
-          },
-        ],
-      })
-        .overrideTemplate(MainComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [MainComponent],
+      providers: [
+        Title,
+        AccountService,
+        {
+          provide: Router,
+          useClass: MockRouter,
+        },
+      ],
     })
-  );
+      .overrideTemplate(MainComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);

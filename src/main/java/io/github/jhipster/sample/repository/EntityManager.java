@@ -191,12 +191,12 @@ public class EntityManager {
      * @param referencedIds the id of the referred entities.
      * @return the number of inserted rows.
      */
-    public Mono<Integer> updateLinkTable(LinkTable table, Long entityId, Stream<Long> referencedIds) {
+    public Mono<Integer> updateLinkTable(LinkTable table, Object entityId, Stream<?> referencedIds) {
         return deleteFromLinkTable(table, entityId)
             .then(
                 Flux
                     .fromStream(referencedIds)
-                    .flatMap((Long referenceId) -> {
+                    .flatMap((Object referenceId) -> {
                         StatementMapper.InsertSpec insert = r2dbcEntityTemplate
                             .getDataAccessStrategy()
                             .getStatementMapper()
@@ -211,7 +211,7 @@ public class EntityManager {
             );
     }
 
-    public Mono<Void> deleteFromLinkTable(LinkTable table, Long entityId) {
+    public Mono<Void> deleteFromLinkTable(LinkTable table, Object entityId) {
         Assert.notNull(entityId, "entityId is null");
         StatementMapper.DeleteSpec deleteSpec = r2dbcEntityTemplate
             .getDataAccessStrategy()
