@@ -23,6 +23,7 @@ import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHe
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 import tech.jhipster.config.JHipsterProperties;
 
@@ -38,17 +39,20 @@ public class SecurityConfiguration {
     private final TokenProvider tokenProvider;
 
     private final SecurityProblemSupport problemSupport;
+    private final CorsWebFilter corsWebFilter;
 
     public SecurityConfiguration(
         ReactiveUserDetailsService userDetailsService,
         TokenProvider tokenProvider,
         JHipsterProperties jHipsterProperties,
-        SecurityProblemSupport problemSupport
+        SecurityProblemSupport problemSupport,
+        CorsWebFilter corsWebFilter
     ) {
         this.userDetailsService = userDetailsService;
         this.tokenProvider = tokenProvider;
         this.jHipsterProperties = jHipsterProperties;
         this.problemSupport = problemSupport;
+        this.corsWebFilter = corsWebFilter;
     }
 
     @Bean
@@ -70,11 +74,12 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
+                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()
                 .disable()
+            .addFilterBefore(corsWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT)
             .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
             .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
             .authenticationManager(reactiveAuthenticationManager())
@@ -99,12 +104,8 @@ public class SecurityConfiguration {
             .pathMatchers("/api/activate").permitAll()
             .pathMatchers("/api/account/reset-password/init").permitAll()
             .pathMatchers("/api/account/reset-password/finish").permitAll()
-            .pathMatchers("/api/auth-info").permitAll()
             .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/api/**").authenticated()
-            // microfrontend resources are loaded by webpack without authentication, they need to be public
-            .pathMatchers("/services/*/*.js").permitAll()
-            .pathMatchers("/services/*/*.js.map").permitAll()
             .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
             .pathMatchers("/services/**").authenticated()
             .pathMatchers("/management/health").permitAll()

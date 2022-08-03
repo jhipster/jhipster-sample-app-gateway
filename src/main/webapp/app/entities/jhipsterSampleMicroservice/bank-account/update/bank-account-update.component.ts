@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { IBankAccount, BankAccount } from '../bank-account.model';
+import { BankAccountFormService, BankAccountFormGroup } from './bank-account-form.service';
+import { IBankAccount } from '../bank-account.model';
 import { BankAccountService } from '../service/bank-account.service';
 
 @Component({
@@ -14,18 +14,22 @@ import { BankAccountService } from '../service/bank-account.service';
 })
 export class BankAccountUpdateComponent implements OnInit {
   isSaving = false;
+  bankAccount: IBankAccount | null = null;
 
-  editForm = this.fb.group({
-    id: [],
-    name: [null, [Validators.required]],
-    balance: [null, [Validators.required]],
-  });
+  editForm: BankAccountFormGroup = this.bankAccountFormService.createBankAccountFormGroup();
 
-  constructor(protected bankAccountService: BankAccountService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected bankAccountService: BankAccountService,
+    protected bankAccountFormService: BankAccountFormService,
+    protected activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bankAccount }) => {
-      this.updateForm(bankAccount);
+      this.bankAccount = bankAccount;
+      if (bankAccount) {
+        this.updateForm(bankAccount);
+      }
     });
   }
 
@@ -35,8 +39,8 @@ export class BankAccountUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const bankAccount = this.createFromForm();
-    if (bankAccount.id !== undefined) {
+    const bankAccount = this.bankAccountFormService.getBankAccount(this.editForm);
+    if (bankAccount.id !== null) {
       this.subscribeToSaveResponse(this.bankAccountService.update(bankAccount));
     } else {
       this.subscribeToSaveResponse(this.bankAccountService.create(bankAccount));
@@ -63,19 +67,7 @@ export class BankAccountUpdateComponent implements OnInit {
   }
 
   protected updateForm(bankAccount: IBankAccount): void {
-    this.editForm.patchValue({
-      id: bankAccount.id,
-      name: bankAccount.name,
-      balance: bankAccount.balance,
-    });
-  }
-
-  protected createFromForm(): IBankAccount {
-    return {
-      ...new BankAccount(),
-      id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
-      balance: this.editForm.get(['balance'])!.value,
-    };
+    this.bankAccount = bankAccount;
+    this.bankAccountFormService.resetForm(this.editForm, bankAccount);
   }
 }

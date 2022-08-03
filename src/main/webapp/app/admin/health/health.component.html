@@ -9,7 +9,7 @@
     <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
       <thead>
         <tr>
-          <th scope="col">Service Name</th>
+          <th scope="col">Service name</th>
           <th scope="col" class="text-center">Status</th>
           <th scope="col" class="text-center">Details</th>
         </tr>
@@ -21,7 +21,9 @@
           </td>
           <td class="text-center">
             <span class="badge" [ngClass]="getBadgeClass(componentHealth.value!.status)">
-              {{ componentHealth.value!.status }}
+              {{
+                { UNKNOWN: 'UNKNOWN', UP: 'UP', OUT_OF_SERVICE: 'OUT_OF_SERVICE', DOWN: 'DOWN' }[componentHealth.value!.status || 'UNKNOWN']
+              }}
             </span>
           </td>
           <td class="text-center">

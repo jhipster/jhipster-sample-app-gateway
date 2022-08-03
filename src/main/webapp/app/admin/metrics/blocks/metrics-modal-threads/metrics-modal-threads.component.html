@@ -39,8 +39,8 @@
       &nbsp;{{ thread.threadName }} (ID {{ thread.threadId }})
 
       <a (click)="thread.showThreadDump = !thread.showThreadDump" href="javascript:void(0);">
-        <span [hidden]="thread.showThreadDump">Show StackTrace</span>
-        <span [hidden]="!thread.showThreadDump">Hide StackTrace</span>
+        <span [hidden]="thread.showThreadDump">Show Stacktrace</span>
+        <span [hidden]="!thread.showThreadDump">Hide Stacktrace</span>
       </a>
     </h6>
 
@@ -68,7 +68,7 @@
           <th scope="col">Blocked Count</th>
           <th scope="col">Waited Time</th>
           <th scope="col">Waited Count</th>
-          <th scope="col">Lock Name</th>
+          <th scope="col">Lock name</th>
         </tr>
       </thead>
       <tbody>

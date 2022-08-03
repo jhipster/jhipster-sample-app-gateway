@@ -1,0 +1,10 @@
+<div class="filter-display" *ngIf="filters.hasAnyFilterSet()">
+  <span>Following filters are set</span>
+  <fa-icon icon="times" (click)="clearAllFilters()" title="Clear all filters"></fa-icon>
+  <ul>
+    <li *ngFor="let filterOption of filters.filterOptions">
+      <span>{{ filterOption.name }}:</span> {{ filterOption.value }}
+      <fa-icon icon="times" (click)="clearFilter(filterOption.name)" title="Clear filter"></fa-icon>
+    </li>
+  </ul>
+</div>

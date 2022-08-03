@@ -1,13 +1,7 @@
 export interface IBankAccount {
-  id?: number;
-  name?: string;
-  balance?: number;
+  id: number;
+  name?: string | null;
+  balance?: number | null;
 }
 
-export class BankAccount implements IBankAccount {
-  constructor(public id?: number, public name?: string, public balance?: number) {}
-}
-
-export function getBankAccountIdentifier(bankAccount: IBankAccount): number | undefined {
-  return bankAccount.id;
-}
+export type NewBankAccount = Omit<IBankAccount, 'id'> & { id: null };

@@ -21,9 +21,6 @@ eureka:
     instanceId: jhipsterSampleGateway:${spring.application.instance-id:${random.value}}
 
 spring:
-  profiles:
-    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
-    #active: testcontainers
   application:
     name: jhipsterSampleGateway
   autoconfigure:
@@ -32,23 +29,18 @@ spring:
   cloud:
     config:
       enabled: false
-
+  # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
+  liquibase:
+    contexts: test
   jackson:
     serialization:
       write-durations-as-timestamps: false
-  liquibase:
-    contexts: test
-    url: jdbc:h2:mem:jhipstersamplegateway;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   mail:
     host: localhost
   main:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-  r2dbc:
-    url: r2dbc:h2:mem:///jhipstersamplegateway;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: r2dbc
-    password:
   task:
     execution:
       thread-name-prefix: jhipster-sample-gateway-task-
@@ -75,6 +67,9 @@ server:
 jhipster:
   clientApp:
     name: 'jhipsterSampleGatewayApp'
+  mail:
+    from: jhipsterSampleGateway@localhost.com
+    base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
     use-json-format: false
@@ -83,9 +78,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-  mail:
-    from: test@localhost
-    base-url: http://127.0.0.1:8080
   security:
     authentication:
       jwt:
@@ -93,6 +85,7 @@ jhipster:
         base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
@@ -103,3 +96,7 @@ jhipster:
 # ===================================================================
 
 # application:
+management:
+  health:
+    mail:
+      enabled: false

@@ -138,7 +138,9 @@ public class UserResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/admin/users/" + user.getLogin()))
-                        .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", user.getLogin()))
+                        .headers(
+                            HeaderUtil.createAlert(applicationName, "A user is created with identifier " + user.getLogin(), user.getLogin())
+                        )
                         .body(user);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -180,7 +182,13 @@ public class UserResource {
             .map(user ->
                 ResponseEntity
                     .ok()
-                    .headers(HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin()))
+                    .headers(
+                        HeaderUtil.createAlert(
+                            applicationName,
+                            "A user is updated with identifier " + userDTO.getLogin(),
+                            userDTO.getLogin()
+                        )
+                    )
                     .body(user)
             );
     }
@@ -238,12 +246,17 @@ public class UserResource {
      */
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
         return userService
             .deleteUser(login)
-            .map(it -> ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build()
+            .then(
+                Mono.just(
+                    ResponseEntity
+                        .noContent()
+                        .headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login))
+                        .build()
+                )
             );
     }
 }
