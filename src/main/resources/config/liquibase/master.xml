@@ -7,8 +7,8 @@
     <property name="floatType" value="float4" dbms="h2"/>
     <property name="uuidType" value="varchar(36)" dbms="h2"/>
     <property name="datetimeType" value="datetime" dbms="h2"/>
-    <property name="clobType" value="varchar(1000000)" dbms="h2"/>
-    <property name="blobType" value="varchar(1000000)" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <property name="blobType" value="blob" dbms="h2"/>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="floatType" value="float" dbms="mysql"/>
     <property name="clobType" value="clob" dbms="mysql"/>

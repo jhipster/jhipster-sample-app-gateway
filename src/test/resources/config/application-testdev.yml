@@ -10,8 +10,8 @@
 
 spring:
   r2dbc:
-    url: r2dbc:h2:file://././target/h2db/testdb/jhipstersamplegateway;DB_CLOSE_DELAY=-1
+    url: r2dbc:h2:file://././target/h2db/testdb/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=LEGACY
     username: jhipstersamplegateway
     password:
   liquibase:
-    url: jdbc:h2:file:./target/h2db/testdb/jhipstersamplegateway;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./target/h2db/testdb/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=LEGACY

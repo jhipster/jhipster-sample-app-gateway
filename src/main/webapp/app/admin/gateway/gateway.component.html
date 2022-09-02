@@ -41,7 +41,7 @@
                     <span *ngFor="let entry of instance.metadata | keyvalue">
                       <span class="badge bg-default fw-normal">
                         <span class="badge rounded-pill bg-info fw-normal">{{ entry.key }}</span>
-                        <span class="text-secondary">{{ entry.value }}</span>
+                        {{ entry.value }}
                       </span>
                     </span>
                   </td>
