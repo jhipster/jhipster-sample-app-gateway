@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
 @IntegrationTest
-public class SpaWebFilterIT {
+class SpaWebFilterIT {
 
     @Autowired
     private WebTestClient webTestClient;

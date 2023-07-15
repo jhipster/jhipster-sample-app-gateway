@@ -310,8 +310,8 @@ class AccountResourceIT {
 
         Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com").blockOptional();
         assertThat(testUser).isPresent();
-        testUser.get().setActivated(true);
-        userRepository.save(testUser.get()).block();
+        testUser.orElseThrow().setActivated(true);
+        userRepository.save(testUser.orElseThrow()).block();
 
         // Second (already activated) user
         accountWebTestClient
@@ -401,10 +401,10 @@ class AccountResourceIT {
 
         Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3").blockOptional();
         assertThat(testUser4).isPresent();
-        assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
+        assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
-        testUser4.get().setActivated(true);
-        userService.updateUser((new AdminUserDTO(testUser4.get()))).block();
+        testUser4.orElseThrow().setActivated(true);
+        userService.updateUser((new AdminUserDTO(testUser4.orElseThrow()))).block();
 
         // Register 4th (already activated) user
         accountWebTestClient
@@ -441,7 +441,7 @@ class AccountResourceIT {
 
         Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy").blockOptional();
         assertThat(userDup).isPresent();
-        assertThat(userDup.get().getAuthorities())
+        assertThat(userDup.orElseThrow().getAuthorities())
             .hasSize(1)
             .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).block());
     }
