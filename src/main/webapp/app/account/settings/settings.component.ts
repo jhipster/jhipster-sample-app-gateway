@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
@@ -8,9 +9,11 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: 'jhi-settings',
+  standalone: true,
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',
 })
-export class SettingsComponent implements OnInit {
+export default class SettingsComponent implements OnInit {
   success = false;
 
   settingsForm = new FormGroup({

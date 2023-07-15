@@ -27,6 +27,14 @@ eureka:
     service-url:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
+management:
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0 # report 100% of traces
+
 spring:
   devtools:
     restart:
@@ -52,7 +60,7 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
-    url: jdbc:h2:file:./target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    url: jdbc:h2:file:./target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=MYSQL
   mail:
     host: localhost
     port: 25
@@ -61,25 +69,11 @@ spring:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   r2dbc:
-    url: r2dbc:h2:file://././target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    url: r2dbc:h2:file:///./target/h2db/db/jhipstersamplegateway;DB_CLOSE_DELAY=-1;MODE=MYSQL
     username: jhipsterSampleGateway
     password:
   thymeleaf:
     cache: false
-  sleuth:
-    # https://github.com/spring-projects/spring-framework/issues/27844#issuescomment-1002866885
-    # https://github.com/spring-cloud/spring-cloud-sleuth/issues/2094
-    async:
-      enabled: false
-    enabled: false
-    sampler:
-      probability: 1 # report 100% of traces
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    base-url: http://localhost:9411
-    enabled: false
-    locator:
-      discovery:
-        enabled: true
 
 server:
   port: 8080
@@ -96,10 +90,6 @@ jhipster:
       enabled: false
       limit: 100000
       duration-in-seconds: 3600
-  cache: # Cache configuration
-    hazelcast: # Hazelcast distributed cache
-      time-to-live-seconds: 3600
-      backup-count: 1
   registry:
     password: admin
   # CORS is only enabled by default with the "dev" profile
@@ -129,7 +119,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

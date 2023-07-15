@@ -64,21 +64,18 @@ management:
       base-path: /management
       exposure:
         include:
-          [
-            'configprops',
-            'env',
-            'gateway',
-            'health',
-            'info',
-            'jhimetrics',
-            'jhiopenapigroups',
-            'logfile',
-            'loggers',
-            'prometheus',
-            'threaddump',
-            'caches',
-            'liquibase',
-          ]
+          - configprops
+          - env
+          - gateway
+          - health
+          - info
+          - jhimetrics
+          - jhiopenapigroups
+          - logfile
+          - loggers
+          - prometheus
+          - threaddump
+          - liquibase
   endpoint:
     health:
       show-details: when_authorized
@@ -100,10 +97,9 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-  metrics:
-    export:
-      # Prometheus is the default metrics backend
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
         step: 60
     enable:
@@ -165,6 +161,9 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
+  webflux:
+    problemdetails:
+      enabled: true
   task:
     execution:
       thread-name-prefix: jhipster-sample-gateway-task-

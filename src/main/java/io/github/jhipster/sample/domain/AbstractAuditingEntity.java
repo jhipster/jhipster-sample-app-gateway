@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.time.Instant;
-import javax.persistence.Column;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

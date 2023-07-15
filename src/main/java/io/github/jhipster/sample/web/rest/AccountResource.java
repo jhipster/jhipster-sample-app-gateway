@@ -9,9 +9,9 @@ import io.github.jhipster.sample.service.dto.PasswordChangeDTO;
 import io.github.jhipster.sample.web.rest.errors.*;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.Objects;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,18 +77,6 @@ public class AccountResource {
             .activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
-    }
-
-    /**
-     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
-    @GetMapping("/authenticate")
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
     }
 
     /**

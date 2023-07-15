@@ -3,12 +3,9 @@ package io.github.jhipster.sample.config;
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-import io.github.jhipster.sample.security.jwt.JWTFilter;
-import io.github.jhipster.sample.security.jwt.TokenProvider;
 import io.github.jhipster.sample.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpMethod;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
@@ -23,36 +20,17 @@ import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHe
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
-import org.springframework.web.cors.reactive.CorsWebFilter;
-import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 import tech.jhipster.config.JHipsterProperties;
 
+@Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-@Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final ReactiveUserDetailsService userDetailsService;
-
-    private final TokenProvider tokenProvider;
-
-    private final SecurityProblemSupport problemSupport;
-    private final CorsWebFilter corsWebFilter;
-
-    public SecurityConfiguration(
-        ReactiveUserDetailsService userDetailsService,
-        TokenProvider tokenProvider,
-        JHipsterProperties jHipsterProperties,
-        SecurityProblemSupport problemSupport,
-        CorsWebFilter corsWebFilter
-    ) {
-        this.userDetailsService = userDetailsService;
-        this.tokenProvider = tokenProvider;
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
-        this.problemSupport = problemSupport;
-        this.corsWebFilter = corsWebFilter;
     }
 
     @Bean
@@ -61,7 +39,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
         UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(
             userDetailsService
         );
@@ -71,49 +49,51 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        // @formatter:off
         http
-            .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/_app/**", "/i18n/**", "/img/**", "/content/**", "/swagger-ui/**", "/v3/api-docs/**", "/test/**"),
-                pathMatchers(HttpMethod.OPTIONS, "/**")
-            )))
-            .csrf()
-                .disable()
-            .addFilterBefore(corsWebFilter, SecurityWebFiltersOrder.REACTOR_CONTEXT)
-            .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
-            .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
-            .authenticationManager(reactiveAuthenticationManager())
-            .exceptionHandling()
-                .accessDeniedHandler(problemSupport)
-                .authenticationEntryPoint(problemSupport)
-        .and()
-            .headers()
-                .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-            .and()
-                .referrerPolicy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-            .and()
-                .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-            .and()
-                .frameOptions().mode(Mode.DENY)
-        .and()
-            .authorizeExchange()
-            .pathMatchers("/").permitAll()
-            .pathMatchers("/*.*").permitAll()
-            .pathMatchers("/api/authenticate").permitAll()
-            .pathMatchers("/api/register").permitAll()
-            .pathMatchers("/api/activate").permitAll()
-            .pathMatchers("/api/account/reset-password/init").permitAll()
-            .pathMatchers("/api/account/reset-password/finish").permitAll()
-            .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .pathMatchers("/api/**").authenticated()
-            .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
-            .pathMatchers("/services/**").authenticated()
-            .pathMatchers("/management/health").permitAll()
-            .pathMatchers("/management/health/**").permitAll()
-            .pathMatchers("/management/info").permitAll()
-            .pathMatchers("/management/prometheus").permitAll()
-            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
-        // @formatter:on
+            .securityMatcher(
+                new NegatedServerWebExchangeMatcher(
+                    new OrServerWebExchangeMatcher(pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**"))
+                )
+            )
+            .csrf(csrf -> csrf.disable())
+            .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
+            .headers(headers ->
+                headers
+                    .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                    .frameOptions(frameOptions -> frameOptions.mode(Mode.DENY))
+                    .referrerPolicy(referrer ->
+                        referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                    )
+                    .permissionsPolicy(permissions ->
+                        permissions.policy(
+                            "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+                        )
+                    )
+            )
+            .authorizeExchange(authz ->
+                // prettier-ignore
+                authz
+                    .pathMatchers("/").permitAll()
+                    .pathMatchers("/*.*").permitAll()
+                    .pathMatchers("/api/authenticate").permitAll()
+                    .pathMatchers("/api/register").permitAll()
+                    .pathMatchers("/api/activate").permitAll()
+                    .pathMatchers("/api/account/reset-password/init").permitAll()
+                    .pathMatchers("/api/account/reset-password/finish").permitAll()
+                    .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .pathMatchers("/api/**").authenticated()
+                    .pathMatchers("/services/*/management/health/readiness").permitAll()
+                    .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .pathMatchers("/services/**").authenticated()
+                    .pathMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .pathMatchers("/management/health").permitAll()
+                    .pathMatchers("/management/health/**").permitAll()
+                    .pathMatchers("/management/info").permitAll()
+                    .pathMatchers("/management/prometheus").permitAll()
+                    .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            )
+            .httpBasic(basic -> basic.disable())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
         return http.build();
     }
 }

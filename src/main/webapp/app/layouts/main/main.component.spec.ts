@@ -1,37 +1,31 @@
 jest.mock('app/core/auth/account.service');
 
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd, NavigationStart } from '@angular/router';
+import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { Subject, of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DOCUMENT } from '@angular/common';
+import { Component } from '@angular/core';
+import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 
-import { MainComponent } from './main.component';
+import MainComponent from './main.component';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 
 describe('MainComponent', () => {
   let comp: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
   let titleService: Title;
   let mockAccountService: AccountService;
-  const routerEventsSubject = new Subject<RouterEvent>();
   const routerState: any = { snapshot: { root: { data: {} } } };
-  class MockRouter {
-    events = routerEventsSubject;
-    routerState = routerState;
-  }
+  let router: Router;
+  let document: Document;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MainComponent],
-      providers: [
-        Title,
-        AccountService,
-        {
-          provide: Router,
-          useClass: MockRouter,
-        },
-      ],
+      providers: [Title, AccountService, { provide: TitleStrategy, useClass: AppPageTitleStrategy }],
     })
       .overrideTemplate(MainComponent, '')
       .compileComponents();
@@ -44,14 +38,14 @@ describe('MainComponent', () => {
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
     mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+    router = TestBed.inject(Router);
+    document = TestBed.inject(DOCUMENT);
   });
 
   describe('page title', () => {
     const defaultPageTitle = 'Jhipster Sample Gateway';
     const parentRoutePageTitle = 'parentTitle';
     const childRoutePageTitle = 'childTitle';
-    const navigationEnd = new NavigationEnd(1, '', '');
-    const navigationStart = new NavigationStart(1, '');
 
     beforeEach(() => {
       routerState.snapshot.root = { data: {} };
@@ -60,58 +54,65 @@ describe('MainComponent', () => {
     });
 
     describe('navigation end', () => {
-      it('should set page title to default title if pageTitle is missing on routes', () => {
+      it('should set page title to default title if pageTitle is missing on routes', fakeAsync(() => {
         // WHEN
-        routerEventsSubject.next(navigationEnd);
+        router.navigateByUrl('');
+        tick();
 
         // THEN
-        expect(titleService.setTitle).toHaveBeenCalledWith(defaultPageTitle);
-      });
+        expect(document.title).toBe(defaultPageTitle);
+      }));
 
-      it('should set page title to root route pageTitle if there is no child routes', () => {
+      it('should set page title to root route pageTitle if there is no child routes', fakeAsync(() => {
         // GIVEN
-        routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
+        router.resetConfig([{ path: '', title: parentRoutePageTitle, component: BlankComponent }]);
 
         // WHEN
-        routerEventsSubject.next(navigationEnd);
+        router.navigateByUrl('');
+        tick();
 
         // THEN
-        expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle);
-      });
+        expect(document.title).toBe(parentRoutePageTitle);
+      }));
 
-      it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', () => {
+      it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', fakeAsync(() => {
         // GIVEN
-        routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
-        routerState.snapshot.root.firstChild = { data: { pageTitle: childRoutePageTitle } };
+        router.resetConfig([
+          {
+            path: 'home',
+            title: parentRoutePageTitle,
+            children: [{ path: '', title: childRoutePageTitle, component: BlankComponent }],
+          },
+        ]);
 
         // WHEN
-        routerEventsSubject.next(navigationEnd);
+        router.navigateByUrl('home');
+        tick();
 
         // THEN
-        expect(titleService.setTitle).toHaveBeenCalledWith(childRoutePageTitle);
-      });
+        expect(document.title).toBe(childRoutePageTitle);
+      }));
 
-      it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', () => {
+      it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', fakeAsync(() => {
         // GIVEN
-        routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
-        routerState.snapshot.root.firstChild = { data: {} };
+        router.resetConfig([
+          {
+            path: 'home',
+            title: parentRoutePageTitle,
+            children: [{ path: '', component: BlankComponent }],
+          },
+        ]);
 
         // WHEN
-        routerEventsSubject.next(navigationEnd);
+        router.navigateByUrl('home');
+        tick();
 
         // THEN
-        expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle);
-      });
-    });
-
-    describe('navigation start', () => {
-      it('should not set page title on navigation start', () => {
-        // WHEN
-        routerEventsSubject.next(navigationStart);
-
-        // THEN
-        expect(titleService.setTitle).not.toHaveBeenCalled();
-      });
+        expect(document.title).toBe(parentRoutePageTitle);
+      }));
     });
   });
 });
+
+@Component({ template: '' })
+export class BlankComponent {}

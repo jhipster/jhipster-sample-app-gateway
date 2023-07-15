@@ -7,13 +7,13 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
 
     @Override
     public void applyTo(BlockHound.Builder builder) {
-        // Workaround until https://github.com/reactor/reactor-core/issues/2137 is fixed
-        builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler$BoundedState", "dispose");
-        builder.allowBlockingCallsInside("reactor.core.scheduler.BoundedElasticScheduler", "schedule");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
         builder.allowBlockingCallsInside("io.github.jhipster.sample.service.MailService", "sendEmailFromTemplate");
         builder.allowBlockingCallsInside("io.github.jhipster.sample.security.DomainUserDetailsService", "createSpringSecurityUser");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.message.client.HandshakeResponse", "writeConnectAttributes");
         builder.allowBlockingCallsInside("org.mariadb.r2dbc.client.MariadbPacketDecoder", "decode");
+        builder.allowBlockingCallsInside("org.springframework.web.reactive.result.method.InvocableHandlerMethod", "invoke");
+        builder.allowBlockingCallsInside("org.springdoc.core.service.OpenAPIService", "build");
+        builder.allowBlockingCallsInside("org.springdoc.core.service.AbstractRequestService", "build");
     }
 }

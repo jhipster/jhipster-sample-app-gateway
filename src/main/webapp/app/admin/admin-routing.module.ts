@@ -8,37 +8,41 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'user-management',
-        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
-        data: {
-          pageTitle: 'Users',
-        },
+        loadChildren: () => import('./user-management/user-management.route'),
+        title: 'Users',
       },
       {
         path: 'docs',
-        loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
+        loadComponent: () => import('./docs/docs.component'),
+        title: 'API',
       },
       {
         path: 'configuration',
-        loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
+        loadComponent: () => import('./configuration/configuration.component'),
+        title: 'Configuration',
       },
       {
         path: 'health',
-        loadChildren: () => import('./health/health.module').then(m => m.HealthModule),
+        loadComponent: () => import('./health/health.component'),
+        title: 'Health Checks',
       },
       {
         path: 'logs',
-        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule),
+        loadComponent: () => import('./logs/logs.component'),
+        title: 'Logs',
       },
       {
         path: 'metrics',
-        loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
+        loadComponent: () => import('./metrics/metrics.component'),
+        title: 'Application Metrics',
       },
       {
         path: 'gateway',
-        loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
+        loadComponent: () => import('./gateway/gateway.component'),
+        title: 'Gateway',
       },
       /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
     ]),
   ],
 })
-export class AdminRoutingModule {}
+export default class AdminRoutingModule {}

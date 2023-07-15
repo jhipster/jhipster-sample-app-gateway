@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 
 import { Account } from 'app/core/auth/account.model';
 import { Authority } from 'app/config/authority.constants';
@@ -35,7 +34,7 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), NgxWebstorageModule.forRoot()],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       providers: [StateStorageService],
     });
 

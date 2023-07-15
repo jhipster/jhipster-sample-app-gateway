@@ -13,11 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
- * Integration tests for the {@link UserJWTController} REST controller.
+ * Integration tests for the {@link AuthenticateController} REST controller.
  */
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @IntegrationTest
-class UserJWTControllerIT {
+class AuthenticateControllerIT {
 
     @Autowired
     private UserRepository userRepository;

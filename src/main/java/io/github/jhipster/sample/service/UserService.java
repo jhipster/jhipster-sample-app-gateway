@@ -16,7 +16,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,18 +40,10 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    private final CacheManager cacheManager;
-
-    public UserService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        AuthorityRepository authorityRepository,
-        CacheManager cacheManager
-    ) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
-        this.cacheManager = cacheManager;
     }
 
     @Transactional
@@ -66,7 +57,6 @@ public class UserService {
                 user.setActivationKey(null);
                 return saveUser(user);
             })
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Activated user: {}", user));
     }
 
@@ -83,8 +73,7 @@ public class UserService {
                 user.setResetDate(null);
                 return user;
             })
-            .flatMap(this::saveUser)
-            .doOnNext(this::clearUserCaches);
+            .flatMap(this::saveUser);
     }
 
     @Transactional
@@ -98,8 +87,7 @@ public class UserService {
                 user.setResetDate(Instant.now());
                 return user;
             })
-            .flatMap(this::saveUser)
-            .doOnNext(this::clearUserCaches);
+            .flatMap(this::saveUser);
     }
 
     @Transactional
@@ -108,7 +96,6 @@ public class UserService {
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
-                    this.clearUserCaches(existingUser);
                     return userRepository.delete(existingUser);
                 } else {
                     return Mono.error(new UsernameAlreadyUsedException());
@@ -117,7 +104,6 @@ public class UserService {
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
-                    this.clearUserCaches(existingUser);
                     return userRepository.delete(existingUser);
                 } else {
                     return Mono.error(new EmailAlreadyUsedException());
@@ -153,7 +139,6 @@ public class UserService {
                     .thenReturn(newUser)
                     .doOnNext(user -> user.setAuthorities(authorities))
                     .flatMap(this::saveUser)
-                    .doOnNext(this::clearUserCaches)
                     .doOnNext(user -> log.debug("Created Information for User: {}", user));
             });
     }
@@ -188,7 +173,6 @@ public class UserService {
                 return newUser;
             })
             .flatMap(this::saveUser)
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
     }
 
@@ -203,7 +187,6 @@ public class UserService {
         return userRepository
             .findById(userDTO.getId())
             .flatMap(user -> {
-                this.clearUserCaches(user);
                 user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
@@ -223,7 +206,6 @@ public class UserService {
                     .then(Mono.just(user));
             })
             .flatMap(this::saveUser)
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Changed Information for User: {}", user))
             .map(AdminUserDTO::new);
     }
@@ -233,7 +215,6 @@ public class UserService {
         return userRepository
             .findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Deleted User: {}", user))
             .then();
     }
@@ -263,7 +244,6 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 return saveUser(user);
             })
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Changed Information for User: {}", user))
             .then();
     }
@@ -307,7 +287,6 @@ public class UserService {
                 return user;
             })
             .flatMap(this::saveUser)
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Changed password for User: {}", user))
             .then();
     }
@@ -354,7 +333,6 @@ public class UserService {
                 LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)
             )
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
-            .doOnNext(this::clearUserCaches)
             .doOnNext(user -> log.debug("Deleted User: {}", user));
     }
 
@@ -365,12 +343,5 @@ public class UserService {
     @Transactional(readOnly = true)
     public Flux<String> getAuthorities() {
         return authorityRepository.findAll().map(Authority::getName);
-    }
-
-    private void clearUserCaches(User user) {
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
-        if (user.getEmail() != null) {
-            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
-        }
     }
 }

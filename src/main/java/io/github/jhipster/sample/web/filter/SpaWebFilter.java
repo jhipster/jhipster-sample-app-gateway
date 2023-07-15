@@ -16,9 +16,10 @@ public class SpaWebFilter implements WebFilter {
         if (
             !path.startsWith("/api") &&
             !path.startsWith("/management") &&
-            !path.startsWith("/services") &&
             !path.startsWith("/v3/api-docs") &&
-            path.matches("[^\\\\.]*")
+            !path.startsWith("/services") &&
+            !path.contains(".") &&
+            path.matches("/(.*)")
         ) {
             return chain.filter(exchange.mutate().request(exchange.getRequest().mutate().path("/index.html").build()).build());
         }

@@ -7,12 +7,13 @@ import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
+import tech.jhipster.service.ColumnConverterReactive;
 
 /**
  * This service provides helper function dealing with the low level {@link Row} and Spring's {@link R2dbcCustomConversions}, so type conversions can be applied.
  */
 @Component
-public class ColumnConverter {
+public class ColumnConverter implements ColumnConverterReactive {
 
     private final ConversionService conversionService;
     private final R2dbcCustomConversions conversions;
@@ -29,6 +30,7 @@ public class ColumnConverter {
      * @param <T> the parameter for the intended type.
      * @return the value which can be constructed from the input.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
         if (value == null || target == null || ClassUtils.isAssignableValue(target, value)) {
@@ -47,7 +49,7 @@ public class ColumnConverter {
     }
 
     /**
-     * Convert a value from the {@link Row} to a type - throws an exception, it it's impossible.
+     * Convert a value from the {@link Row} to a type - throws an exception, if it's impossible.
      * @param row which contains the column values.
      * @param target class.
      * @param columnName the name of the column which to convert.

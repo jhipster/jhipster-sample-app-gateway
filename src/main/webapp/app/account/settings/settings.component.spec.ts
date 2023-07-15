@@ -8,7 +8,7 @@ import { throwError, of } from 'rxjs';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
-import { SettingsComponent } from './settings.component';
+import SettingsComponent from './settings.component';
 
 describe('SettingsComponent', () => {
   let comp: SettingsComponent;
@@ -27,8 +27,7 @@ describe('SettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [SettingsComponent],
+      imports: [HttpClientTestingModule, SettingsComponent],
       providers: [FormBuilder, AccountService],
     })
       .overrideTemplate(SettingsComponent, '')

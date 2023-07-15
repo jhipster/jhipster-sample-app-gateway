@@ -84,11 +84,12 @@ class ModifyServersOpenApiFilterTest {
 
         @Test
         void shouldRewriteBodyWhenBodyIsFluxAndResponseIsNotZipped() {
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
-                path,
-                exchange.getResponse(),
-                exchange.getResponse().bufferFactory()
-            );
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor =
+                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+                    path,
+                    exchange.getResponse(),
+                    exchange.getResponse().bufferFactory()
+                );
 
             byte[] bytes = "{}".getBytes();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
@@ -104,11 +105,12 @@ class ModifyServersOpenApiFilterTest {
         @Test
         void shouldRewriteBodyWhenBodyIsFluxAndResponseIsZipped() {
             exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_ENCODING, "gzip");
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
-                path,
-                exchange.getResponse(),
-                exchange.getResponse().bufferFactory()
-            );
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor =
+                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+                    path,
+                    exchange.getResponse(),
+                    exchange.getResponse().bufferFactory()
+                );
 
             byte[] bytes = zipContent();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);
@@ -123,11 +125,12 @@ class ModifyServersOpenApiFilterTest {
 
         @Test
         void shouldNotRewriteBodyWhenBodyIsNotFlux() {
-            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor = modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
-                path,
-                exchange.getResponse(),
-                exchange.getResponse().bufferFactory()
-            );
+            ModifyServersOpenApiFilter.ModifyServersOpenApiInterceptor interceptor =
+                modifyServersOpenApiFilter.createModifyServersOpenApiInterceptor(
+                    path,
+                    exchange.getResponse(),
+                    exchange.getResponse().bufferFactory()
+                );
 
             byte[] bytes = "{}".getBytes();
             DataBuffer body = exchange.getResponse().bufferFactory().wrap(bytes);

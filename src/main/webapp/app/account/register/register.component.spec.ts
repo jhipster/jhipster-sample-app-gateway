@@ -6,7 +6,7 @@ import { of, throwError } from 'rxjs';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 
 import { RegisterService } from './register.service';
-import { RegisterComponent } from './register.component';
+import RegisterComponent from './register.component';
 
 describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegisterComponent>;
@@ -14,8 +14,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [RegisterComponent],
+      imports: [HttpClientTestingModule, RegisterComponent],
       providers: [FormBuilder],
     })
       .overrideTemplate(RegisterComponent, '')

@@ -4,10 +4,11 @@ import { Component, Input } from '@angular/core';
  * A component that will take care of item count statistics of a pagination.
  */
 @Component({
+  standalone: true,
   selector: 'jhi-item-count',
   template: ` <div>Showing {{ first }} - {{ second }} of {{ total }} items.</div> `,
 })
-export class ItemCountComponent {
+export default class ItemCountComponent {
   /**
    * @param params  Contains parameters for component:
    *                    page          Current page number

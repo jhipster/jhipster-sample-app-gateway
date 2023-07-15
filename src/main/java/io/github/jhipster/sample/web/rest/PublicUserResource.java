@@ -47,7 +47,7 @@ public class PublicUserResource {
     @GetMapping("/users")
     public Mono<ResponseEntity<Flux<UserDTO>>> getAllPublicUsers(
         ServerHttpRequest request,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get all public User names");
         if (!onlyContainsAllowedProperties(pageable)) {

@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { BankAccountComponent } from '../list/bank-account.component';
-import { BankAccountDetailComponent } from '../detail/bank-account-detail.component';
-import { BankAccountUpdateComponent } from '../update/bank-account-update.component';
-import { BankAccountRoutingResolveService } from './bank-account-routing-resolve.service';
+import { BankAccountComponent } from './list/bank-account.component';
+import { BankAccountDetailComponent } from './detail/bank-account-detail.component';
+import { BankAccountUpdateComponent } from './update/bank-account-update.component';
+import BankAccountResolve from './route/bank-account-routing-resolve.service';
 import { ASC } from 'app/config/navigation.constants';
 
 const bankAccountRoute: Routes = [
@@ -21,7 +20,7 @@ const bankAccountRoute: Routes = [
     path: ':id/view',
     component: BankAccountDetailComponent,
     resolve: {
-      bankAccount: BankAccountRoutingResolveService,
+      bankAccount: BankAccountResolve,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -29,7 +28,7 @@ const bankAccountRoute: Routes = [
     path: 'new',
     component: BankAccountUpdateComponent,
     resolve: {
-      bankAccount: BankAccountRoutingResolveService,
+      bankAccount: BankAccountResolve,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -37,14 +36,10 @@ const bankAccountRoute: Routes = [
     path: ':id/edit',
     component: BankAccountUpdateComponent,
     resolve: {
-      bankAccount: BankAccountRoutingResolveService,
+      bankAccount: BankAccountResolve,
     },
     canActivate: [UserRouteAccessService],
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forChild(bankAccountRoute)],
-  exports: [RouterModule],
-})
-export class BankAccountRoutingModule {}
+export default bankAccountRoute;

@@ -1,9 +1,9 @@
 package io.github.jhipster.sample.config;
 
+import jakarta.annotation.Nonnull;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.TimeZone;
-import javax.annotation.Nonnull;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;

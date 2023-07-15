@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ItemCountComponent } from './item-count.component';
+import ItemCountComponent from './item-count.component';
 
 describe('ItemCountComponent test', () => {
   let comp: ItemCountComponent;
@@ -8,7 +8,7 @@ describe('ItemCountComponent test', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ItemCountComponent],
+      imports: [ItemCountComponent],
     }).compileComponents();
   }));
 

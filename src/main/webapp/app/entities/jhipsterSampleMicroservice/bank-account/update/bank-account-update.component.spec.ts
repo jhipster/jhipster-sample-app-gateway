@@ -21,8 +21,7 @@ describe('BankAccount Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [BankAccountUpdateComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), BankAccountUpdateComponent],
       providers: [
         FormBuilder,
         {
