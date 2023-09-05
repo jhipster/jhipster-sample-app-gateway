@@ -3,7 +3,6 @@ package io.github.jhipster.sample.web.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.IntegrationTest;
-import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;

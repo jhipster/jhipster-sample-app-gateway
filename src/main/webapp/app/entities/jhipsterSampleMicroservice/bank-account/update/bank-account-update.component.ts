@@ -7,9 +7,9 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { BankAccountFormService, BankAccountFormGroup } from './bank-account-form.service';
 import { IBankAccount } from '../bank-account.model';
 import { BankAccountService } from '../service/bank-account.service';
+import { BankAccountFormService, BankAccountFormGroup } from './bank-account-form.service';
 
 @Component({
   standalone: true,
@@ -26,7 +26,7 @@ export class BankAccountUpdateComponent implements OnInit {
   constructor(
     protected bankAccountService: BankAccountService,
     protected bankAccountFormService: BankAccountFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

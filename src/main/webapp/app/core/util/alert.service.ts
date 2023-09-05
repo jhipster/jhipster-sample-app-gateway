@@ -25,7 +25,10 @@ export class AlertService {
   private alertId = 0;
   private alerts: Alert[] = [];
 
-  constructor(private sanitizer: DomSanitizer, private ngZone: NgZone) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private ngZone: NgZone,
+  ) {}
 
   clear(): void {
     this.alerts = [];

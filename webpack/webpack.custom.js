@@ -1,6 +1,6 @@
+const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -24,7 +24,7 @@ module.exports = async (config, options, targetOptions) => {
       new WebpackNotifierPlugin({
         title: 'Jhipster Sample Gateway',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
-      })
+      }),
     );
   }
 
@@ -64,8 +64,8 @@ module.exports = async (config, options, targetOptions) => {
         },
         {
           reload: targetOptions.target === 'build', // enabled for build --watch
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -76,7 +76,7 @@ module.exports = async (config, options, targetOptions) => {
         openAnalyzer: false,
         // Webpack statistics in target folder
         reportFilename: '../stats.html',
-      })
+      }),
     );
   }
 
@@ -110,11 +110,11 @@ module.exports = async (config, options, targetOptions) => {
       // If you use an API server, in `prod` mode, you will need to enable CORS
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
       SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
-    })
+    }),
   );
 
   config = merge(
-    config
+    config,
     // jhipster-needle-add-webpack-config - JHipster will add custom config
   );
 

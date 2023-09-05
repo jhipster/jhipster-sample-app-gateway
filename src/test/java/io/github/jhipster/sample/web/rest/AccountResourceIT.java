@@ -1,6 +1,5 @@
 package io.github.jhipster.sample.web.rest;
 
-import static io.github.jhipster.sample.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.jhipster.sample.IntegrationTest;
@@ -12,7 +11,6 @@ import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import io.github.jhipster.sample.service.dto.PasswordChangeDTO;
-import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
@@ -31,7 +29,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
-@WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
 class AccountResourceIT {
 
@@ -67,6 +64,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() {
         accountWebTestClient
             .get()
@@ -80,6 +78,7 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testGetExistingAccount() {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
@@ -128,7 +127,7 @@ class AccountResourceIT {
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
-            .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            .isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test

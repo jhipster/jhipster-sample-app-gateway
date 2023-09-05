@@ -37,7 +37,7 @@ export class BankAccountFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       name: new FormControl(bankAccountRawValue.name, {
         validators: [Validators.required],
@@ -58,7 +58,7 @@ export class BankAccountFormService {
       {
         ...bankAccountRawValue,
         id: { value: bankAccountRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 

@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 
+import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 import LogsComponent from './logs.component';
 import { LogsService } from './logs.service';
 import { Log, LoggersResponse } from './log.model';
-import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 
 describe('LogsComponent', () => {
   let comp: LogsComponent;
@@ -44,7 +44,7 @@ describe('LogsComponent', () => {
               effectiveLevel: 'WARN',
             },
           },
-        } as unknown as LoggersResponse)
+        } as unknown as LoggersResponse),
       );
 
       // WHEN
@@ -68,7 +68,7 @@ describe('LogsComponent', () => {
               effectiveLevel: 'ERROR',
             },
           },
-        } as unknown as LoggersResponse)
+        } as unknown as LoggersResponse),
       );
 
       // WHEN

@@ -4,9 +4,9 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
-import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 
 @Component({
   standalone: true,
@@ -25,7 +25,10 @@ export default class LogsComponent implements OnInit {
   services: string[] = [];
   selectedService: string | undefined = undefined;
 
-  constructor(private logsService: LogsService, private gatewayRoutesService: GatewayRoutesService) {}
+  constructor(
+    private logsService: LogsService,
+    private gatewayRoutesService: GatewayRoutesService,
+  ) {}
 
   ngOnInit(): void {
     this.findAndExtractLoggers();
@@ -43,7 +46,7 @@ export default class LogsComponent implements OnInit {
 
   filterAndSort(): void {
     this.filteredAndOrderedLoggers = this.loggers!.filter(
-      logger => !this.filter || logger.name.toLowerCase().includes(this.filter.toLowerCase())
+      logger => !this.filter || logger.name.toLowerCase().includes(this.filter.toLowerCase()),
     ).sort((a, b) => {
       if (a[this.orderProp] < b[this.orderProp]) {
         return this.ascending ? -1 : 1;
@@ -64,7 +67,7 @@ export default class LogsComponent implements OnInit {
         finalize(() => {
           this.filterAndSort();
           this.isLoading = false;
-        })
+        }),
       )
       .subscribe({
         next: (response: LoggersResponse) =>

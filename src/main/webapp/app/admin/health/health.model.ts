@@ -5,6 +5,7 @@ export type HealthKey =
   | 'refreshScope'
   | 'clientConfigServer'
   | 'hystrix'
+  | 'consul'
   | 'diskSpace'
   | 'mail'
   | 'ping'

@@ -10,7 +10,11 @@ import { Router } from '@angular/router';
   providers: [AppPageTitleStrategy],
 })
 export default class MainComponent implements OnInit {
-  constructor(private router: Router, private appPageTitleStrategy: AppPageTitleStrategy, private accountService: AccountService) {}
+  constructor(
+    private router: Router,
+    private appPageTitleStrategy: AppPageTitleStrategy,
+    private accountService: AccountService,
+  ) {}
 
   ngOnInit(): void {
     // try to log in automatically

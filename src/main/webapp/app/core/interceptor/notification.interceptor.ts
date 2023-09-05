@@ -28,7 +28,7 @@ export class NotificationInterceptor implements HttpInterceptor {
             });
           }
         }
-      })
+      }),
     );
   }
 }

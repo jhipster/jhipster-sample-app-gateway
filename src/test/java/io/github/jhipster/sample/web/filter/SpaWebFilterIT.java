@@ -2,6 +2,7 @@ package io.github.jhipster.sample.web.filter;
 
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -39,7 +40,17 @@ class SpaWebFilterIT {
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
     void testFilterDoesNotForwardToIndexForV3ApiDocs() {
-        webTestClient.get().uri("/v3/api-docs").exchange().expectStatus().isOk().expectHeader().contentType(MediaType.APPLICATION_JSON);
+        webTestClient
+            .mutate()
+            .responseTimeout(Duration.ofMillis(10000))
+            .build()
+            .get()
+            .uri("/v3/api-docs")
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON);
     }
 
     @Test

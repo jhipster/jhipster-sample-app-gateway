@@ -6,9 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject, from } from 'rxjs';
 
-import { BankAccountFormService } from './bank-account-form.service';
 import { BankAccountService } from '../service/bank-account.service';
 import { IBankAccount } from '../bank-account.model';
+import { BankAccountFormService } from './bank-account-form.service';
 
 import { BankAccountUpdateComponent } from './bank-account-update.component';
 
