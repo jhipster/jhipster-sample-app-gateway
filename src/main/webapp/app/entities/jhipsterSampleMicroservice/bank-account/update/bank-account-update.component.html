@@ -15,7 +15,7 @@
           <label class="form-label" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
           <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required">This field is required.</small>
           </div>
         </div>
 
@@ -23,10 +23,8 @@
           <label class="form-label" for="field_balance">Balance</label>
           <input type="number" class="form-control" name="balance" id="field_balance" data-cy="balance" formControlName="balance" />
           <div *ngIf="editForm.get('balance')!.invalid && (editForm.get('balance')!.dirty || editForm.get('balance')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('balance')?.errors?.required"> This field is required. </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('balance')?.errors?.number">
-              This field should be a number.
-            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('balance')?.errors?.required">This field is required.</small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('balance')?.errors?.number">This field should be a number.</small>
           </div>
         </div>
       </div>

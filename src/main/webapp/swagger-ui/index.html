@@ -59,15 +59,15 @@
                       if (Array.isArray(response.data)) {
                         return response.data.map(({ group, description }) => ({
                           name: description,
-                          url: `/services/${service}${baseUrl}/${group}`,
+                          url: `/services/${service}/${baseUrl}/${group}`,
                         }));
                       }
                       return undefined;
                     })
                     .catch(() => {
                       return axios
-                        .get(`/services/${service}${baseUrl}`, axiosConfig)
-                        .then(() => [{ url: `/services/${service}${baseUrl}`, name: `${service} (default)` }]);
+                        .get(`/services/${service}/${baseUrl}`, axiosConfig)
+                        .then(() => [{ url: `/services/${service}/${baseUrl}`, name: `${service} (default)` }]);
                     });
                 }),
               )
