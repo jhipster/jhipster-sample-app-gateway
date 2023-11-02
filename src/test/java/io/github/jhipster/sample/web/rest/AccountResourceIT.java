@@ -320,7 +320,7 @@ class AccountResourceIT {
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus()
-            .isCreated();
+            .isBadRequest();
     }
 
     @Test
@@ -413,7 +413,7 @@ class AccountResourceIT {
             .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus()
-            .isCreated();
+            .is4xxClientError();
     }
 
     @Test
