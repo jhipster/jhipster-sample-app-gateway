@@ -23,7 +23,7 @@ describe('MainComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MainComponent],
+      imports: [MainComponent],
       providers: [Title, AccountService, { provide: TitleStrategy, useClass: AppPageTitleStrategy }],
     })
       .overrideTemplate(MainComponent, '')

@@ -14,7 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.ForwardedHeaderUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.jhipster.web.util.PaginationUtil;
@@ -55,7 +55,12 @@ public class PublicUserResource {
         return userService
             .countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
+            .map(page ->
+                PaginationUtil.generatePaginationHttpHeaders(
+                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                    page
+                )
+            )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
 

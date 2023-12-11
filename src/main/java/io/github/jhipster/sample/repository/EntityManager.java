@@ -11,6 +11,7 @@ import org.springframework.data.r2dbc.core.StatementMapper;
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.sql.Column;
 import org.springframework.data.relational.core.sql.Condition;
 import org.springframework.data.relational.core.sql.OrderByField;
 import org.springframework.data.relational.core.sql.Select;
@@ -223,11 +224,57 @@ public class EntityManager {
 
         for (Sort.Order order : sortToUse) {
             String propertyName = order.getProperty();
-            OrderByField orderByField = OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName));
+            OrderByField orderByField = !propertyName.contains(".")
+                ? OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName))
+                : createOrderByField(propertyName);
 
             fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
         }
 
         return fields;
+    }
+
+    /**
+     * Creates an OrderByField instance for sorting a query by the specified property.
+     *
+     * @param propertyName The full property name in the format "tableName.columnName".
+     * @return An OrderByField instance for sorting by the specified property.
+     */
+    private static OrderByField createOrderByField(String propertyName) {
+        // Split the propertyName into table name and column name
+        String[] parts = propertyName.split("\\.");
+        String tableName = parts[0];
+        String columnName = parts[1];
+
+        // Create and return an OrderByField instance
+        return OrderByField.from(
+            // Create a column with the given name and alias it with the table name and column name
+            Column.aliased(
+                columnName,
+                // Create a table alias with the same name as the table
+                Table.aliased(camelCaseToSnakeCase(tableName), tableName),
+                // Use a composite alias of "tableName_columnName"
+                String.format("%s_%s", tableName, columnName)
+            )
+        );
+    }
+
+    /**
+     * Converts a camel case string to snake case.
+     *
+     * @param input The camel case string to be converted to snake case.
+     * @return The input string converted to snake case.
+     */
+    public static String camelCaseToSnakeCase(String input) {
+        // Regular Expression
+        String regex = "([a-z])([A-Z]+)";
+
+        // Replacement string
+        String replacement = "$1_$2";
+
+        // Replace the given regex
+        // with replacement string
+        // and convert it to lower case.
+        return input.replaceAll(regex, replacement).toLowerCase();
     }
 }
