@@ -65,26 +65,6 @@ class PublicUserResourceIT {
     }
 
     @Test
-    void getAllAuthorities() {
-        webTestClient
-            .get()
-            .uri("/api/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .expectBody()
-            .jsonPath("$")
-            .isArray()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]")
-            .hasJsonPath()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.USER + "')]")
-            .hasJsonPath();
-    }
-
-    @Test
     void getAllUsersSortedByParameters() throws Exception {
         // Initialize the database
         userRepository.save(user).block();

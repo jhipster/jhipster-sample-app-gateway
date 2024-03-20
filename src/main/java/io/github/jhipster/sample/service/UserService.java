@@ -158,8 +158,7 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        return Flux
-            .fromIterable(userDTO.getAuthorities() != null ? userDTO.getAuthorities() : new HashSet<>())
+        return Flux.fromIterable(userDTO.getAuthorities() != null ? userDTO.getAuthorities() : new HashSet<>())
             .flatMap(authorityRepository::findById)
             .doOnNext(authority -> user.getAuthorities().add(authority))
             .then(Mono.just(user))
@@ -231,8 +230,7 @@ public class UserService {
      */
     @Transactional
     public Mono<Void> updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        return SecurityUtils
-            .getCurrentUserLogin()
+        return SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .flatMap(user -> {
                 user.setFirstName(firstName);
@@ -250,8 +248,7 @@ public class UserService {
 
     @Transactional
     public Mono<User> saveUser(User user) {
-        return SecurityUtils
-            .getCurrentUserLogin()
+        return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.just(Constants.SYSTEM))
             .flatMap(login -> {
                 if (user.getCreatedBy() == null) {
@@ -262,19 +259,18 @@ public class UserService {
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
                 return userRepository
                     .save(user)
-                    .flatMap(savedUser ->
-                        Flux
-                            .fromIterable(user.getAuthorities())
-                            .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
-                            .then(Mono.just(savedUser))
+                    .flatMap(
+                        savedUser ->
+                            Flux.fromIterable(user.getAuthorities())
+                                .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
+                                .then(Mono.just(savedUser))
                     );
             });
     }
 
     @Transactional
     public Mono<Void> changePassword(String currentClearTextPassword, String newPassword) {
-        return SecurityUtils
-            .getCurrentUserLogin()
+        return SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .publishOn(Schedulers.boundedElastic())
             .map(user -> {

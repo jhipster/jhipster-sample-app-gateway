@@ -136,8 +136,7 @@ public class UserResource {
             .doOnSuccess(mailService::sendCreationEmail)
             .map(user -> {
                 try {
-                    return ResponseEntity
-                        .created(new URI("/api/admin/users/" + user.getLogin()))
+                    return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
                         .headers(
                             HeaderUtil.createAlert(applicationName, "A user is created with identifier " + user.getLogin(), user.getLogin())
                         )
@@ -156,9 +155,12 @@ public class UserResource {
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
-    @PutMapping("/users")
+    @PutMapping({ "/users", "/users/{login}" })
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Mono<ResponseEntity<AdminUserDTO>> updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
+    public Mono<ResponseEntity<AdminUserDTO>> updateUser(
+        @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login,
+        @Valid @RequestBody AdminUserDTO userDTO
+    ) {
         log.debug("REST request to update User : {}", userDTO);
         return userRepository
             .findOneByEmailIgnoreCase(userDTO.getEmail())
@@ -179,17 +181,17 @@ public class UserResource {
                 return userService.updateUser(userDTO);
             })
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .map(user ->
-                ResponseEntity
-                    .ok()
-                    .headers(
-                        HeaderUtil.createAlert(
-                            applicationName,
-                            "A user is updated with identifier " + userDTO.getLogin(),
-                            userDTO.getLogin()
+            .map(
+                user ->
+                    ResponseEntity.ok()
+                        .headers(
+                            HeaderUtil.createAlert(
+                                applicationName,
+                                "A user is updated with identifier " + userDTO.getLogin(),
+                                userDTO.getLogin()
+                            )
                         )
-                    )
-                    .body(user)
+                        .body(user)
             );
     }
 
@@ -214,11 +216,12 @@ public class UserResource {
         return userService
             .countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page ->
-                PaginationUtil.generatePaginationHttpHeaders(
-                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
-                    page
-                )
+            .map(
+                page ->
+                    PaginationUtil.generatePaginationHttpHeaders(
+                        ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                        page
+                    )
             )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
     }
@@ -257,8 +260,7 @@ public class UserResource {
             .deleteUser(login)
             .then(
                 Mono.just(
-                    ResponseEntity
-                        .noContent()
+                    ResponseEntity.noContent()
                         .headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login))
                         .build()
                 )

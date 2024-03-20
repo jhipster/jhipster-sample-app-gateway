@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import SharedModule from 'app/shared/shared.module';
@@ -14,7 +14,7 @@ const initialAccount: Account = {} as Account;
   templateUrl: './settings.component.html',
 })
 export default class SettingsComponent implements OnInit {
-  success = false;
+  success = signal(false);
 
   settingsForm = new FormGroup({
     firstName: new FormControl(initialAccount.firstName, {
@@ -37,7 +37,7 @@ export default class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  constructor(private accountService: AccountService) {}
+  private accountService = inject(AccountService);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
@@ -48,11 +48,11 @@ export default class SettingsComponent implements OnInit {
   }
 
   save(): void {
-    this.success = false;
+    this.success.set(false);
 
     const account = this.settingsForm.getRawValue();
     this.accountService.save(account).subscribe(() => {
-      this.success = true;
+      this.success.set(true);
 
       this.accountService.authenticate(account);
     });

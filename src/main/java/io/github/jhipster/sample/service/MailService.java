@@ -50,12 +50,10 @@ public class MailService {
     }
 
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-        Mono
-            .defer(() -> {
-                this.sendEmailSync(to, subject, content, isMultipart, isHtml);
-                return Mono.empty();
-            })
-            .subscribe();
+        Mono.defer(() -> {
+            this.sendEmailSync(to, subject, content, isMultipart, isHtml);
+            return Mono.empty();
+        }).subscribe();
     }
 
     private void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
@@ -84,12 +82,10 @@ public class MailService {
     }
 
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Mono
-            .defer(() -> {
-                this.sendEmailFromTemplateSync(user, templateName, titleKey);
-                return Mono.empty();
-            })
-            .subscribe();
+        Mono.defer(() -> {
+            this.sendEmailFromTemplateSync(user, templateName, titleKey);
+            return Mono.empty();
+        }).subscribe();
     }
 
     private void sendEmailFromTemplateSync(User user, String templateName, String titleKey) {

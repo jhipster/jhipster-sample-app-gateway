@@ -54,8 +54,9 @@ class TokenAuthenticationSecurityMetersIT {
 
         tryToAuthenticate(createTokenWithDifferentSignature());
 
-        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "invalid-signature").counter().count())
-            .isEqualTo(count + 1);
+        assertThat(meterRegistry.get(INVALID_TOKENS_METER_EXPECTED_NAME).tag("cause", "invalid-signature").counter().count()).isEqualTo(
+            count + 1
+        );
     }
 
     @Test

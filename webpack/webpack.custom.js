@@ -1,6 +1,6 @@
-const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
+const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackNotifierPlugin = require('webpack-notifier');

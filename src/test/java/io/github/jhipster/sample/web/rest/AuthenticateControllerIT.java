@@ -1,5 +1,6 @@
 package io.github.jhipster.sample.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
@@ -18,6 +19,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @IntegrationTest
 class AuthenticateControllerIT {
+
+    @Autowired
+    private ObjectMapper om;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,7 +50,7 @@ class AuthenticateControllerIT {
             .post()
             .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus()
             .isOk()
@@ -76,7 +80,7 @@ class AuthenticateControllerIT {
             .post()
             .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus()
             .isOk()
@@ -96,7 +100,7 @@ class AuthenticateControllerIT {
             .post()
             .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus()
             .isUnauthorized()

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -21,13 +21,12 @@ export class BankAccountUpdateComponent implements OnInit {
   isSaving = false;
   bankAccount: IBankAccount | null = null;
 
-  editForm: BankAccountFormGroup = this.bankAccountFormService.createBankAccountFormGroup();
+  protected bankAccountService = inject(BankAccountService);
+  protected bankAccountFormService = inject(BankAccountFormService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected bankAccountService: BankAccountService,
-    protected bankAccountFormService: BankAccountFormService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: BankAccountFormGroup = this.bankAccountFormService.createBankAccountFormGroup();
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bankAccount }) => {

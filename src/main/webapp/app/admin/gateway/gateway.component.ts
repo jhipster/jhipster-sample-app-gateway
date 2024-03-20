@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { GatewayRoutesService } from './gateway-routes.service';
@@ -15,7 +15,7 @@ export default class GatewayComponent implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];
   updatingRoutes = false;
 
-  constructor(private gatewayRoutesService: GatewayRoutesService) {}
+  private gatewayRoutesService = inject(GatewayRoutesService);
 
   ngOnInit(): void {
     this.refresh();

@@ -39,16 +39,16 @@ describe('Alert Error Component', () => {
       // GIVEN
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { status: 0 } });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Server not reachable');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Server not reachable');
     });
 
     it('Should display an alert on status 404', () => {
       // GIVEN
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { status: 404 } });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Not found');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Not found');
     });
 
     it('Should display an alert on generic error', () => {
@@ -56,9 +56,9 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { error: { message: 'Error Message' } } });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { error: 'Second Error Message' } });
       // THEN
-      expect(comp.alerts.length).toBe(2);
-      expect(comp.alerts[0].message).toBe('Error Message');
-      expect(comp.alerts[1].message).toBe('Second Error Message');
+      expect(comp.alerts().length).toBe(2);
+      expect(comp.alerts()[0].message).toBe('Error Message');
+      expect(comp.alerts()[1].message).toBe('Second Error Message');
     });
 
     it('Should display an alert on status 400 for generic error', () => {
@@ -78,8 +78,8 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('error.validation');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('error.validation');
     });
 
     it('Should display an alert on status 400 for generic error without message', () => {
@@ -92,8 +92,8 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Bad Request');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Bad Request');
     });
 
     it('Should display an alert on status 400 for invalid parameters', () => {
@@ -114,8 +114,8 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Error on field "MinField"');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Error on field "MinField"');
     });
 
     it('Should display an alert on status 400 for error headers', () => {
@@ -132,8 +132,8 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Error Message');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Error Message');
     });
 
     it('Should display an alert on status 500 with detail', () => {
@@ -151,8 +151,8 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts.length).toBe(1);
-      expect(comp.alerts[0].message).toBe('Detailed error message');
+      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()[0].message).toBe('Detailed error message');
     });
   });
 });

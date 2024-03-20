@@ -100,8 +100,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public Mono<Void> saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
-        return SecurityUtils
-            .getCurrentUserLogin()
+        return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin ->
                 userRepository
@@ -113,17 +112,17 @@ public class AccountResource {
                             throw new EmailAlreadyUsedException();
                         }
                         return userRepository.findOneByLogin(userLogin);
-                    })
-            )
+                    }))
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
-            .flatMap(user ->
-                userService.updateUser(
-                    userDTO.getFirstName(),
-                    userDTO.getLastName(),
-                    userDTO.getEmail(),
-                    userDTO.getLangKey(),
-                    userDTO.getImageUrl()
-                )
+            .flatMap(
+                user ->
+                    userService.updateUser(
+                        userDTO.getFirstName(),
+                        userDTO.getLastName(),
+                        userDTO.getEmail(),
+                        userDTO.getLangKey(),
+                        userDTO.getImageUrl()
+                    )
             );
     }
 

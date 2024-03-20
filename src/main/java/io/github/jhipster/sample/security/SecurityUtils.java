@@ -27,8 +27,7 @@ public final class SecurityUtils {
      * @return the login of the current user.
      */
     public static Mono<String> getCurrentUserLogin() {
-        return ReactiveSecurityContextHolder
-            .getContext()
+        return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
     }
@@ -52,8 +51,7 @@ public final class SecurityUtils {
      * @return the JWT of the current user.
      */
     public static Mono<String> getCurrentUserJWT() {
-        return ReactiveSecurityContextHolder
-            .getContext()
+        return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
@@ -65,8 +63,7 @@ public final class SecurityUtils {
      * @return true if the user is authenticated, false otherwise.
      */
     public static Mono<Boolean> isAuthenticated() {
-        return ReactiveSecurityContextHolder
-            .getContext()
+        return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
             .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).noneMatch(AuthoritiesConstants.ANONYMOUS::equals));
@@ -79,15 +76,15 @@ public final class SecurityUtils {
      * @return true if the current user has any of the authorities, false otherwise.
      */
     public static Mono<Boolean> hasCurrentUserAnyOfAuthorities(String... authorities) {
-        return ReactiveSecurityContextHolder
-            .getContext()
+        return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
-            .map(authorityList ->
-                authorityList
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+            .map(
+                authorityList ->
+                    authorityList
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
             );
     }
 

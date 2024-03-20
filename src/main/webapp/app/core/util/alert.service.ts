@@ -1,4 +1,4 @@
-import { Injectable, SecurityContext, NgZone } from '@angular/core';
+import { inject, Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 export type AlertType = 'success' | 'danger' | 'warning' | 'info';
@@ -25,10 +25,7 @@ export class AlertService {
   private alertId = 0;
   private alerts: Alert[] = [];
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    private ngZone: NgZone,
-  ) {}
+  private sanitizer = inject(DomSanitizer);
 
   clear(): void {
     this.alerts = [];

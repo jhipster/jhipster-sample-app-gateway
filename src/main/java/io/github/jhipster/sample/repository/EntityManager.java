@@ -174,23 +174,21 @@ public class EntityManager {
      * @return the number of inserted rows.
      */
     public Mono<Long> updateLinkTable(LinkTable table, Object entityId, Stream<?> referencedIds) {
-        return deleteFromLinkTable(table, entityId)
-            .then(
-                Flux
-                    .fromStream(referencedIds)
-                    .flatMap((Object referenceId) -> {
-                        StatementMapper.InsertSpec insert = r2dbcEntityTemplate
-                            .getDataAccessStrategy()
-                            .getStatementMapper()
-                            .createInsert(table.tableName)
-                            .withColumn(table.idColumn, Parameter.from(entityId))
-                            .withColumn(table.referenceColumn, Parameter.from(referenceId));
+        return deleteFromLinkTable(table, entityId).then(
+            Flux.fromStream(referencedIds)
+                .flatMap((Object referenceId) -> {
+                    StatementMapper.InsertSpec insert = r2dbcEntityTemplate
+                        .getDataAccessStrategy()
+                        .getStatementMapper()
+                        .createInsert(table.tableName)
+                        .withColumn(table.idColumn, Parameter.from(entityId))
+                        .withColumn(table.referenceColumn, Parameter.from(referenceId));
 
-                        return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(insert)).fetch().rowsUpdated();
-                    })
-                    .collectList()
-                    .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l))
-            );
+                    return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(insert)).fetch().rowsUpdated();
+                })
+                .collectList()
+                .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l))
+        );
     }
 
     public Mono<Void> deleteFromLinkTable(LinkTable table, Object entityId) {
@@ -208,8 +206,9 @@ public class EntityManager {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
             if (entity != null) {
                 Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-                selectFrom =
-                    selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
+                selectFrom = selectFrom.orderBy(
+                    createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)
+                );
             }
         }
         return createSelect(selectFrom.build());

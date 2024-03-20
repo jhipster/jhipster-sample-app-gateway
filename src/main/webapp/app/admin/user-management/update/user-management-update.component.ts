@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,8 +19,8 @@ const newUser: IUser = {
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export default class UserManagementUpdateComponent implements OnInit {
-  authorities: string[] = [];
-  isSaving = false;
+  authorities = signal<string[]>([]);
+  isSaving = signal(false);
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),
@@ -43,10 +43,8 @@ export default class UserManagementUpdateComponent implements OnInit {
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
   });
 
-  constructor(
-    private userService: UserManagementService,
-    private route: ActivatedRoute,
-  ) {}
+  private userService = inject(UserManagementService);
+  private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {
@@ -56,7 +54,7 @@ export default class UserManagementUpdateComponent implements OnInit {
         this.editForm.reset(newUser);
       }
     });
-    this.userService.authorities().subscribe(authorities => (this.authorities = authorities));
+    this.userService.authorities().subscribe(authorities => this.authorities.set(authorities));
   }
 
   previousState(): void {
@@ -64,7 +62,7 @@ export default class UserManagementUpdateComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving = true;
+    this.isSaving.set(true);
     const user = this.editForm.getRawValue();
     if (user.id !== null) {
       this.userService.update(user).subscribe({
@@ -80,11 +78,11 @@ export default class UserManagementUpdateComponent implements OnInit {
   }
 
   private onSaveSuccess(): void {
-    this.isSaving = false;
+    this.isSaving.set(false);
     this.previousState();
   }
 
   private onSaveError(): void {
-    this.isSaving = false;
+    this.isSaving.set(false);
   }
 }

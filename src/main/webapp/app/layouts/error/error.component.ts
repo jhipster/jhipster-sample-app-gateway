@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 
@@ -9,14 +9,14 @@ import SharedModule from 'app/shared/shared.module';
   imports: [SharedModule],
 })
 export default class ErrorComponent implements OnInit {
-  errorMessage?: string;
+  errorMessage = signal<string | undefined>(undefined);
 
-  constructor(private route: ActivatedRoute) {}
+  private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {
       if (routeData.errorMessage) {
-        this.errorMessage = routeData.errorMessage;
+        this.errorMessage.set(routeData.errorMessage);
       }
     });
   }

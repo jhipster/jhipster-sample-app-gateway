@@ -105,8 +105,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
 
         if (ex instanceof AuthenticationException) {
             // Ensure no information about existing users is revealed via failed authentication attempts
-            return ProblemDetailWithCauseBuilder
-                .instance()
+            return ProblemDetailWithCauseBuilder.instance()
                 .withStatus(toStatus(ex).value())
                 .withTitle("Unauthorized")
                 .withDetail("Invalid credentials")
@@ -162,12 +161,13 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
             .getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(f ->
-                new FieldErrorVM(
-                    f.getObjectName().replaceFirst("DTO$", ""),
-                    f.getField(),
-                    StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
-                )
+            .map(
+                f ->
+                    new FieldErrorVM(
+                        f.getObjectName().replaceFirst("DTO$", ""),
+                        f.getField(),
+                        StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
+                    )
             )
             .toList();
     }
@@ -181,11 +181,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
         // Let the ErrorResponse take this responsibility
         if (throwable instanceof ErrorResponse err) return HttpStatus.valueOf(err.getBody().getStatus());
 
-        return Optional
-            .ofNullable(getMappedStatus(throwable))
-            .orElse(
-                Optional.ofNullable(resolveResponseStatus(throwable)).map(ResponseStatus::value).orElse(HttpStatus.INTERNAL_SERVER_ERROR)
-            );
+        return Optional.ofNullable(getMappedStatus(throwable)).orElse(
+            Optional.ofNullable(resolveResponseStatus(throwable)).map(ResponseStatus::value).orElse(HttpStatus.INTERNAL_SERVER_ERROR)
+        );
     }
 
     private ResponseStatus extractResponseStatus(final Throwable throwable) {
