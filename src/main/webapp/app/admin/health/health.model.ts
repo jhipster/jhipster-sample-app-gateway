@@ -11,7 +11,7 @@ export type HealthKey =
   | 'ping'
   | 'livenessState'
   | 'readinessState'
-  | 'db';
+  | 'r2dbc';
 
 export interface Health {
   status: HealthStatus;

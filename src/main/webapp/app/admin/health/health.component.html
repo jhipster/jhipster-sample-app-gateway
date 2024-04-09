@@ -19,13 +19,27 @@
           @for (componentHealth of health.components | keyvalue; track componentHealth.key) {
             <tr>
               <td>
-                <span class="text-capitalize">{{ componentHealth.key }}</span>
+                {{
+                  {
+                    discoveryComposite: 'Discovery Composite',
+                    refreshScope: 'Microservice Refresh Scope',
+                    clientConfigServer: 'Microservice Config Server',
+                    hystrix: 'Hystrix',
+                    consul: 'Consul',
+                    diskSpace: 'Disk space',
+                    mail: 'Email',
+                    livenessState: 'Liveness state',
+                    readinessState: 'Readiness state',
+                    ping: 'Application',
+                    r2dbc: 'Database'
+                  }[componentHealth.key] || componentHealth.key
+                }}
               </td>
               <td class="text-center">
                 <span class="badge" [ngClass]="getBadgeClass(componentHealth.value!.status)">
                   {{
                     { UNKNOWN: 'UNKNOWN', UP: 'UP', OUT_OF_SERVICE: 'OUT_OF_SERVICE', DOWN: 'DOWN' }[
-                      componentHealth.value!.status || 'UNKNOWN'
+                      componentHealth.value?.status ?? 'UNKNOWN'
                     ]
                   }}
                 </span>

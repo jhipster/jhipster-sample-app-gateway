@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
 import tech.jhipster.config.JHipsterProperties;
 
 @Target(ElementType.TYPE)
@@ -35,6 +34,5 @@ import tech.jhipster.config.JHipsterProperties;
     }
 )
 @ComponentScan({})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public @interface AuthenticationIntegrationTest {
 }
