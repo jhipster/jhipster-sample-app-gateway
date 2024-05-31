@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, inject, ViewChild, signal } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,8 +15,7 @@ import { RegisterService } from './register.service';
   templateUrl: './register.component.html',
 })
 export default class RegisterComponent implements AfterViewInit {
-  @ViewChild('login', { static: false })
-  login?: ElementRef;
+  login = viewChild.required<ElementRef>('login');
 
   doNotMatch = signal(false);
   error = signal(false);
@@ -51,9 +50,7 @@ export default class RegisterComponent implements AfterViewInit {
   private registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {
-    if (this.login) {
-      this.login.nativeElement.focus();
-    }
+    this.login().nativeElement.focus();
   }
 
   register(): void {

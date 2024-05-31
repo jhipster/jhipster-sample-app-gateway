@@ -149,6 +149,12 @@ spring:
   webflux:
     problemdetails:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
   task:
     execution:
       thread-name-prefix: jhipster-sample-gateway-task-

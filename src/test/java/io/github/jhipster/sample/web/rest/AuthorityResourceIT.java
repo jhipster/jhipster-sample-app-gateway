@@ -47,6 +47,8 @@ class AuthorityResourceIT {
 
     private Authority authority;
 
+    private Authority insertedAuthority;
+
     /**
      * Create an entity for this test.
      *
@@ -77,15 +79,18 @@ class AuthorityResourceIT {
         }
     }
 
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
     @BeforeEach
     public void initTest() {
-        deleteEntities(em);
         authority = createEntity(em);
+    }
+
+    @AfterEach
+    public void cleanup() {
+        if (insertedAuthority != null) {
+            authorityRepository.delete(insertedAuthority).block();
+            insertedAuthority = null;
+        }
+        deleteEntities(em);
     }
 
     @Test
@@ -107,12 +112,14 @@ class AuthorityResourceIT {
         // Validate the Authority in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         assertAuthorityUpdatableFieldsEquals(returnedAuthority, getPersistedAuthority(returnedAuthority));
+
+        insertedAuthority = returnedAuthority;
     }
 
     @Test
     void createAuthorityWithExistingId() throws Exception {
         // Create the Authority with an existing ID
-        authorityRepository.save(authority).block();
+        insertedAuthority = authorityRepository.save(authority).block();
 
         long databaseSizeBeforeCreate = getRepositoryCount();
 
@@ -164,7 +171,7 @@ class AuthorityResourceIT {
     void getAllAuthorities() {
         // Initialize the database
         authority.setName(UUID.randomUUID().toString());
-        authorityRepository.save(authority).block();
+        insertedAuthority = authorityRepository.save(authority).block();
 
         // Get all the authorityList
         webTestClient
@@ -185,7 +192,7 @@ class AuthorityResourceIT {
     void getAuthority() {
         // Initialize the database
         authority.setName(UUID.randomUUID().toString());
-        authorityRepository.save(authority).block();
+        insertedAuthority = authorityRepository.save(authority).block();
 
         // Get the authority
         webTestClient
@@ -218,7 +225,7 @@ class AuthorityResourceIT {
     void deleteAuthority() {
         // Initialize the database
         authority.setName(UUID.randomUUID().toString());
-        authorityRepository.save(authority).block();
+        insertedAuthority = authorityRepository.save(authority).block();
 
         long databaseSizeBeforeDelete = getRepositoryCount();
 

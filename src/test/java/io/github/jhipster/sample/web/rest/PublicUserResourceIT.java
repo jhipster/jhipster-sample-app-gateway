@@ -1,13 +1,12 @@
 package io.github.jhipster.sample.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-import io.github.jhipster.sample.service.dto.UserDTO;
+import java.util.Set;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,13 @@ class PublicUserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(userRepository, em);
+        user = UserResourceIT.initTestUser(em);
+    }
+
+    @AfterEach
+    public void cleanupAndCheck() {
+        userRepository.deleteAllUserAuthorities().block();
+        userRepository.deleteAll().block();
     }
 
     @Test
@@ -48,7 +53,7 @@ class PublicUserResourceIT {
         userRepository.save(user).block();
 
         // Get all the users
-        UserDTO foundUser = webTestClient
+        webTestClient
             .get()
             .uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
@@ -57,11 +62,17 @@ class PublicUserResourceIT {
             .isOk()
             .expectHeader()
             .contentType(MediaType.APPLICATION_JSON)
-            .returnResult(UserDTO.class)
-            .getResponseBody()
-            .blockFirst();
-
-        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+            .expectBody()
+            .jsonPath("$.[?(@.id == %d)].login", user.getId())
+            .isEqualTo(user.getLogin())
+            .jsonPath("$.[?(@.id == %d)].keys()", user.getId())
+            .isEqualTo(Set.of("id", "login"))
+            .jsonPath("$.[*].email")
+            .doesNotHaveJsonPath()
+            .jsonPath("$.[*].imageUrl")
+            .doesNotHaveJsonPath()
+            .jsonPath("$.[*].langKey")
+            .doesNotHaveJsonPath();
     }
 
     @Test

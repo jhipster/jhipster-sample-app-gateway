@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -55,6 +56,11 @@ class AccountResourceIT {
 
     @Autowired
     private WebTestClient accountWebTestClient;
+
+    @AfterEach
+    public void cleanupAndCheck() {
+        userRepository.deleteAll().block();
+    }
 
     @Test
     @WithUnauthenticatedMockUser
@@ -124,6 +130,8 @@ class AccountResourceIT {
             .isEqualTo("en")
             .jsonPath("$.authorities")
             .isEqualTo(AuthoritiesConstants.ADMIN);
+
+        userService.deleteUser(TEST_USER_LOGIN).block();
     }
 
     @Test
@@ -160,6 +168,8 @@ class AccountResourceIT {
             .isCreated();
 
         assertThat(userRepository.findOneByLogin("test-register-valid").blockOptional()).isPresent();
+
+        userService.deleteUser("test-register-valid").block();
     }
 
     @Test
@@ -295,6 +305,8 @@ class AccountResourceIT {
             .exchange()
             .expectStatus()
             .isBadRequest();
+
+        userService.deleteUser("alice").block();
     }
 
     @Test
@@ -388,6 +400,8 @@ class AccountResourceIT {
             .exchange()
             .expectStatus()
             .is4xxClientError();
+
+        userService.deleteUser("test-register-duplicate-email-3").block();
     }
 
     @Test
@@ -417,6 +431,8 @@ class AccountResourceIT {
         assertThat(userDup.orElseThrow().getAuthorities())
             .hasSize(1)
             .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).block());
+
+        userService.deleteUser("badguy").block();
     }
 
     @Test
@@ -436,6 +452,8 @@ class AccountResourceIT {
 
         user = userRepository.findOneByLogin(user.getLogin()).block();
         assertThat(user.isActivated()).isTrue();
+
+        userService.deleteUser("activate-account").block();
     }
 
     @Test
@@ -487,6 +505,8 @@ class AccountResourceIT {
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());
         assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
+
+        userService.deleteUser("save-account").block();
     }
 
     @Test
@@ -521,6 +541,8 @@ class AccountResourceIT {
             .isBadRequest();
 
         assertThat(userRepository.findOneByEmailIgnoreCase("invalid email").blockOptional()).isNotPresent();
+
+        userService.deleteUser("save-invalid-email").block();
     }
 
     @Test
@@ -564,6 +586,9 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("save-existing-email").block();
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
+
+        userService.deleteUser("save-existing-email").block();
+        userService.deleteUser("save-existing-email2").block();
     }
 
     @Test
@@ -598,6 +623,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("save-existing-email-and-login").block();
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
+
+        userService.deleteUser("save-existing-email-and-login").block();
     }
 
     @Test
@@ -623,6 +650,8 @@ class AccountResourceIT {
         User updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password").block();
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password-wrong-existing-password").block();
     }
 
     @Test
@@ -647,6 +676,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password").block();
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password").block();
     }
 
     @Test
@@ -673,6 +704,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-small").block();
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-small").block();
     }
 
     @Test
@@ -699,6 +732,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").block();
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-long").block();
     }
 
     @Test
@@ -723,6 +758,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password-empty").block();
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-empty").block();
     }
 
     @Test
@@ -743,6 +780,8 @@ class AccountResourceIT {
             .exchange()
             .expectStatus()
             .isOk();
+
+        userService.deleteUser("password-reset").block();
     }
 
     @Test
@@ -763,6 +802,8 @@ class AccountResourceIT {
             .exchange()
             .expectStatus()
             .isOk();
+
+        userService.deleteUser("password-reset-upper-case").block();
     }
 
     @Test
@@ -802,6 +843,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin(user.getLogin()).block();
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("finish-password-reset").block();
     }
 
     @Test
@@ -830,6 +873,8 @@ class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin(user.getLogin()).block();
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
+
+        userService.deleteUser("finish-password-reset-too-small").block();
     }
 
     @Test
