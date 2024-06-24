@@ -1,7 +1,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { throwError, of } from 'rxjs';
 
@@ -27,8 +27,8 @@ describe('SettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, SettingsComponent],
-      providers: [FormBuilder, AccountService],
+      imports: [SettingsComponent],
+      providers: [provideHttpClient(), FormBuilder, AccountService],
     })
       .overrideTemplate(SettingsComponent, '')
       .compileComponents();
@@ -76,7 +76,7 @@ describe('SettingsComponent', () => {
 
   it('should notify of error upon failed save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => throwError('ERROR'));
+    mockAccountService.save = jest.fn(() => throwError(() => {}));
 
     // WHEN
     comp.ngOnInit();

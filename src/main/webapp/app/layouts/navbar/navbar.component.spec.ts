@@ -1,7 +1,8 @@
 jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
@@ -30,8 +31,8 @@ describe('Navbar Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NavbarComponent, HttpClientTestingModule],
-      providers: [LoginService],
+      imports: [NavbarComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), LoginService],
     })
       .overrideTemplate(NavbarComponent, '')
       .compileComponents();

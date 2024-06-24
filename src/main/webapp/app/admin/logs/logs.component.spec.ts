@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
@@ -14,8 +15,8 @@ describe('LogsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, LogsComponent],
-      providers: [LogsService, GatewayRoutesService],
+      imports: [LogsComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), LogsService, GatewayRoutesService],
     })
       .overrideTemplate(LogsComponent, '')
       .compileComponents();

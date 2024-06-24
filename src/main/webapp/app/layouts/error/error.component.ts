@@ -11,7 +11,7 @@ import SharedModule from 'app/shared/shared.module';
 export default class ErrorComponent implements OnInit {
   errorMessage = signal<string | undefined>(undefined);
 
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
@@ -14,8 +14,8 @@ describe('RegisterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RegisterComponent],
-      providers: [FormBuilder],
+      imports: [RegisterComponent],
+      providers: [provideHttpClient(), FormBuilder],
     })
       .overrideTemplate(RegisterComponent, '')
       .compileComponents();

@@ -33,7 +33,7 @@ import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 @Configuration
 public class WebConfigurer implements WebFluxConfigurer {
 
-    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
     private final JHipsterProperties jHipsterProperties;
 

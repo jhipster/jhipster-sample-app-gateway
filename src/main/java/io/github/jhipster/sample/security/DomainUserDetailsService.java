@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 @Component("userDetailsService")
 public class DomainUserDetailsService implements ReactiveUserDetailsService {
 
-    private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
+    private static final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
 

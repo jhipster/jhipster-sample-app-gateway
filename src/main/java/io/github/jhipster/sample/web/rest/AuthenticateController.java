@@ -35,7 +35,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api")
 public class AuthenticateController {
 
-    private final Logger log = LoggerFactory.getLogger(AuthenticateController.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticateController.class);
 
     private final JwtEncoder jwtEncoder;
 
