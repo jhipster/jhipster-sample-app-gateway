@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
@@ -17,8 +17,6 @@ export default class MainComponent implements OnInit {
   private router = inject(Router);
   private appPageTitleStrategy = inject(AppPageTitleStrategy);
   private accountService = inject(AccountService);
-
-  constructor() {}
 
   ngOnInit(): void {
     // try to log in automatically

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -36,7 +36,7 @@ export class AlertErrorComponent implements OnDestroy {
     );
   }
 
-  setClasses(alert: Alert): { [key: string]: boolean } {
+  setClasses(alert: Alert): Record<string, boolean> {
     const classes = { 'jhi-toast': Boolean(alert.toast) };
     if (alert.position) {
       return { ...classes, [alert.position]: true };
@@ -107,7 +107,7 @@ export class AlertErrorComponent implements OnDestroy {
   }
 
   private handleFieldsError(httpErrorResponse: HttpErrorResponse): void {
-    const fieldErrors = httpErrorResponse.error.fieldErrors;
+    const { fieldErrors } = httpErrorResponse.error;
     for (const fieldError of fieldErrors) {
       if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
         fieldError.message = 'Size';

@@ -80,7 +80,7 @@ public class UserResource {
         )
     );
 
-    private static final Logger log = LoggerFactory.getLogger(UserResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -111,7 +111,7 @@ public class UserResource {
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Mono<ResponseEntity<User>> createUser(@Valid @RequestBody AdminUserDTO userDTO) {
-        log.debug("REST request to save User : {}", userDTO);
+        LOG.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
@@ -161,7 +161,7 @@ public class UserResource {
         @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login,
         @Valid @RequestBody AdminUserDTO userDTO
     ) {
-        log.debug("REST request to update User : {}", userDTO);
+        LOG.debug("REST request to update User : {}", userDTO);
         return userRepository
             .findOneByEmailIgnoreCase(userDTO.getEmail())
             .filter(user -> !user.getId().equals(userDTO.getId()))
@@ -181,17 +181,16 @@ public class UserResource {
                 return userService.updateUser(userDTO);
             })
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .map(
-                user ->
-                    ResponseEntity.ok()
-                        .headers(
-                            HeaderUtil.createAlert(
-                                applicationName,
-                                "A user is updated with identifier " + userDTO.getLogin(),
-                                userDTO.getLogin()
-                            )
+            .map(user ->
+                ResponseEntity.ok()
+                    .headers(
+                        HeaderUtil.createAlert(
+                            applicationName,
+                            "A user is updated with identifier " + userDTO.getLogin(),
+                            userDTO.getLogin()
                         )
-                        .body(user)
+                    )
+                    .body(user)
             );
     }
 
@@ -208,7 +207,7 @@ public class UserResource {
         @org.springdoc.core.annotations.ParameterObject ServerHttpRequest request,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get all User for an admin");
+        LOG.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
@@ -216,12 +215,11 @@ public class UserResource {
         return userService
             .countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(
-                page ->
-                    PaginationUtil.generatePaginationHttpHeaders(
-                        ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
-                        page
-                    )
+            .map(page ->
+                PaginationUtil.generatePaginationHttpHeaders(
+                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                    page
+                )
             )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
     }
@@ -239,7 +237,7 @@ public class UserResource {
     @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Mono<AdminUserDTO> getUser(@PathVariable("login") String login) {
-        log.debug("REST request to get User : {}", login);
+        LOG.debug("REST request to get User : {}", login);
         return userService
             .getUserWithAuthoritiesByLogin(login)
             .map(AdminUserDTO::new)
@@ -255,7 +253,7 @@ public class UserResource {
     @DeleteMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
-        log.debug("REST request to delete User: {}", login);
+        LOG.debug("REST request to delete User: {}", login);
         return userService
             .deleteUser(login)
             .then(

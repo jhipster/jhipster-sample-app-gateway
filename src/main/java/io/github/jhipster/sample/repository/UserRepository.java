@@ -99,9 +99,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
         return db
             .sql("SELECT * FROM jhi_user u LEFT JOIN jhi_user_authority ua ON u.id=ua.user_id")
-            .map(
-                (row, metadata) ->
-                    Tuples.of(r2dbcConverter.read(User.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
+            .map((row, metadata) ->
+                Tuples.of(r2dbcConverter.read(User.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
             )
             .all()
             .groupBy(t -> t.getT1().getLogin())
@@ -128,9 +127,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
         return db
             .sql("SELECT * FROM jhi_user u LEFT JOIN jhi_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
-            .map(
-                (row, metadata) ->
-                    Tuples.of(r2dbcConverter.read(User.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
+            .map((row, metadata) ->
+                Tuples.of(r2dbcConverter.read(User.class, row, metadata), Optional.ofNullable(row.get("authority_name", String.class)))
             )
             .all()
             .collectList()

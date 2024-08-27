@@ -1,7 +1,7 @@
 jest.mock('app/core/auth/state-storage.service');
 
 import { Router } from '@angular/router';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
@@ -24,6 +24,8 @@ function accountWithAuthorities(authorities: string[]): Account {
     imageUrl: '',
   };
 }
+
+const mockFn = (value: string | null): jest.Mock<string | null> => jest.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;
@@ -126,7 +128,7 @@ describe('Account Service', () => {
     describe('navigateToStoredUrl', () => {
       it('should navigate to the previous stored url post successful authentication', () => {
         // GIVEN
-        mockStorageService.getUrl = jest.fn(() => 'admin/users?page=0');
+        mockStorageService.getUrl = mockFn('admin/users?page=0');
 
         // WHEN
         service.identity().subscribe();
@@ -151,7 +153,7 @@ describe('Account Service', () => {
 
       it('should not navigate to the previous stored url when no such url exists post successful authentication', () => {
         // GIVEN
-        mockStorageService.getUrl = jest.fn(() => null);
+        mockStorageService.getUrl = mockFn(null);
 
         // WHEN
         service.identity().subscribe();

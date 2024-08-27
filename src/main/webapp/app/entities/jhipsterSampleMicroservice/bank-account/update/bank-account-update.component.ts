@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IBankAccount } from '../bank-account.model';
 import { BankAccountService } from '../service/bank-account.service';
-import { BankAccountFormService, BankAccountFormGroup } from './bank-account-form.service';
+import { BankAccountFormGroup, BankAccountFormService } from './bank-account-form.service';
 
 @Component({
   standalone: true,

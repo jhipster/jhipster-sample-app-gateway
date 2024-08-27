@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 @Component("userDetailsService")
 public class DomainUserDetailsService implements ReactiveUserDetailsService {
 
-    private static final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
 
@@ -32,7 +32,7 @@ public class DomainUserDetailsService implements ReactiveUserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public Mono<UserDetails> findByUsername(final String login) {
-        log.debug("Authenticating {}", login);
+        LOG.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
             return userRepository

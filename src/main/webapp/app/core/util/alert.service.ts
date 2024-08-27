@@ -1,10 +1,10 @@
-import { inject, Injectable, SecurityContext } from '@angular/core';
+import { Injectable, SecurityContext, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 export type AlertType = 'success' | 'danger' | 'warning' | 'info';
 
 export interface Alert {
-  id?: number;
+  id: number;
   type: AlertType;
   message?: string;
   timeout?: number;
@@ -42,20 +42,20 @@ export class AlertService {
    *                   Else adding `alert` to `extAlerts`.
    * @returns  Added alert
    */
-  addAlert(alert: Alert, extAlerts?: Alert[]): Alert {
-    alert.id = this.alertId++;
+  addAlert(alertToAdd: Omit<Alert, 'id'>, extAlerts?: Alert[]): Alert {
+    const alert: Alert = { ...alertToAdd, id: this.alertId++ };
 
     alert.message = this.sanitizer.sanitize(SecurityContext.HTML, alert.message ?? '') ?? '';
     alert.timeout = alert.timeout ?? this.timeout;
     alert.toast = alert.toast ?? this.toast;
     alert.position = alert.position ?? this.position;
-    alert.close = (alertsArray: Alert[]) => this.closeAlert(alert.id!, alertsArray);
+    alert.close = (alertsArray: Alert[]) => this.closeAlert(alert.id, alertsArray);
 
     (extAlerts ?? this.alerts).push(alert);
 
     if (alert.timeout > 0) {
       setTimeout(() => {
-        this.closeAlert(alert.id!, extAlerts ?? this.alerts);
+        this.closeAlert(alert.id, extAlerts ?? this.alerts);
       }, alert.timeout);
     }
 

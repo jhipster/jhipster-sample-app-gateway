@@ -32,7 +32,7 @@ public class AccountResource {
         }
     }
 
-    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
 
@@ -112,17 +112,17 @@ public class AccountResource {
                             throw new EmailAlreadyUsedException();
                         }
                         return userRepository.findOneByLogin(userLogin);
-                    }))
+                    })
+            )
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
-            .flatMap(
-                user ->
-                    userService.updateUser(
-                        userDTO.getFirstName(),
-                        userDTO.getLastName(),
-                        userDTO.getEmail(),
-                        userDTO.getLangKey(),
-                        userDTO.getImageUrl()
-                    )
+            .flatMap(user ->
+                userService.updateUser(
+                    userDTO.getFirstName(),
+                    userDTO.getLastName(),
+                    userDTO.getEmail(),
+                    userDTO.getLangKey(),
+                    userDTO.getImageUrl()
+                )
             );
     }
 
@@ -155,7 +155,7 @@ public class AccountResource {
                 } else {
                     // Pretend the request has been successful to prevent checking which emails really exist
                     // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail");
+                    LOG.warn("Password reset requested for non existing mail");
                 }
             })
             .then();

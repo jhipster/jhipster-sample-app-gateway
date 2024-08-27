@@ -32,7 +32,7 @@ import tech.jhipster.security.RandomUtil;
 @Service
 public class UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 
@@ -48,7 +48,7 @@ public class UserService {
 
     @Transactional
     public Mono<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        LOG.debug("Activating user for activation key {}", key);
         return userRepository
             .findOneByActivationKey(key)
             .flatMap(user -> {
@@ -57,12 +57,12 @@ public class UserService {
                 user.setActivationKey(null);
                 return saveUser(user);
             })
-            .doOnNext(user -> log.debug("Activated user: {}", user));
+            .doOnNext(user -> LOG.debug("Activated user: {}", user));
     }
 
     @Transactional
     public Mono<User> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        LOG.debug("Reset user password for reset key {}", key);
         return userRepository
             .findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
@@ -139,7 +139,7 @@ public class UserService {
                     .thenReturn(newUser)
                     .doOnNext(user -> user.setAuthorities(authorities))
                     .flatMap(this::saveUser)
-                    .doOnNext(user -> log.debug("Created Information for User: {}", user));
+                    .doOnNext(user -> LOG.debug("Created Information for User: {}", user));
             });
     }
 
@@ -172,7 +172,7 @@ public class UserService {
                 return newUser;
             })
             .flatMap(this::saveUser)
-            .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
+            .doOnNext(user1 -> LOG.debug("Created Information for User: {}", user1));
     }
 
     /**
@@ -205,7 +205,7 @@ public class UserService {
                     .then(Mono.just(user));
             })
             .flatMap(this::saveUser)
-            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
             .map(AdminUserDTO::new);
     }
 
@@ -214,7 +214,7 @@ public class UserService {
         return userRepository
             .findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
-            .doOnNext(user -> log.debug("Deleted User: {}", user))
+            .doOnNext(user -> LOG.debug("Deleted User: {}", user))
             .then();
     }
 
@@ -242,7 +242,7 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 return saveUser(user);
             })
-            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
             .then();
     }
 
@@ -259,11 +259,10 @@ public class UserService {
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
                 return userRepository
                     .save(user)
-                    .flatMap(
-                        savedUser ->
-                            Flux.fromIterable(user.getAuthorities())
-                                .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
-                                .then(Mono.just(savedUser))
+                    .flatMap(savedUser ->
+                        Flux.fromIterable(user.getAuthorities())
+                            .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
+                            .then(Mono.just(savedUser))
                     );
             });
     }
@@ -283,7 +282,7 @@ public class UserService {
                 return user;
             })
             .flatMap(this::saveUser)
-            .doOnNext(user -> log.debug("Changed password for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
             .then();
     }
 
@@ -329,7 +328,7 @@ public class UserService {
                 LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)
             )
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
-            .doOnNext(user -> log.debug("Deleted User: {}", user));
+            .doOnNext(user -> LOG.debug("Deleted User: {}", user));
     }
 
     /**

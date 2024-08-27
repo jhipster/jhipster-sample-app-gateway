@@ -97,6 +97,8 @@ management:
       repository:
         autotime:
           enabled: true
+    tags:
+      application: ${spring.application.name}
 
 spring:
   application:
@@ -122,10 +124,7 @@ spring:
               args:
                 pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
           filters:
-            - name: RewritePath
-              args:
-                regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
-                replacement: "'/${remaining}'"
+            - StripPrefix=2
       httpclient:
         pool:
           max-connections: 1000

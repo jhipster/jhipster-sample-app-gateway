@@ -2,7 +2,6 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.User;
-import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import java.util.Set;
@@ -23,13 +22,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @IntegrationTest
 class PublicUserResourceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
-
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -38,7 +32,7 @@ class PublicUserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(em);
+        user = UserResourceIT.initTestUser();
     }
 
     @AfterEach

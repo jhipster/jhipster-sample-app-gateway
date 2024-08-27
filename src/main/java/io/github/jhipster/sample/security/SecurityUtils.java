@@ -79,12 +79,11 @@ public final class SecurityUtils {
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
-            .map(
-                authorityList ->
-                    authorityList
-                        .stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+            .map(authorityList ->
+                authorityList
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
             );
     }
 

@@ -68,7 +68,7 @@ class AccountResourceIT {
         accountWebTestClient
             .get()
             .uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
+            .accept(MediaType.TEXT_PLAIN)
             .exchange()
             .expectStatus()
             .isOk()
@@ -82,7 +82,7 @@ class AccountResourceIT {
         accountWebTestClient
             .get()
             .uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
+            .accept(MediaType.TEXT_PLAIN)
             .exchange()
             .expectStatus()
             .isOk()

@@ -28,7 +28,7 @@ import tech.jhipster.web.util.reactive.ResponseUtil;
 @Transactional
 public class AuthorityResource {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorityResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorityResource.class);
 
     private static final String ENTITY_NAME = "adminAuthority";
 
@@ -51,7 +51,7 @@ public class AuthorityResource {
     @PostMapping("")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public Mono<ResponseEntity<Authority>> createAuthority(@Valid @RequestBody Authority authority) throws URISyntaxException {
-        log.debug("REST request to save Authority : {}", authority);
+        LOG.debug("REST request to save Authority : {}", authority);
         return authorityRepository
             .existsById(authority.getName())
             .flatMap(exists -> {
@@ -80,7 +80,7 @@ public class AuthorityResource {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public Mono<List<Authority>> getAllAuthorities() {
-        log.debug("REST request to get all Authorities");
+        LOG.debug("REST request to get all Authorities");
         return authorityRepository.findAll().collectList();
     }
 
@@ -91,7 +91,7 @@ public class AuthorityResource {
     @GetMapping(value = "", produces = MediaType.APPLICATION_NDJSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public Flux<Authority> getAllAuthoritiesAsStream() {
-        log.debug("REST request to get all Authorities as a stream");
+        LOG.debug("REST request to get all Authorities as a stream");
         return authorityRepository.findAll();
     }
 
@@ -104,7 +104,7 @@ public class AuthorityResource {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public Mono<ResponseEntity<Authority>> getAuthority(@PathVariable("id") String id) {
-        log.debug("REST request to get Authority : {}", id);
+        LOG.debug("REST request to get Authority : {}", id);
         Mono<Authority> authority = authorityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(authority);
     }
@@ -118,7 +118,7 @@ public class AuthorityResource {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public Mono<ResponseEntity<Void>> deleteAuthority(@PathVariable("id") String id) {
-        log.debug("REST request to delete Authority : {}", id);
+        LOG.debug("REST request to delete Authority : {}", id);
         return authorityRepository
             .deleteById(id)
             .then(

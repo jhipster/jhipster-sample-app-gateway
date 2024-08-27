@@ -27,7 +27,7 @@ public class PublicUserResource {
         Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey")
     );
 
-    private static final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
 
@@ -47,7 +47,7 @@ public class PublicUserResource {
         ServerHttpRequest request,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get all public User names");
+        LOG.debug("REST request to get all public User names");
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
         }
@@ -55,12 +55,11 @@ public class PublicUserResource {
         return userService
             .countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(
-                page ->
-                    PaginationUtil.generatePaginationHttpHeaders(
-                        ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
-                        page
-                    )
+            .map(page ->
+                PaginationUtil.generatePaginationHttpHeaders(
+                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                    page
+                )
             )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
