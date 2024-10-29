@@ -39,8 +39,9 @@ public class WebConfigurer implements WebFluxConfigurer {
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+        if (h2ConsoleIsEnabled(env)) {
             try {
+                LOG.info("Initialize H2 console");
                 H2ConfigurationHelper.initH2Console();
             } catch (Exception e) {
                 // Console may already be running on another app or after a refresh.
@@ -95,5 +96,12 @@ public class WebConfigurer implements WebFluxConfigurer {
     public CachingHttpHeadersFilter cachingHttpHeadersFilter() {
         // Use a cache filter that only match selected paths
         return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
+    }
+
+    private boolean h2ConsoleIsEnabled(Environment env) {
+        return (
+            env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) &&
+            "true".equals(env.getProperty("spring.h2.console.enabled"))
+        );
     }
 }

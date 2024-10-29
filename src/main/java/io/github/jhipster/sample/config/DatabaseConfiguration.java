@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -35,6 +38,7 @@ import tech.jhipster.config.h2.H2ConfigurationHelper;
 @Configuration
 @EnableR2dbcRepositories({ "io.github.jhipster.sample.repository" })
 @EnableTransactionManagement
+@EnableConfigurationProperties(H2ConsoleProperties.class)
 public class DatabaseConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConfiguration.class);
@@ -53,6 +57,7 @@ public class DatabaseConfiguration {
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+    @ConditionalOnProperty(prefix = "spring.h2.console", name = "enabled", havingValue = "true")
     public Object h2TCPServer() throws SQLException {
         String port = getValidPortForH2();
         LOG.debug("H2 database is available on port {}", port);

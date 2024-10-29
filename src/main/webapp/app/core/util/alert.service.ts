@@ -25,7 +25,7 @@ export class AlertService {
   private alertId = 0;
   private alerts: Alert[] = [];
 
-  private sanitizer = inject(DomSanitizer);
+  private readonly sanitizer = inject(DomSanitizer);
 
   clear(): void {
     this.alerts = [];

@@ -37,7 +37,7 @@ export default class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  private accountService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {

@@ -25,9 +25,9 @@ export default class NavbarComponent implements OnInit {
   account = inject(AccountService).trackCurrentAccount();
   entitiesNavbarItems: NavbarItem[] = [];
 
-  private loginService = inject(LoginService);
-  private profileService = inject(ProfileService);
-  private router = inject(Router);
+  private readonly loginService = inject(LoginService);
+  private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
 
   constructor() {
     if (VERSION) {

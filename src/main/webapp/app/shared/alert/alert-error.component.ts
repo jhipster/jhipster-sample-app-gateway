@@ -19,8 +19,8 @@ export class AlertErrorComponent implements OnDestroy {
   errorListener: Subscription;
   httpErrorListener: Subscription;
 
-  private alertService = inject(AlertService);
-  private eventManager = inject(EventManager);
+  private readonly alertService = inject(AlertService);
+  private readonly eventManager = inject(EventManager);
 
   constructor() {
     this.errorListener = this.eventManager.subscribe('jhipsterSampleGatewayApp.error', (response: EventWithContent<unknown> | string) => {

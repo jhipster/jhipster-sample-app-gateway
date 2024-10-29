@@ -14,9 +14,9 @@ import PageRibbonComponent from '../profiles/page-ribbon.component';
   imports: [RouterOutlet, FooterComponent, PageRibbonComponent],
 })
 export default class MainComponent implements OnInit {
-  private router = inject(Router);
-  private appPageTitleStrategy = inject(AppPageTitleStrategy);
-  private accountService = inject(AccountService);
+  private readonly router = inject(Router);
+  private readonly appPageTitleStrategy = inject(AppPageTitleStrategy);
+  private readonly accountService = inject(AccountService);
 
   ngOnInit(): void {
     // try to log in automatically

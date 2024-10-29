@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -26,7 +25,7 @@ public class Authority implements Serializable, Persistable<String> {
     @Column("name")
     private String name;
 
-    @Transient
+    @org.springframework.data.annotation.Transient
     private boolean isPersisted;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -49,7 +48,7 @@ public class Authority implements Serializable, Persistable<String> {
         return this.name;
     }
 
-    @Transient
+    @org.springframework.data.annotation.Transient
     @Override
     public boolean isNew() {
         return !this.isPersisted;
