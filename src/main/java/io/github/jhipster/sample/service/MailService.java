@@ -51,7 +51,7 @@ public class MailService {
 
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         Mono.defer(() -> {
-            this.sendEmailSync(to, subject, content, isMultipart, isHtml);
+            sendEmailSync(to, subject, content, isMultipart, isHtml);
             return Mono.empty();
         }).subscribe();
     }
@@ -83,7 +83,7 @@ public class MailService {
 
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         Mono.defer(() -> {
-            this.sendEmailFromTemplateSync(user, templateName, titleKey);
+            sendEmailFromTemplateSync(user, templateName, titleKey);
             return Mono.empty();
         }).subscribe();
     }
@@ -99,21 +99,21 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        this.sendEmailSync(user.getEmail(), subject, content, false, true);
+        sendEmailSync(user.getEmail(), subject, content, false, true);
     }
 
     public void sendActivationEmail(User user) {
         LOG.debug("Sending activation email to '{}'", user.getEmail());
-        this.sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     public void sendCreationEmail(User user) {
         LOG.debug("Sending creation email to '{}'", user.getEmail());
-        this.sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     public void sendPasswordResetMail(User user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
-        this.sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 }

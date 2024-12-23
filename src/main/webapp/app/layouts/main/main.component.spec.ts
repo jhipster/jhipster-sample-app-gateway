@@ -117,5 +117,7 @@ describe('MainComponent', () => {
   });
 });
 
-@Component({ template: '' })
+@Component({
+  template: '',
+})
 export class BlankComponent {}

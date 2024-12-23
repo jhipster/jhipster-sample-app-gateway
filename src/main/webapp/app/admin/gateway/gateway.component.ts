@@ -5,7 +5,6 @@ import { GatewayRoutesService } from './gateway-routes.service';
 import { GatewayRoute } from './gateway-route.model';
 
 @Component({
-  standalone: true,
   selector: 'jhi-gateway',
   templateUrl: './gateway.component.html',
   providers: [GatewayRoutesService],

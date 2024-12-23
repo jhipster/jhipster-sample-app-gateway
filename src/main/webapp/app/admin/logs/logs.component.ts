@@ -9,7 +9,6 @@ import { Level, Log, LoggersResponse } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
-  standalone: true,
   selector: 'jhi-logs',
   templateUrl: './logs.component.html',
   providers: [GatewayRoutesService],

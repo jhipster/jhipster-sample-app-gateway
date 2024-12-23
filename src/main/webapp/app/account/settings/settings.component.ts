@@ -8,7 +8,6 @@ import { Account } from 'app/core/auth/account.model';
 const initialAccount: Account = {} as Account;
 
 @Component({
-  standalone: true,
   selector: 'jhi-settings',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',

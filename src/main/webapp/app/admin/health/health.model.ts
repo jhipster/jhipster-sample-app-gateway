@@ -1,7 +1,6 @@
 export type HealthStatus = 'UP' | 'DOWN' | 'UNKNOWN' | 'OUT_OF_SERVICE';
 
 export type HealthKey =
-  | 'binders'
   | 'discoveryComposite'
   | 'refreshScope'
   | 'clientConfigServer'
