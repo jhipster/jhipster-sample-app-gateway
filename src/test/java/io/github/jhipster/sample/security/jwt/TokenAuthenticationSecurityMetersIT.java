@@ -78,14 +78,7 @@ class TokenAuthenticationSecurityMetersIT {
     }
 
     private void tryToAuthenticate(String token) {
-        webTestClient
-            .get()
-            .uri("/api/authenticate")
-            .headers(headers -> headers.setBearerAuth(token))
-            .exchange()
-            .returnResult(String.class)
-            .getResponseBody()
-            .blockLast();
+        webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange();
     }
 
     private double aggregate(Collection<Counter> counters) {

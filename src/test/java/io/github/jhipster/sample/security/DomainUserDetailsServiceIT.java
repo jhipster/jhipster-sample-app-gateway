@@ -81,14 +81,14 @@ class DomainUserDetailsServiceIT {
     }
 
     @BeforeEach
-    public void init() {
+    void init() {
         userRepository.save(getUserOne()).block();
         userRepository.save(getUserTwo()).block();
         userRepository.save(getUserThree()).block();
     }
 
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         userService.deleteUser(USER_ONE_LOGIN).block();
         userService.deleteUser(USER_TWO_LOGIN).block();
         userService.deleteUser(USER_THREE_LOGIN).block();

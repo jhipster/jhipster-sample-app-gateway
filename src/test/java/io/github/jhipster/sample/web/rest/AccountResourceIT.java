@@ -58,36 +58,20 @@ class AccountResourceIT {
     private WebTestClient accountWebTestClient;
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
         userRepository.deleteAll().block();
     }
 
     @Test
     @WithUnauthenticatedMockUser
     void testNonAuthenticatedUser() {
-        accountWebTestClient
-            .get()
-            .uri("/api/authenticate")
-            .accept(MediaType.TEXT_PLAIN)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectBody()
-            .isEmpty();
+        accountWebTestClient.get().uri("/api/authenticate").exchange().expectStatus().isUnauthorized();
     }
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() {
-        accountWebTestClient
-            .get()
-            .uri("/api/authenticate")
-            .accept(MediaType.TEXT_PLAIN)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectBody(String.class)
-            .isEqualTo(TEST_USER_LOGIN);
+        accountWebTestClient.get().uri("/api/authenticate").exchange().expectStatus().isNoContent();
     }
 
     @Test

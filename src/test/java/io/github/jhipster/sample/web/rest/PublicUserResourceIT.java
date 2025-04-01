@@ -31,12 +31,12 @@ class PublicUserResourceIT {
     private User user;
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         user = UserResourceIT.initTestUser();
     }
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
         userRepository.deleteAllUserAuthorities().block();
         userRepository.deleteAll().block();
     }

@@ -40,7 +40,13 @@ class TokenAuthenticationIT {
     }
 
     private void expectOk(String token) {
-        webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange().expectStatus().isOk();
+        webTestClient
+            .get()
+            .uri("/api/authenticate")
+            .headers(headers -> headers.setBearerAuth(token))
+            .exchange()
+            .expectStatus()
+            .isNoContent();
     }
 
     private void expectUnauthorized(String token) {
