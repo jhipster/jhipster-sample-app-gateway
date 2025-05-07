@@ -1,7 +1,9 @@
 package io.github.jhipster.sample.security;
 
+import static io.github.jhipster.sample.security.SecurityUtils.USER_ID_CLAIM;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.util.context.Context;
 
 /**
@@ -30,6 +33,25 @@ class SecurityUtilsUnitTest {
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "token")))
             .block();
         assertThat(jwt).isEqualTo("token");
+    }
+
+    @Test
+    void testGetCurrentUserId() {
+        var userId = 1L;
+        var now = Instant.now();
+        var jwt = Jwt.withTokenValue("token")
+            .issuedAt(now)
+            .expiresAt(now.plusSeconds(60))
+            .claim(USER_ID_CLAIM, userId)
+            .header("Test", "test")
+            .build();
+
+        var authentication = new UsernamePasswordAuthenticationToken(jwt, "token");
+        var contextUserId = SecurityUtils.getCurrentUserId()
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+            .block();
+
+        assertThat(contextUserId).isEqualTo(userId);
     }
 
     @Test
