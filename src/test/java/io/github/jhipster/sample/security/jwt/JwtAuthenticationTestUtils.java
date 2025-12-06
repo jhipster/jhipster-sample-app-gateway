@@ -6,7 +6,6 @@ import static io.github.jhipster.sample.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
-import io.github.jhipster.sample.repository.UserRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.time.Instant;
@@ -14,9 +13,7 @@ import java.util.Collections;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -30,13 +27,6 @@ public class JwtAuthenticationTestUtils {
     private MeterRegistry meterRegistry() {
         return new SimpleMeterRegistry();
     }
-
-    // TODO switch to MockitoSpyBean https://github.com/spring-projects/spring-framework/issues/33941
-    @MockBean
-    private ReactiveUserDetailsService userDetailsService;
-
-    @MockBean
-    private UserRepository userRepository;
 
     public static String createValidToken(String jwtKey) {
         return createValidTokenForUser(jwtKey, "anonymous");

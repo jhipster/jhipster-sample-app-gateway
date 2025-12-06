@@ -13,7 +13,7 @@ export type HealthKey =
   | 'readinessState'
   | 'r2dbc';
 
-export interface Health {
+export interface HealthModel {
   status: HealthStatus;
   components?: Partial<Record<HealthKey, HealthDetails>>;
 }

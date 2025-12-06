@@ -62,7 +62,7 @@ public class AuthenticateController {
                     .flatMap(auth -> Mono.fromCallable(() -> this.createToken(auth, login.isRememberMe())))
             )
             .map(jwt -> {
-                HttpHeaders httpHeaders = new HttpHeaders();
+                var httpHeaders = new HttpHeaders();
                 httpHeaders.setBearerAuth(jwt);
                 return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
             });
@@ -83,7 +83,7 @@ public class AuthenticateController {
     public String createToken(Authentication authentication, boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
-        Instant now = Instant.now();
+        var now = Instant.now();
         Instant validity;
         if (rememberMe) {
             validity = now.plus(this.tokenValidityInSecondsForRememberMe, ChronoUnit.SECONDS);

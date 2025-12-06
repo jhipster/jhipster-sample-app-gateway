@@ -41,6 +41,9 @@ public class JWTRelayGatewayFilterFactory extends AbstractGatewayFilterFactory<O
     }
 
     private ServerWebExchange withBearerAuth(ServerWebExchange exchange, String authorizeToken) {
-        return exchange.mutate().request(r -> r.headers(headers -> headers.setBearerAuth(authorizeToken))).build();
+        return exchange
+            .mutate()
+            .request(r -> r.headers(headers -> headers.setBearerAuth(authorizeToken)))
+            .build();
     }
 }

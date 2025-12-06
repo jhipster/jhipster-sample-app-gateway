@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AlertComponent } from './alert/alert.component';
-import { AlertErrorComponent } from './alert/alert-error.component';
+import { NgModule } from '@angular/core';
 
-/**
- * Application wide Module
- */
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { Alert } from './alert/alert';
+import { AlertError } from './alert/alert-error';
+
 @NgModule({
-  imports: [AlertComponent, AlertErrorComponent],
-  exports: [CommonModule, NgbModule, FontAwesomeModule, AlertComponent, AlertErrorComponent],
+  imports: [Alert, AlertError],
+  exports: [CommonModule, NgbModule, FontAwesomeModule, Alert, AlertError],
 })
 export default class SharedModule {}

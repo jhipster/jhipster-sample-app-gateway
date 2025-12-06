@@ -50,15 +50,15 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     }
                     testValues = testValues.and(
                         "spring.r2dbc.url=" +
-                        prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") +
-                        "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
+                            prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc") +
+                            "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
                     );
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
                     testValues = testValues.and(
                         "spring.liquibase.url=" +
-                        prodTestContainer.getTestContainer().getJdbcUrl() +
-                        "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
+                            prodTestContainer.getTestContainer().getJdbcUrl() +
+                            "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
                     );
                 }
                 testValues.applyTo(context);
