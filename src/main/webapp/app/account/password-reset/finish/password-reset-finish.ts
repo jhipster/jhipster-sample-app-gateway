@@ -3,13 +3,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import PasswordStrengthBar from 'app/account/password/password-strength-bar/password-strength-bar';
-import SharedModule from 'app/shared/shared.module';
 
 import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
   selector: 'jhi-password-reset-finish',
-  imports: [SharedModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
+  imports: [RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './password-reset-finish.html',
 })
 export default class PasswordResetFinish implements OnInit, AfterViewInit {

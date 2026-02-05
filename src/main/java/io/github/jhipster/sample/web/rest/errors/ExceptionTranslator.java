@@ -75,6 +75,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
+    @SuppressWarnings("java:S2638")
     @Nullable
     @Override
     protected Mono<ResponseEntity<Object>> handleExceptionInternal(

@@ -7,6 +7,7 @@ export type HealthKey =
   | 'hystrix'
   | 'consul'
   | 'diskSpace'
+  | 'ssl'
   | 'mail'
   | 'ping'
   | 'livenessState'

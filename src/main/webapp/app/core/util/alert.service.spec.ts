@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { AlertModel, AlertService } from './alert.service';
@@ -9,7 +10,7 @@ describe('Alert Service Test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(AlertService);
-    jest.useFakeTimers();
+    vitest.useFakeTimers();
     extAlerts = [];
   });
 
@@ -142,7 +143,7 @@ describe('Alert Service Test', () => {
 
     expect(service.get().length).toBe(1);
 
-    jest.advanceTimersByTime(6000);
+    vitest.advanceTimersByTime(6000);
 
     expect(service.get().length).toBe(0);
   });

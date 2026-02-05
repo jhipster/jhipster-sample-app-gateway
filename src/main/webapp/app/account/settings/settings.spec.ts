@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of, throwError } from 'rxjs';
@@ -28,7 +29,7 @@ describe('Settings', () => {
         {
           provide: AccountService,
           useValue: {
-            authenticate: jest.fn(),
+            authenticate: vitest.fn(),
           },
         },
       ],
@@ -39,12 +40,12 @@ describe('Settings', () => {
     fixture = TestBed.createComponent(Settings);
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(account));
+    mockAccountService.identity = vitest.fn(() => of(account));
   });
 
   it('should send the current identity upon save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => of({}));
+    mockAccountService.save = vitest.fn(() => of({}));
     const settingsFormValues = {
       firstName: 'John',
       lastName: 'Doe',
@@ -64,7 +65,7 @@ describe('Settings', () => {
 
   it('should notify of success upon successful save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => of({}));
+    mockAccountService.save = vitest.fn(() => of({}));
 
     // WHEN
     comp.ngOnInit();
@@ -76,7 +77,7 @@ describe('Settings', () => {
 
   it('should notify of error upon failed save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => throwError(Error));
+    mockAccountService.save = vitest.fn(() => throwError(Error));
 
     // WHEN
     comp.ngOnInit();

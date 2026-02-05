@@ -1,12 +1,14 @@
+import { DecimalPipe, KeyValuePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-jvm-memory',
   templateUrl: './jvm-memory.html',
-  imports: [SharedModule],
+  imports: [NgbModule, KeyValuePipe, DecimalPipe],
 })
 export class JvmMemory {
   /**

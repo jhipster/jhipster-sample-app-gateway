@@ -1,19 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'environments/environment';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-navbar',
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
-  imports: [RouterLink, RouterLinkActive, SharedModule, HasAnyAuthorityDirective],
+  imports: [RouterLink, RouterLinkActive, FontAwesomeModule, NgbModule, HasAnyAuthorityDirective],
 })
 export default class Navbar implements OnInit {
   inProduction = signal(true);

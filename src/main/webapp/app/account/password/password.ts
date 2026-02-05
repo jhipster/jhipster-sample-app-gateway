@@ -4,14 +4,13 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-import SharedModule from 'app/shared/shared.module';
 
 import PasswordStrengthBar from './password-strength-bar/password-strength-bar';
 import { PasswordService } from './password.service';
 
 @Component({
   selector: 'jhi-password',
-  imports: [SharedModule, ReactiveFormsModule, PasswordStrengthBar],
+  imports: [ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './password.html',
 })
 export default class Password implements OnInit {

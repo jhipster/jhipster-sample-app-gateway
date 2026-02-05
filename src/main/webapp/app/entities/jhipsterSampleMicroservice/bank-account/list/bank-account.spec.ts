@@ -1,4 +1,5 @@
-import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
+import { MockInstance, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -17,12 +18,11 @@ describe('BankAccount Management Component', () => {
   let comp: BankAccount;
   let fixture: ComponentFixture<BankAccount>;
   let service: BankAccountService;
-  let routerNavigateSpy: jest.SpyInstance<Promise<boolean>>;
+  let routerNavigateSpy: MockInstance;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
@@ -53,9 +53,9 @@ describe('BankAccount Management Component', () => {
     fixture = TestBed.createComponent(BankAccount);
     comp = fixture.componentInstance;
     service = TestBed.inject(BankAccountService);
-    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+    routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
 
-    jest
+    vitest
       .spyOn(service, 'query')
       .mockReturnValueOnce(
         of(
@@ -94,7 +94,7 @@ describe('BankAccount Management Component', () => {
   describe('trackId', () => {
     it('should forward to bankAccountService', () => {
       const entity = { id: 22720 };
-      jest.spyOn(service, 'getBankAccountIdentifier');
+      vitest.spyOn(service, 'getBankAccountIdentifier');
       const id = comp.trackId(entity);
       expect(service.getBankAccountIdentifier).toHaveBeenCalledWith(entity);
       expect(id).toBe(entity.id);
@@ -133,12 +133,12 @@ describe('BankAccount Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      vitest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -151,7 +151,7 @@ describe('BankAccount Management Component', () => {
 
     it('on dismiss should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

@@ -1,12 +1,12 @@
 import { Component, input } from '@angular/core';
 
-import SharedModule from '../shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { IFilterOptions } from './filter.model';
 
 @Component({
   selector: 'jhi-filter',
-  imports: [SharedModule],
+  imports: [FontAwesomeModule],
   templateUrl: './filter.html',
 })
 export default class Filter {

@@ -1,4 +1,5 @@
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +22,6 @@ describe('Authority Management Update Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
@@ -56,22 +56,22 @@ describe('Authority Management Update Component', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<IAuthority>>();
       const authority = { name: '572a7ecc-bf76-43f4-8026-46b42fba586d' };
-      jest.spyOn(authorityFormService, 'getAuthority').mockReturnValue({ name: null });
-      jest.spyOn(authorityService, 'create').mockReturnValue(saveSubject);
-      jest.spyOn(comp, 'previousState');
+      vitest.spyOn(authorityFormService, 'getAuthority').mockReturnValue({ name: null });
+      vitest.spyOn(authorityService, 'create').mockReturnValue(saveSubject);
+      vitest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ authority: null });
       comp.ngOnInit();
 
       // WHEN
       comp.save();
-      expect(comp.isSaving).toEqual(true);
+      expect(comp.isSaving()).toEqual(true);
       saveSubject.next(new HttpResponse({ body: authority }));
       saveSubject.complete();
 
       // THEN
       expect(authorityFormService.getAuthority).toHaveBeenCalled();
       expect(authorityService.create).toHaveBeenCalled();
-      expect(comp.isSaving).toEqual(false);
+      expect(comp.isSaving()).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
   });

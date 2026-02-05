@@ -1,14 +1,14 @@
+import { KeyValuePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
 import { HealthDetails, HealthKey } from '../health.model';
 
 @Component({
   selector: 'jhi-health-modal',
   templateUrl: './health-modal.html',
-  imports: [SharedModule],
+  imports: [KeyValuePipe],
 })
 export default class HealthModal {
   health?: { key: HealthKey; value: HealthDetails };

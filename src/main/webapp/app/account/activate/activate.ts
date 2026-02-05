@@ -3,13 +3,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { mergeMap } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
-
 import { ActivateService } from './activate.service';
 
 @Component({
   selector: 'jhi-activate',
-  imports: [SharedModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

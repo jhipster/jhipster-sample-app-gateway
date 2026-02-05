@@ -1,4 +1,5 @@
-import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
@@ -28,7 +29,7 @@ describe('User Management Component', () => {
       }),
     );
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
+      providers: [AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
     });
   });
 
@@ -37,15 +38,15 @@ describe('User Management Component', () => {
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.isAuthenticated = jest.fn(() => false);
-    mockAccountService.identity = jest.fn(() => of(null));
+    mockAccountService.isAuthenticated = vitest.fn(() => false);
+    mockAccountService.identity = vitest.fn(() => of(null));
   });
 
   describe('OnInit', () => {
     it('should call load all on init', inject([], () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      jest.spyOn(service, 'query').mockReturnValue(
+      vitest.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [new User(123)],
@@ -68,7 +69,7 @@ describe('User Management Component', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
       const user = new User(123);
-      jest.spyOn(service, 'query').mockReturnValue(
+      vitest.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [user],
@@ -76,7 +77,7 @@ describe('User Management Component', () => {
           }),
         ),
       );
-      jest.spyOn(service, 'update').mockReturnValue(of(user));
+      vitest.spyOn(service, 'update').mockReturnValue(of(user));
 
       // WHEN
       comp.setActive(user, true);

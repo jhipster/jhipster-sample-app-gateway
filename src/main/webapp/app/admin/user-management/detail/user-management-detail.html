@@ -2,7 +2,7 @@
   <div class="col-8">
     @if (user(); as userRef) {
       <div>
-        <h2>
+        <h2 data-cy="userManagementDetailsHeading">
           <span>User</span> [<strong>{{ userRef.login }}</strong
           >]
         </h2>
@@ -51,7 +51,9 @@
           </dd>
         </dl>
 
-        <button type="submit" routerLink="../../" class="btn btn-info"><fa-icon icon="arrow-left" />&nbsp;<span>Back</span></button>
+        <button type="submit" routerLink="../../" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
+        </button>
       </div>
     }
   </div>

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { Authority } from 'app/config/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./home/home'),
-    title: 'home.title',
+    title: 'Welcome, Java Hipster!',
   },
   {
     path: '',
@@ -31,7 +31,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./login/login'),
-    title: 'login.title',
+    title: 'Sign in',
   },
   {
     path: '',

@@ -1,12 +1,12 @@
-import { provideHttpClient } from '@angular/common/http';
+import { Mock, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { Authority } from 'app/config/authority.constants';
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import { AccountService } from './account.service';
 
@@ -23,7 +23,7 @@ function accountWithAuthorities(authorities: string[]): Account {
   };
 }
 
-const mockFn = (value: string | null): jest.Mock<string | null> => jest.fn(() => value);
+const mockFn = (value: string | null): Mock => vitest.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;
@@ -35,13 +35,12 @@ describe('Account Service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         {
           provide: StateStorageService,
           useValue: {
-            clearUrl: jest.fn(),
-            getUrl: jest.fn(),
+            clearUrl: vitest.fn(),
+            getUrl: vitest.fn(),
           },
         },
       ],
@@ -52,7 +51,7 @@ describe('Account Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigateByUrl');
+    vitest.spyOn(mockRouter, 'navigateByUrl');
   });
 
   afterEach(() => {
@@ -110,7 +109,8 @@ describe('Account Service', () => {
       // Once more
       service.identity().subscribe();
       // Then there is only request
-      httpMock.expectOne({ method: 'GET' });
+      const requests = httpMock.match({ method: 'GET' });
+      expect(requests.length).toBe(1);
     });
 
     it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
@@ -130,7 +130,8 @@ describe('Account Service', () => {
       service.identity().subscribe();
 
       // Then there is a new request
-      httpMock.expectOne({ method: 'GET' });
+      const requests = httpMock.match({ method: 'GET' });
+      expect(requests.length).toBe(1);
     });
 
     describe('navigateToStoredUrl', () => {

@@ -2,7 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { AlertError } from 'app/shared/alert/alert-error';
 import { UserManagementService } from '../service/user-management.service';
 import { IUser } from '../user-management.model';
 
@@ -15,7 +17,7 @@ const newUser: IUser = {
 @Component({
   selector: 'jhi-user-mgmt-update',
   templateUrl: './user-management-update.html',
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export default class UserManagementUpdate implements OnInit {
   authorities = signal<string[]>([]);

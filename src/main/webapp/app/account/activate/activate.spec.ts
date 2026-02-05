@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,7 +13,6 @@ describe('Activate', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: { queryParams: of({ key: 'ABC123' }) },
@@ -28,7 +27,7 @@ describe('Activate', () => {
   });
 
   it('calls activate.get with the key from params', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(of());
+    vitest.spyOn(service, 'get').mockReturnValue(of());
 
     comp.ngOnInit();
 
@@ -36,7 +35,7 @@ describe('Activate', () => {
   }));
 
   it('should set success to true upon successful activation', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(of({}));
+    vitest.spyOn(service, 'get').mockReturnValue(of({}));
 
     comp.ngOnInit();
 
@@ -45,7 +44,7 @@ describe('Activate', () => {
   }));
 
   it('should set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(throwError(Error));
+    vitest.spyOn(service, 'get').mockReturnValue(throwError(Error));
 
     comp.ngOnInit();
 

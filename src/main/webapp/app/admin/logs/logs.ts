@@ -1,9 +1,10 @@
+import { SlicePipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { finalize, map } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, sortStateSignal } from 'app/shared/sort';
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 
@@ -14,7 +15,7 @@ import { LogsService } from './logs.service';
   selector: 'jhi-logs',
   templateUrl: './logs.html',
   providers: [GatewayRoutesService],
-  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
+  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, SlicePipe],
 })
 export default class Logs implements OnInit {
   loggers = signal<Log[] | undefined>(undefined);

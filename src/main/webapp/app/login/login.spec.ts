@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, Router } from '@angular/router';
@@ -26,13 +27,13 @@ describe('Login', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: vitest.fn(),
           },
         },
         {
           provide: LoginService,
           useValue: {
-            login: jest.fn(() => of({})),
+            login: vitest.fn(() => of({})),
           },
         },
       ],
@@ -43,7 +44,7 @@ describe('Login', () => {
     fixture = TestBed.createComponent(Login);
     comp = fixture.componentInstance;
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate');
+    vitest.spyOn(mockRouter, 'navigate');
     mockLoginService = TestBed.inject(LoginService);
     mockAccountService = TestBed.inject(AccountService);
   });
@@ -51,7 +52,7 @@ describe('Login', () => {
   describe('ngOnInit', () => {
     it('should call accountService.identity on Init', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = vitest.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -62,7 +63,7 @@ describe('Login', () => {
 
     it('should call accountService.isAuthenticated on Init', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = vitest.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -73,7 +74,7 @@ describe('Login', () => {
 
     it('should navigate to home page on Init if authenticated=true', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = vitest.fn(() => of(null));
       mockAccountService.isAuthenticated = () => true;
 
       // WHEN
@@ -88,7 +89,7 @@ describe('Login', () => {
     it('should set focus to username input after the view has been initialized', () => {
       // GIVEN
       const node = {
-        focus: jest.fn(),
+        focus: vitest.fn(),
       };
       comp.username = signal<ElementRef>(new ElementRef(node));
 
@@ -126,7 +127,7 @@ describe('Login', () => {
 
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
       // GIVEN
-      jest.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
+      vitest.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
 
       // WHEN
       comp.login();
@@ -138,7 +139,7 @@ describe('Login', () => {
 
     it('should stay on login form and show error message on login error', () => {
       // GIVEN
-      mockLoginService.login = jest.fn(() => throwError(Error));
+      mockLoginService.login = vitest.fn(() => throwError(Error));
 
       // WHEN
       comp.login();

@@ -27,11 +27,13 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column("id")
     private Long id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
+    @Column("login")
     private String login;
 
     @JsonIgnore
@@ -50,9 +52,11 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Email
     @Size(min = 5, max = 254)
+    @Column("email")
     private String email;
 
     @NotNull
+    @Column("activated")
     private boolean activated = false;
 
     @Size(min = 2, max = 10)

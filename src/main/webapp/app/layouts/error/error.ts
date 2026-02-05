@@ -1,12 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
-
 @Component({
   selector: 'jhi-error',
+
   templateUrl: './error.html',
-  imports: [SharedModule],
 })
 export default class Error implements OnInit {
   errorMessage = signal<string | undefined>(undefined);

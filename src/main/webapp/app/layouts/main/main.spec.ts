@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { DOCUMENT } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
@@ -23,12 +23,11 @@ describe('Main', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         Title,
         {
           provide: AccountService,
           useValue: {
-            identity: jest.fn(() => of(null)),
+            identity: vitest.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -51,7 +50,7 @@ describe('Main', () => {
 
     beforeEach(() => {
       routerState.snapshot.root = { data: {} };
-      jest.spyOn(titleService, 'setTitle');
+      vitest.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 

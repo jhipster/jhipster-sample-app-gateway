@@ -4,11 +4,10 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-login',
-  imports: [SharedModule, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {

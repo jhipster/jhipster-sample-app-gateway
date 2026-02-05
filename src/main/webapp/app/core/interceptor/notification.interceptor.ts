@@ -1,35 +1,27 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { HttpEvent, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
 
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { AlertService } from 'app/core/util/alert.service';
+import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
-@Injectable()
-export class NotificationInterceptor implements HttpInterceptor {
-  private readonly alertService = inject(AlertService);
+export const notificationInterceptor: HttpInterceptorFn = (req, next) => {
+  const alertService = inject(AlertService);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      tap((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          let alert: string | null = null;
+  return next(req).pipe(
+    tap((event: HttpEvent<any>) => {
+      if (event instanceof HttpResponse) {
+        const headers = Object.fromEntries(event.headers.keys().map(key => [key, event.headers.getAll(key)]));
+        const message = getMessageFromHeaders(headers);
 
-          for (const headerKey of event.headers.keys()) {
-            if (headerKey.toLowerCase().endsWith('app-alert')) {
-              alert = event.headers.get(headerKey);
-            }
-          }
-
-          if (alert) {
-            this.alertService.addAlert({
-              type: 'success',
-              message: alert,
-            });
-          }
+        if (message.alertMessage) {
+          alertService.addAlert({
+            type: 'success',
+            message: message.alertMessage,
+          });
         }
-      }),
-    );
-  }
-}
+      }
+    }),
+  );
+};

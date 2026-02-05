@@ -1,6 +1,7 @@
+import { KeyValuePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { GatewayRoute } from './gateway-route.model';
 import { GatewayRoutesService } from './gateway-routes.service';
@@ -9,7 +10,7 @@ import { GatewayRoutesService } from './gateway-routes.service';
   selector: 'jhi-gateway',
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
-  imports: [SharedModule],
+  imports: [KeyValuePipe, FontAwesomeModule],
 })
 export default class Gateway implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];

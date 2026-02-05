@@ -6,13 +6,12 @@ import { takeUntil } from 'rxjs/operators';
 
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [SharedModule, RouterLink],
+  imports: [RouterLink],
 })
 export default class Home implements OnInit, OnDestroy {
   account = signal<Account | null>(null);
