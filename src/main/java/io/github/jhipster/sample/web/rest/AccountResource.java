@@ -10,21 +10,28 @@ import io.github.jhipster.sample.web.rest.errors.*;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * REST controller for managing the current user's account.
  */
 @RestController
 @RequestMapping("/api")
+@Validated
 public class AccountResource {
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Account resource request invalid")
     private static class AccountResourceException extends RuntimeException {
 
         private AccountResourceException(String message) {
@@ -40,10 +47,18 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public AccountResource(
+        UserRepository userRepository,
+        UserService userService,
+        MailService mailService,
+        PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -57,6 +72,7 @@ public class AccountResource {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        LOG.debug("REST request to register account");
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
@@ -71,6 +87,7 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public Mono<Void> activateAccount(@RequestParam(value = "key") String key) {
+        LOG.debug("REST request to activate account");
         return userService
             .activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
@@ -85,6 +102,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public Mono<AdminUserDTO> getAccount() {
+        LOG.debug("REST request to get account");
         return userService
             .getUserWithAuthorities()
             .map(AdminUserDTO::new)
@@ -100,6 +118,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public Mono<Void> saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
+        LOG.debug("REST request to save account");
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin ->
@@ -134,6 +153,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/change-password")
     public Mono<Void> changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
+        LOG.debug("REST request to change password");
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
@@ -146,7 +166,8 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public Mono<Void> requestPasswordReset(@RequestBody String mail) {
+    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+        LOG.debug("REST request to request password reset");
         return userService
             .requestPasswordReset(mail)
             .doOnSuccess(user -> {
@@ -175,7 +196,17 @@ public class AccountResource {
         }
         return userService
             .completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
+            .switchIfEmpty(
+                Mono.defer(() ->
+                    Mono.fromRunnable(() -> {
+                        // Dummy hash to prevent reset-key enumeration via response-time timing attack:
+                        // mirrors the bcrypt cost of a successful path so both branches take equal time.
+                        passwordEncoder.encode(keyAndPassword.getNewPassword());
+                    })
+                        .subscribeOn(Schedulers.boundedElastic())
+                        .then(Mono.error(new AccountResourceException("No user was found for this reset key")))
+                )
+            )
             .then();
     }
 

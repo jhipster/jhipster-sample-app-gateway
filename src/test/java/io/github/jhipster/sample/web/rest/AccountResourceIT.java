@@ -373,7 +373,7 @@ class AccountResourceIT {
         assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.orElseThrow().setActivated(true);
-        userService.updateUser((new AdminUserDTO(testUser4.orElseThrow()))).block();
+        userService.updateUser(new AdminUserDTO(testUser4.orElseThrow())).block();
 
         // Register 4th (already activated) user
         accountWebTestClient
@@ -442,12 +442,7 @@ class AccountResourceIT {
 
     @Test
     void testActivateAccountWithWrongKey() {
-        accountWebTestClient
-            .get()
-            .uri("/api/activate?key=wrongActivationKey")
-            .exchange()
-            .expectStatus()
-            .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey").exchange().expectStatus().isBadRequest();
     }
 
     @Test
@@ -802,6 +797,28 @@ class AccountResourceIT {
     }
 
     @Test
+    void testRequestPasswordResetInvalidEmail() {
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/init")
+            .bodyValue("invalid-email")
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+    }
+
+    @Test
+    void testRequestPasswordResetTooLongEmail() {
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/init")
+            .bodyValue("a".repeat(250) + "@x.co")
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+    }
+
+    @Test
     void testFinishPasswordReset() throws Exception {
         User user = new User();
         user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
@@ -874,6 +891,6 @@ class AccountResourceIT {
             .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
             .expectStatus()
-            .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            .isBadRequest();
     }
 }

@@ -11,10 +11,6 @@ describe('ItemCount test', () => {
   const inputParams = 'params';
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ItemCount);
     comp = fixture.componentInstance;
     compRef = fixture.componentRef;

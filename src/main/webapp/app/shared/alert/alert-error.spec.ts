@@ -17,7 +17,6 @@ describe('Alert Error Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [],
       providers: [EventManager, AlertService],
     });
   });
@@ -40,7 +39,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { status: 0 } });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('Server not reachable');
     });
 
@@ -48,7 +47,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { status: 404 } });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('Not found');
     });
 
@@ -57,7 +56,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { error: { message: 'Error Message' } } });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: { error: 'Second Error Message' } });
       // THEN
-      expect(comp.alerts().length).toBe(2);
+      expect(comp.alerts()).toHaveLength(2);
       expect(comp.alerts()[0].message).toBe('Error Message');
       expect(comp.alerts()[1].message).toBe('Second Error Message');
     });
@@ -79,7 +78,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('error.validation');
     });
 
@@ -93,7 +92,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('Bad Request');
     });
 
@@ -115,7 +114,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('Error on field "MinField"');
     });
 
@@ -133,7 +132,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('header.error');
     });
 
@@ -152,7 +151,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: 'jhipsterSampleGatewayApp.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].message).toBe('Detailed error message');
     });
   });

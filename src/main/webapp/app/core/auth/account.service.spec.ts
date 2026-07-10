@@ -91,7 +91,7 @@ describe('Account Service', () => {
       service.identity().subscribe();
       // Then there is only request
       const requests = httpMock.match({ method: 'GET' });
-      expect(requests.length).toBe(1);
+      expect(requests).toHaveLength(1);
     });
 
     it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
@@ -112,7 +112,7 @@ describe('Account Service', () => {
 
       // Then there is a new request
       const requests = httpMock.match({ method: 'GET' });
-      expect(requests.length).toBe(1);
+      expect(requests).toHaveLength(1);
     });
 
     describe('navigateToStoredUrl', () => {

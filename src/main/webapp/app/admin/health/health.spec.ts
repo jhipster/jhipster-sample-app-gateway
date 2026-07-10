@@ -14,10 +14,6 @@ describe('Health', () => {
   let service: HealthService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(Health);
     comp = fixture.componentInstance;
     service = TestBed.inject(HealthService);

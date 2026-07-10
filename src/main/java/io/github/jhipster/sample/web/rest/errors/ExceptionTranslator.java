@@ -2,6 +2,7 @@ package io.github.jhipster.sample.web.rest.errors;
 
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
+import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -148,7 +149,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
         if (problemProperties == null || !problemProperties.containsKey(PATH_KEY)) problem.setProperty(PATH_KEY, getPathValue(request));
 
         if (
-            (err instanceof WebExchangeBindException fieldException) &&
+            err instanceof WebExchangeBindException fieldException &&
             (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY))
         ) problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
 
@@ -200,12 +201,14 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
     }
 
     private URI getMappedType(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (
+            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
+        ) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) {
+        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) {
             return ErrorConstants.ERR_VALIDATION;
         } else if (err instanceof ConcurrencyFailureException || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
@@ -216,7 +219,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) return "Method argument not valid";
+        if (
+            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
+        ) return "Method argument not valid";
         return null;
     }
 
@@ -236,6 +241,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
         if (err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
         if (err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
+        if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
         return null;
     }
 

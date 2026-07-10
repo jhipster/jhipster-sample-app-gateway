@@ -15,8 +15,8 @@
 
     <p>There are {{ loggers()?.length }} loggers.</p>
 
-    <span>Filter</span>
-    <input type="text" [ngModel]="filter()" (ngModelChange)="filter.set($event)" class="form-control" />
+    <label for="logs-filter">Filter</label>
+    <input id="logs-filter" type="text" [ngModel]="filter()" (ngModelChange)="filter.set($event)" class="form-control" />
 
     <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
       <thead>

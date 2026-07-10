@@ -13,7 +13,6 @@ describe('PasswordResetInit', () => {
   let service: PasswordResetInitService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     fixture = TestBed.createComponent(PasswordResetInit);
     comp = fixture.componentInstance;
     service = TestBed.inject(PasswordResetInitService);

@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export default class Error implements OnInit {
   readonly errorMessage = signal<string | undefined>(undefined);
-
   private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {

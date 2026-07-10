@@ -13,10 +13,6 @@ describe('Metrics', () => {
   let service: MetricsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;
     service = TestBed.inject(MetricsService);
