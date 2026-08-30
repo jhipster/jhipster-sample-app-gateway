@@ -1,18 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
 
 @Component({
   selector: 'jhi-login',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
 })
 export default class Login implements OnInit, AfterViewInit {
-  username = viewChild.required<ElementRef>('username');
+  readonly username = viewChild.required<ElementRef>('username');
 
   readonly authenticationError = signal(false);
 

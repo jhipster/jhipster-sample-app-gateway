@@ -1,14 +1,14 @@
-import { Mock, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { Account } from 'app/core/auth/account.model';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { serverApiUrl } from 'app/config';
 import { Authority } from 'app/shared/jhipster/constants';
 
+import { Account } from './account.model';
 import { AccountService } from './account.service';
+import { StateStorageService } from './state-storage.service';
 
 function accountWithAuthorities(authorities: string[]): Account {
   return {
@@ -23,11 +23,10 @@ function accountWithAuthorities(authorities: string[]): Account {
   };
 }
 
-const mockFn = (value: string | null): Mock => vitest.fn(() => value);
+const mockFn = (value: string | null): Mock => vi.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;
-  let applicationConfigService: ApplicationConfigService;
   let httpMock: HttpTestingController;
   let mockStorageService: StateStorageService;
   let mockRouter: Router;
@@ -39,19 +38,18 @@ describe('Account Service', () => {
         {
           provide: StateStorageService,
           useValue: {
-            clearUrl: vitest.fn(),
-            getUrl: vitest.fn(),
+            clearUrl: vi.fn(),
+            getUrl: vi.fn(),
           },
         },
       ],
     });
 
     service = TestBed.inject(AccountService);
-    applicationConfigService = TestBed.inject(ApplicationConfigService);
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, 'navigateByUrl');
+    vi.spyOn(mockRouter, 'navigateByUrl');
   });
 
   afterEach(() => {
@@ -65,7 +63,7 @@ describe('Account Service', () => {
 
       // WHEN
       service.save(account).subscribe();
-      const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+      const testRequest = httpMock.expectOne({ method: 'POST', url: `${serverApiUrl}api/account` });
       testRequest.flush({});
 
       // THEN
@@ -164,7 +162,7 @@ describe('Account Service', () => {
         expect(hasAuthority).toBe(false);
       });
 
-      it('should return false if user is logged and has not authority', () => {
+      it('should return false if user is logged and has no authority', () => {
         service.authenticate(accountWithAuthorities([Authority.USER]));
 
         const hasAuthority = service.hasAnyAuthority(Authority.ADMIN);
@@ -187,7 +185,7 @@ describe('Account Service', () => {
         expect(hasAuthority).toBeFalsy();
       });
 
-      it('should return false if user is logged and has not authority', () => {
+      it('should return false if user is logged and has no authority', () => {
         service.authenticate(accountWithAuthorities([Authority.USER]));
 
         const hasAuthority = service.hasAnyAuthority([Authority.ADMIN]);

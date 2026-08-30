@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
-import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 import tech.jhipster.config.JHipsterProperties;
 
 @Configuration
@@ -48,12 +46,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.securityMatcher(
-            new NegatedServerWebExchangeMatcher(
-                new OrServerWebExchangeMatcher(pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**"))
-            )
-        )
-            .cors(withDefaults())
+        http.cors(withDefaults())
             .csrf(csrf -> csrf.disable())
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
             .headers(headers ->
@@ -72,8 +65,14 @@ public class SecurityConfiguration {
             .authorizeExchange(authz ->
                 // prettier-ignore
                 authz
-                    .pathMatchers("/").permitAll()
-                    .pathMatchers("/*.*").permitAll()
+                    .pathMatchers(
+                        "/",
+                        "/*.*",
+                        "/app/**",
+                        "/i18n/**",
+                        "/content/**",
+                        "/swagger-ui/**"
+                    ).permitAll()
                     .pathMatchers("/api/authenticate").permitAll()
                     .pathMatchers("/api/register").permitAll()
                     .pathMatchers("/api/activate").permitAll()

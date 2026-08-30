@@ -4,7 +4,7 @@ import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import java.util.*;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,14 +12,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 /**
  * Authenticate a user from the database.
  */
-@Component("userDetailsService")
+@Service("userDetailsService")
 public class DomainUserDetailsService implements ReactiveUserDetailsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DomainUserDetailsService.class);

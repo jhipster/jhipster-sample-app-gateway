@@ -32,7 +32,7 @@ const routes: Routes = [
     loadComponent: () => import('./gateway/gateway'),
     title: 'Gateway',
   },
-  /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
+  // jhipster-needle-add-admin-route - JHipster will add admin routes here
 ];
 
 export default routes;

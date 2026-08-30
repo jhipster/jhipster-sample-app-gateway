@@ -8,10 +8,8 @@
     <a
       class="navbar-toggler d-lg-none"
       href="javascript:void(0);"
-      data-toggle="collapse"
-      data-target="#navbarResponsive"
       aria-controls="navbarResponsive"
-      aria-expanded="false"
+      [attr.aria-expanded]="!isNavbarCollapsed()"
       aria-label="Toggle navigation"
       (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
     >
@@ -31,7 +29,7 @@
           <li
             ngbDropdown
             class="nav-item dropdown pointer"
-            display="dynamic"
+            display="static"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             data-cy="entity"
@@ -63,7 +61,7 @@
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
           class="nav-item dropdown pointer"
-          display="dynamic"
+          display="static"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           data-cy="adminMenu"
@@ -78,18 +76,6 @@
             <li>
               <a
                 class="dropdown-item"
-                routerLink="/authority"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true" />
-                <span>Authority</span>
-              </a>
-            </li>
-            <li>
-              <a
-                class="dropdown-item"
                 routerLink="/user-management"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
@@ -97,6 +83,18 @@
               >
                 <fa-icon icon="asterisk" [fixedWidth]="true" />
                 <span>User Management</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/authority"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true" />
+                <span>Authority</span>
               </a>
             </li>
             <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
@@ -140,7 +138,13 @@
             }
             @if (!inProduction()) {
               <li>
-                <a class="dropdown-item" href=" http://localhost:8092/ " target="_tab" (click)="collapseNavbar()">
+                <a
+                  class="dropdown-item"
+                  href=" http://localhost:8092/ "
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  (click)="collapseNavbar()"
+                >
                   <fa-icon icon="database" [fixedWidth]="true" />
                   <span>Database</span>
                 </a>
@@ -151,7 +155,7 @@
         <li
           ngbDropdown
           class="nav-item dropdown pointer"
-          display="dynamic"
+          display="static"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           data-cy="accountMenu"
@@ -165,11 +169,11 @@
               </span>
             } @else {
               <span>
-                <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
+                <img [src]="accountRef.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
               </span>
             }
           </a>
-          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
             @if (accountRef !== null) {
               <li>
                 <a

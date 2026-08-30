@@ -1,18 +1,17 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Observable, finalize } from 'rxjs';
 
-import { AlertError } from 'app/shared/alert/alert-error';
+import { AlertError } from 'app/shared/alert';
 import { IAuthority } from '../authority.model';
 import { AuthorityService } from '../service/authority.service';
 
 import { AuthorityFormGroup, AuthorityFormService } from './authority-form.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'jhi-authority-update',
   templateUrl: './authority-update.html',
   imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],

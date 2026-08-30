@@ -1,5 +1,5 @@
 import { KeyValuePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -8,7 +8,6 @@ import { GatewayRoutesService } from './gateway-routes.service';
 
 @Component({
   selector: 'jhi-gateway',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
   imports: [KeyValuePipe, FontAwesomeModule],

@@ -1,13 +1,12 @@
 import { DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { Databases } from 'app/admin/metrics/metrics.model';
-import { filterNaN } from 'app/core/util/operators';
+import { filterNaN } from 'app/core/util';
 
 @Component({
   selector: 'jhi-metrics-datasource',
   templateUrl: './metrics-datasource.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DecimalPipe],
 })
 export class MetricsDatasource {

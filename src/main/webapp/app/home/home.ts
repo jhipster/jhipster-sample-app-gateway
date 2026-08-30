@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 
 @Component({
   selector: 'jhi-home',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
   styleUrl: './home.scss',
   imports: [RouterLink],

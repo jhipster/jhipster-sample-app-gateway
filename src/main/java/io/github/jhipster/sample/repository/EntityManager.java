@@ -18,6 +18,7 @@ import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoinCondition;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectOrdered;
+import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.r2dbc.core.Parameter;
@@ -206,7 +207,10 @@ public class EntityManager {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
             if (entity != null) {
                 selectFrom = selectFrom.orderBy(
-                    createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sortParameter)
+                    createOrderByFields(
+                        Table.create(SqlIdentifier.unquoted(entity.getTableName().getReference())).as(EntityManager.ENTITY_ALIAS),
+                        sortParameter
+                    )
                 );
             }
         }

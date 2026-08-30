@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
@@ -8,7 +8,6 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: 'jhi-thread-modal',
   templateUrl: './metrics-modal-threads.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FontAwesomeModule],
 })
 export class MetricsModalThreads implements OnInit {

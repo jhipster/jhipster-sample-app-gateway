@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -55,9 +55,9 @@ describe('BankAccount Management Update Component', () => {
       // GIVEN
       const saveSubject = new Subject<IBankAccount>();
       const bankAccount = { id: 22720 };
-      vitest.spyOn(bankAccountFormService, 'getBankAccount').mockReturnValue(bankAccount);
-      vitest.spyOn(bankAccountService, 'update').mockReturnValue(saveSubject);
-      vitest.spyOn(comp, 'previousState');
+      vi.spyOn(bankAccountFormService, 'getBankAccount').mockReturnValue(bankAccount);
+      vi.spyOn(bankAccountService, 'update').mockReturnValue(saveSubject);
+      vi.spyOn(comp, 'previousState');
       activatedRoute.data = of({ bankAccount });
       comp.ngOnInit();
 
@@ -78,9 +78,9 @@ describe('BankAccount Management Update Component', () => {
       // GIVEN
       const saveSubject = new Subject<IBankAccount>();
       const bankAccount = { id: 22720 };
-      vitest.spyOn(bankAccountFormService, 'getBankAccount').mockReturnValue({ id: null });
-      vitest.spyOn(bankAccountService, 'create').mockReturnValue(saveSubject);
-      vitest.spyOn(comp, 'previousState');
+      vi.spyOn(bankAccountFormService, 'getBankAccount').mockReturnValue({ id: null });
+      vi.spyOn(bankAccountService, 'create').mockReturnValue(saveSubject);
+      vi.spyOn(comp, 'previousState');
       activatedRoute.data = of({ bankAccount: null });
       comp.ngOnInit();
 
@@ -101,8 +101,8 @@ describe('BankAccount Management Update Component', () => {
       // GIVEN
       const saveSubject = new Subject<IBankAccount>();
       const bankAccount = { id: 22720 };
-      vitest.spyOn(bankAccountService, 'update').mockReturnValue(saveSubject);
-      vitest.spyOn(comp, 'previousState');
+      vi.spyOn(bankAccountService, 'update').mockReturnValue(saveSubject);
+      vi.spyOn(comp, 'previousState');
       activatedRoute.data = of({ bankAccount });
       comp.ngOnInit();
 

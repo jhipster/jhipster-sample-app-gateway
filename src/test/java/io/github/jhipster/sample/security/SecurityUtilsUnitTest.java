@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +26,18 @@ class SecurityUtilsUnitTest {
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin")))
             .block();
         assertThat(login).isEqualTo("admin");
+    }
+
+    @Test
+    void testGetCurrentUserLoginForAnonymousUser() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        String login = SecurityUtils.getCurrentUserLogin()
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(new AnonymousAuthenticationToken("key", "anonymousUser", authorities))
+            )
+            .block();
+        assertThat(login).isNull();
     }
 
     @Test

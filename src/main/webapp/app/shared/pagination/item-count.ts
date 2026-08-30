@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 /**
  * A component that will take care of item count statistics of a pagination.
  */
 @Component({
   selector: 'jhi-item-count',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: ` <div>Showing {{ first() }} - {{ second() }} of {{ total() }} items.</div> `,
 })
 export default class ItemCount {

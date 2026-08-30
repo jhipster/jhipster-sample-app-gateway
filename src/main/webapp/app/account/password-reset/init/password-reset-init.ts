@@ -1,18 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { AlertError } from 'app/shared/alert/alert-error';
+import { AlertError } from 'app/shared/alert';
 
 import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
   selector: 'jhi-password-reset-init',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AlertError, ReactiveFormsModule],
   templateUrl: './password-reset-init.html',
 })
 export default class PasswordResetInit implements AfterViewInit {
-  email = viewChild.required<ElementRef>('email');
+  readonly email = viewChild.required<ElementRef>('email');
 
   readonly success = signal(false);
   resetRequestForm;

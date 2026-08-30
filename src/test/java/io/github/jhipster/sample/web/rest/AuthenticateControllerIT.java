@@ -1,6 +1,5 @@
 package io.github.jhipster.sample.web.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
@@ -8,10 +7,11 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Integration tests for the {@link AuthenticateController} REST controller.

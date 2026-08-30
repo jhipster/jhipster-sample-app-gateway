@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +23,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -54,7 +55,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
-    private static final boolean CASUAL_CHAIN_ENABLED = false;
+    private static final boolean CAUSAL_CHAIN_ENABLED = false;
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
@@ -271,20 +272,20 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler implemen
     }
 
     public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, ServerWebExchange request) {
-        if (throwable != null && isCasualChainEnabled()) {
+        if (throwable != null && isCausalChainEnabled()) {
             return Optional.of(customizeProblem(getProblemDetailWithCause(throwable), throwable, request));
         }
         return Optional.ofNullable(null);
     }
 
-    private boolean isCasualChainEnabled() {
+    private boolean isCausalChainEnabled() {
         // Customize as per the needs
-        return CASUAL_CHAIN_ENABLED;
+        return CAUSAL_CHAIN_ENABLED;
     }
 
     private boolean containsPackageName(String message) {
         // This list is for sure not complete
-        return StringUtils.containsAny(
+        return Strings.CS.containsAny(
             message,
             "org.",
             "java.",

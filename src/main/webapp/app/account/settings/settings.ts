@@ -1,15 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Account } from 'app/core/auth/account.model';
-import { AccountService } from 'app/core/auth/account.service';
-import { AlertError } from 'app/shared/alert/alert-error';
+import { Account, AccountService } from 'app/core/auth';
+import { AlertError } from 'app/shared/alert';
 
 const initialAccount: Account = {} as Account;
 
 @Component({
   selector: 'jhi-settings',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AlertError, ReactiveFormsModule],
   templateUrl: './settings.html',
 })
@@ -30,7 +28,6 @@ export default class Settings implements OnInit {
       validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
     }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
-
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),
     authorities: new FormControl(initialAccount.authorities, { nonNullable: true }),
     imageUrl: new FormControl(initialAccount.imageUrl, { nonNullable: true }),

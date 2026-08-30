@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -23,7 +21,6 @@ import org.springframework.data.relational.core.mapping.Table;
  * A user.
  */
 @Table("jhi_user")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Serial

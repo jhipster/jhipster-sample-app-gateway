@@ -1,11 +1,11 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
-import { ElementRef, signal } from '@angular/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
 
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 
 import Login from './login';
 import { LoginService } from './login.service';
@@ -27,13 +27,13 @@ describe('Login', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: vitest.fn(),
+            isAuthenticated: vi.fn(),
           },
         },
         {
           provide: LoginService,
           useValue: {
-            login: vitest.fn(() => of({})),
+            login: vi.fn(() => of({})),
           },
         },
       ],
@@ -44,7 +44,7 @@ describe('Login', () => {
     fixture = TestBed.createComponent(Login);
     comp = fixture.componentInstance;
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, 'navigate');
+    vi.spyOn(mockRouter, 'navigate');
     mockLoginService = TestBed.inject(LoginService);
     mockAccountService = TestBed.inject(AccountService);
   });
@@ -52,7 +52,7 @@ describe('Login', () => {
   describe('ngOnInit', () => {
     it('should call accountService.identity on Init', () => {
       // GIVEN
-      mockAccountService.identity = vitest.fn(() => of(null));
+      mockAccountService.identity = vi.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -63,7 +63,7 @@ describe('Login', () => {
 
     it('should call accountService.isAuthenticated on Init', () => {
       // GIVEN
-      mockAccountService.identity = vitest.fn(() => of(null));
+      mockAccountService.identity = vi.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -74,7 +74,7 @@ describe('Login', () => {
 
     it('should navigate to home page on Init if authenticated=true', () => {
       // GIVEN
-      mockAccountService.identity = vitest.fn(() => of(null));
+      mockAccountService.identity = vi.fn(() => of(null));
       mockAccountService.isAuthenticated = () => true;
 
       // WHEN
@@ -89,9 +89,9 @@ describe('Login', () => {
     it('should set focus to username input after the view has been initialized', () => {
       // GIVEN
       const node = {
-        focus: vitest.fn(),
+        focus: vi.fn(),
       };
-      comp.username = signal(new ElementRef(node));
+      vi.spyOn(comp, 'username').mockReturnValue(new ElementRef(node));
 
       // WHEN
       comp.ngAfterViewInit();
@@ -127,7 +127,7 @@ describe('Login', () => {
 
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
       // GIVEN
-      vitest.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
+      vi.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
 
       // WHEN
       comp.login();
@@ -139,7 +139,7 @@ describe('Login', () => {
 
     it('should stay on login form and show error message on login error', () => {
       // GIVEN
-      mockLoginService.login = vitest.fn(() => throwError(Error));
+      mockLoginService.login = vi.fn(() => throwError(Error));
 
       // WHEN
       comp.login();

@@ -2,10 +2,13 @@
   <div class="col-8">
     @if (userManagement(); as userManagementRef) {
       <div>
-        <h2 data-cy="userManagementDetailsHeading">
-          <span>User</span> [<strong>{{ userManagementRef.login }}</strong
-          >]
-        </h2>
+        <h2 data-cy="userManagementDetailsHeading"><span>User</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
 
         <dl class="row-md jh-entity-details">
           <dt><span>Login</span></dt>
@@ -17,27 +20,30 @@
               <span class="badge bg-danger">Deactivated</span>
             }
           </dd>
-
           <dt><span>First name</span></dt>
-          <dd>{{ userManagementRef.firstName }}</dd>
-
+          <dd>
+            <span>{{ userManagementRef.firstName }}</span>
+          </dd>
           <dt><span>Last name</span></dt>
-          <dd>{{ userManagementRef.lastName }}</dd>
-
+          <dd>
+            <span>{{ userManagementRef.lastName }}</span>
+          </dd>
           <dt><span>Email</span></dt>
-          <dd>{{ userManagementRef.email }}</dd>
-
-          <dt><span>Created by</span></dt>
-          <dd>{{ userManagementRef.createdBy }}</dd>
-
+          <dd>
+            <span>{{ userManagementRef.email }}</span>
+          </dd>
           <dt><span>Created date</span></dt>
-          <dd>{{ userManagementRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
-
+          <dd>
+            <span>{{ userManagementRef.createdDate | formatMediumDatetime }}</span>
+          </dd>
           <dt><span>Modified by</span></dt>
-          <dd>{{ userManagementRef.lastModifiedBy }}</dd>
-
+          <dd>
+            <span>{{ userManagementRef.lastModifiedBy }}</span>
+          </dd>
           <dt><span>Modified date</span></dt>
-          <dd>{{ userManagementRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+          <dd>
+            <span>{{ userManagementRef.lastModifiedDate | formatMediumDatetime }}</span>
+          </dd>
 
           <dt><span>Profiles</span></dt>
           <dd>
@@ -53,6 +59,10 @@
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/user-management', userManagementRef.login, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
         </button>
       </div>
     }

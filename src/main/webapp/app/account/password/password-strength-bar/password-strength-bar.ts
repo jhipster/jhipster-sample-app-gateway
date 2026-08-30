@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Renderer2, effect, inject, input } from '@angular/core';
+import { Component, ElementRef, Renderer2, effect, inject, input } from '@angular/core';
 
 @Component({
   selector: 'jhi-password-strength-bar',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './password-strength-bar.html',
   styleUrl: './password-strength-bar.scss',
 })

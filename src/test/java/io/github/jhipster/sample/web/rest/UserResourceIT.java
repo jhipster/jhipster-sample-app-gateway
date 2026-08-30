@@ -2,7 +2,6 @@ package io.github.jhipster.sample.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
@@ -19,12 +18,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.

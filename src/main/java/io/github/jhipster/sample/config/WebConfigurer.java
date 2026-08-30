@@ -1,11 +1,10 @@
 package io.github.jhipster.sample.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.web.reactive.ResourceHandlerRegistrationCustomizer;
+import org.springframework.boot.webflux.autoconfigure.ResourceHandlerRegistrationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,6 +25,7 @@ import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 import tech.jhipster.web.filter.reactive.CachingHttpHeadersFilter;
 import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -45,7 +45,7 @@ public class WebConfigurer implements WebFluxConfigurer {
                 H2ConfigurationHelper.initH2Console();
             } catch (Exception e) {
                 // Console may already be running on another app or after a refresh.
-                e.printStackTrace();
+                LOG.warn("Failed to initialize H2 console", e);
             }
         }
     }

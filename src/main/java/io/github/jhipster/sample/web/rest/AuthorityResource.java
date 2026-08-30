@@ -25,7 +25,7 @@ import tech.jhipster.web.util.reactive.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/authorities")
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AuthorityResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorityResource.class);

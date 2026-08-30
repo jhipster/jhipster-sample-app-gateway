@@ -1,18 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { serverApiUrl } from 'app/config';
 
 import { GatewayRoute } from './gateway-route.model';
 
-@Injectable()
+@Service()
 export class GatewayRoutesService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   findAll(): Observable<GatewayRoute[]> {
-    return this.http.get<GatewayRoute[]>(this.applicationConfigService.getEndpointFor('api/gateway/routes'));
+    return this.http.get<GatewayRoute[]>(`${serverApiUrl}api/gateway/routes`);
   }
 }

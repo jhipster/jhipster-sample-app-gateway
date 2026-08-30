@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -41,7 +41,7 @@ describe('Register', () => {
   });
 
   it('should update success to true after creating an account', inject([RegisterService], (service: RegisterService) => {
-    vitest.spyOn(service, 'save').mockReturnValue(of({}));
+    vi.spyOn(service, 'save').mockReturnValue(of({}));
     comp.registerForm.patchValue({
       password: 'password',
       confirmPassword: 'password',
@@ -63,7 +63,7 @@ describe('Register', () => {
 
   it('should notify of user existence upon 400/login already in use', inject([RegisterService], (service: RegisterService) => {
     const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
-    vitest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+    vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
     comp.registerForm.patchValue({
       password: 'password',
       confirmPassword: 'password',
@@ -78,7 +78,7 @@ describe('Register', () => {
 
   it('should notify of email existence upon 400/email address already in use', inject([RegisterService], (service: RegisterService) => {
     const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
-    vitest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+    vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
     comp.registerForm.patchValue({
       password: 'password',
       confirmPassword: 'password',
@@ -93,7 +93,7 @@ describe('Register', () => {
 
   it('should notify of generic error', inject([RegisterService], (service: RegisterService) => {
     const err = { status: 503 };
-    vitest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+    vi.spyOn(service, 'save').mockReturnValue(throwError(() => err));
     comp.registerForm.patchValue({
       password: 'password',
       confirmPassword: 'password',

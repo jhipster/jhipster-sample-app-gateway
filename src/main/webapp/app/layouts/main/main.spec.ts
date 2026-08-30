@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { Router, TitleStrategy } from '@angular/router';
@@ -8,7 +8,7 @@ import { Router, TitleStrategy } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 
 import Main from './main';
 
@@ -16,7 +16,6 @@ describe('Main', () => {
   let comp: Main;
   let fixture: ComponentFixture<Main>;
   let titleService: Title;
-  const routerState: any = { snapshot: { root: { data: {} } } };
   let router: Router;
   let document: Document;
 
@@ -27,7 +26,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: vitest.fn(() => of(null)),
+            identity: vi.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -49,8 +48,7 @@ describe('Main', () => {
     const childRoutePageTitle = 'childTitle';
 
     beforeEach(() => {
-      routerState.snapshot.root = { data: {} };
-      vitest.spyOn(titleService, 'setTitle');
+      vi.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 
@@ -112,7 +110,6 @@ describe('Main', () => {
 });
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '',
 })
 export class Blank {}
