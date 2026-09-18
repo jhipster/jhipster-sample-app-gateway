@@ -25,18 +25,20 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.Environment;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
-import org.springframework.data.r2dbc.convert.MappingR2dbcConverter;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
+import org.springframework.data.r2dbc.dialect.H2Dialect;
+import org.springframework.data.r2dbc.dialect.MySqlDialect;
 import org.springframework.data.r2dbc.dialect.R2dbcDialect;
 import org.springframework.data.r2dbc.mapping.R2dbcMappingContext;
-import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.data.relational.RelationalManagedTypes;
-import org.springframework.data.relational.core.dialect.RenderContextFactory;
+import org.springframework.data.relational.core.dialect.InsertRenderContext;
 import org.springframework.data.relational.core.mapping.DefaultNamingStrategy;
 import org.springframework.data.relational.core.mapping.NamingStrategy;
-import org.springframework.data.relational.core.sql.render.SqlRenderer;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
@@ -148,18 +150,37 @@ public class DatabaseConfiguration {
 
     @Bean
     public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
-        return DialectResolver.getDialect(connectionFactory);
+        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+        if (dialect instanceof MySqlDialect) {
+            // Spring Data renders an insert without values as `VALUES (DEFAULT)`, which MySQL and MariaDB reject for
+            // tables with more than one column. Use `() VALUES ()` so an entity with only null fields can be inserted.
+            return new MySqlDialect() {
+                @Override
+                public InsertRenderContext getInsertRenderContext() {
+                    return () -> " () VALUES ()";
+                }
+            };
+        }
+        if (dialect instanceof H2Dialect) {
+            // Spring Data renders an insert without values as `VALUES (DEFAULT)`, which H2 rejects for tables with
+            // more than one column. Use `DEFAULT VALUES` so an entity with only null fields can be inserted.
+            return new H2Dialect() {
+                @Override
+                public InsertRenderContext getInsertRenderContext() {
+                    return () -> " DEFAULT VALUES";
+                }
+            };
+        }
+        return dialect;
     }
 
+    /**
+     * Spring Boot resolves the dialect itself when creating the {@link R2dbcEntityTemplate}; create it with the
+     * customized dialect so it renders inserts without values in a form the database accepts.
+     */
     @Bean
-    public UpdateMapper updateMapper(R2dbcDialect dialect, MappingR2dbcConverter mappingR2dbcConverter) {
-        return new UpdateMapper(dialect, mappingR2dbcConverter);
-    }
-
-    @Bean
-    public SqlRenderer sqlRenderer(R2dbcDialect dialect) {
-        RenderContextFactory factory = new RenderContextFactory(dialect);
-        return SqlRenderer.create(factory.createRenderContext());
+    public R2dbcEntityTemplate r2dbcEntityTemplate(DatabaseClient databaseClient, R2dbcDialect dialect, R2dbcConverter converter) {
+        return new R2dbcEntityTemplate(databaseClient, dialect, converter);
     }
 
     @WritingConverter

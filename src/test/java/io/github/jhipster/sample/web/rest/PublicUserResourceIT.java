@@ -1,9 +1,12 @@
 package io.github.jhipster.sample.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import io.github.jhipster.sample.service.UserService;
 import java.util.Objects;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
@@ -29,15 +32,20 @@ class PublicUserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CacheManager cacheManager;
 
     @Autowired
     private WebTestClient webTestClient;
 
     private User user;
+    private Long numberOfUsers;
 
     @BeforeEach
     void initTest() {
+        numberOfUsers = userRepository.count().block();
         user = UserResourceIT.initTestUser();
     }
 
@@ -49,8 +57,9 @@ class PublicUserResourceIT {
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
             .forEach(Cache::clear);
-        userRepository.deleteAllUserAuthorities().block();
-        userRepository.deleteAll().block();
+        userService.deleteUser(user.getLogin()).block();
+        assertThat(userRepository.count().block()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
     }
 
     @Test

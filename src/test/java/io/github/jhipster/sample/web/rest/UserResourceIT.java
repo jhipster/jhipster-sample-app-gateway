@@ -6,9 +6,9 @@ import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.AuthorityRepository;
-import io.github.jhipster.sample.repository.EntityManager;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import java.util.*;
@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -61,13 +62,16 @@ class UserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private AuthorityRepository authorityRepository;
 
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
-    private EntityManager em;
+    private R2dbcEntityTemplate template;
 
     @Autowired
     private CacheManager cacheManager;
@@ -76,6 +80,8 @@ class UserResourceIT {
     private WebTestClient webTestClient;
 
     private User user;
+
+    private Long numberOfUsers;
 
     /**
      * Create a User.
@@ -100,7 +106,7 @@ class UserResourceIT {
     /**
      * Delete all the users from the database.
      */
-    public static void deleteEntities(EntityManager em) {}
+    public static void deleteEntities(R2dbcEntityTemplate template) {}
 
     /**
      * Setups the database with one user.
@@ -114,13 +120,18 @@ class UserResourceIT {
 
     @BeforeEach
     void initTest() {
+        numberOfUsers = userRepository.count().block();
         user = initTestUser();
     }
 
     @AfterEach
     void cleanupAndCheck() {
-        userRepository.deleteAllUserAuthorities().block();
-        userRepository.deleteAll().block();
+        userService.deleteUser(DEFAULT_LOGIN).block();
+        userService.deleteUser(UPDATED_LOGIN).block();
+        userService.deleteUser(user.getLogin()).block();
+        userService.deleteUser("anotherlogin").block();
+        assertThat(userRepository.count().block()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
         cacheManager
             .getCacheNames()
             .stream()

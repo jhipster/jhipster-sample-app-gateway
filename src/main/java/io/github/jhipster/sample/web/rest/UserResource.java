@@ -191,7 +191,7 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
+     * {@code GET /admin/users} : get all users with all the details - calling this is only allowed for the administrators.
      *
      * @param request a {@link ServerHttpRequest} request.
      * @param pageable the pagination information.

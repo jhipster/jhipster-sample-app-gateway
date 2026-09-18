@@ -46,9 +46,6 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
     @Query("INSERT INTO jhi_user_authority VALUES(:userId, :authority)")
     Mono<Void> saveUserAuthority(Long userId, String authority);
 
-    @Query("DELETE FROM jhi_user_authority")
-    Mono<Void> deleteAllUserAuthorities();
-
     @Query("DELETE FROM jhi_user_authority WHERE user_id = :userId")
     Mono<Void> deleteUserAuthorities(Long userId);
 }
@@ -103,7 +100,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             )
             .all()
             .groupBy(t -> t.getT1().getLogin())
-            .flatMap(l -> l.collectList().map(t -> updateUserWithAuthorities(t.get(0).getT1(), t)))
+            .flatMap(l -> l.collectList().map(t -> updateUserWithAuthorities(t.getFirst().getT1(), t)))
             .sort(
                 Sort.Direction.fromString(direction) == Sort.DEFAULT_DIRECTION
                     ? new BeanComparator<>(property)
@@ -138,7 +135,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .all()
             .collectList()
             .filter(l -> !l.isEmpty())
-            .map(l -> updateUserWithAuthorities(l.get(0).getT1(), l));
+            .map(l -> updateUserWithAuthorities(l.getFirst().getT1(), l));
     }
 
     private User updateUserWithAuthorities(User user, List<Tuple2<User, Optional<String>>> tuples) {

@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -57,10 +58,17 @@ class AccountResourceIT {
     @Autowired
     private WebTestClient accountWebTestClient;
 
+    private Long numberOfUsers;
+
+    @BeforeEach
+    void countUsers() {
+        numberOfUsers = userRepository.count().block();
+    }
+
     @AfterEach
-    void cleanupAndCheck() {
-        userRepository.deleteAllUserAuthorities().block();
-        userRepository.deleteAll().block();
+    void checkUsers() {
+        assertThat(userRepository.count().block()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
     }
 
     @Test

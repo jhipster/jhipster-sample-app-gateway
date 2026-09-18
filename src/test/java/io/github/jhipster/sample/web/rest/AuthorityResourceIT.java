@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.is;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.repository.AuthorityRepository;
-import io.github.jhipster.sample.repository.EntityManager;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -40,7 +40,7 @@ class AuthorityResourceIT {
     private AuthorityRepository authorityRepository;
 
     @Autowired
-    private EntityManager em;
+    private R2dbcEntityTemplate template;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -69,9 +69,9 @@ class AuthorityResourceIT {
         return new Authority().name(UUID.randomUUID().toString());
     }
 
-    public static void deleteEntities(EntityManager em) {
+    public static void deleteEntities(R2dbcEntityTemplate template) {
         try {
-            em.deleteAll(Authority.class).block();
+            template.delete(Authority.class).all().block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
@@ -88,7 +88,7 @@ class AuthorityResourceIT {
             authorityRepository.delete(insertedAuthority).block();
             insertedAuthority = null;
         }
-        deleteEntities(em);
+        deleteEntities(template);
     }
 
     @Test
@@ -158,7 +158,7 @@ class AuthorityResourceIT {
 
         assertThat(authorityList).isNotNull();
         assertThat(authorityList).hasSize(1);
-        Authority testAuthority = authorityList.get(0);
+        Authority testAuthority = authorityList.getFirst();
 
         // Test fails because reactive api returns an empty object instead of null
         // assertAuthorityAllPropertiesEquals(authority, testAuthority);
